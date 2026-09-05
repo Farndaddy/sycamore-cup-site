@@ -205,52 +205,85 @@ function renderPanel() {
 // ---------------------------------------------------------
 // WIRING
 // ---------------------------------------------------------
-function say(id, msg, isErr) {
-  const el = document.getElementById(id);
+// Status lives in a bar outside #admin-root, because a live database update
+// re-renders the panel and would otherwise wipe the message the moment it appears.
+function say(_id, msg, isErr) {
+  const el = document.getElementById('admin-flash');
   if (!el) return;
   el.textContent = msg;
   el.classList.toggle('err', !!isErr);
+  el.hidden = !msg;
 }
 
+// One listener on the document, attached once. Buttons are rebuilt on every
+// database update, so listeners bound to individual buttons get detached
+// mid-click and the button silently does nothing. Delegation survives that.
+let wired = false;
 function wirePanel() {
-  document.getElementById('seed-btn').addEventListener('click', async () => {
-    say('seed-status', 'Creating…');
-    try { await Live.seedPlayers(); say('seed-status', 'Player records are ready.'); }
-    catch (e) { say('seed-status', e.message, true); }
-  });
+  if (wired) return;
+  wired = true;
 
-  document.querySelectorAll('[data-release]').forEach(b => {
-    b.addEventListener('click', async () => {
-      const id = b.dataset.release;
+  document.addEventListener('click', async (e) => {
+    const t = e.target.closest('button, [data-tee-set]');
+    if (!t) return;
+
+    if (t.id === 'seed-btn') {
+      say(null, 'Creating player records…');
+      try { await Live.seedPlayers(); say(null, 'Player records are ready.'); }
+      catch (err) { say(null, err.message, true); }
+      return;
+    }
+
+    if (t.dataset.release) {
+      const id = t.dataset.release;
+      t.disabled = true;
+      say(null, `Releasing ${playerById(id).name}'s card…`);
       try {
         await Live.releaseCard(id);
-        say('card-status', `${playerById(id).name}'s card is free — he can claim it again on any phone.`);
-      } catch (e) { say('card-status', e.message, true); }
-    });
-  });
+        say(null, `${playerById(id).name}'s card is free — he can claim it again on any phone.`);
+      } catch (err) { say(null, err.message, true); }
+      return;
+    }
 
-  document.querySelectorAll('[data-lock]').forEach(b => {
-    b.addEventListener('click', async () => {
+    if (t.dataset.lock) {
+      const to = t.dataset.to === 'lock';
       try {
-        await Live.setRoundLocked(b.dataset.lock, b.dataset.to === 'lock');
-        say('round-status', b.dataset.to === 'lock' ? 'Round marked final.' : 'Round reopened.');
-      } catch (e) { say('round-status', e.message, true); }
-    });
+        await Live.setRoundLocked(t.dataset.lock, to);
+        say(null, to ? 'Round marked final.' : 'Round reopened.');
+      } catch (err) { say(null, err.message, true); }
+      return;
+    }
+
+    if (t.id === 'edit-load') { renderEditArea(); return; }
+
+    if (t.id === 'edit-save') { await saveEditedCard(); return; }
+
+    if (t.dataset.teeSet) {
+      const roundId = document.getElementById('tee-round').value;
+      const round = ROUNDS.find(r => r.id === roundId);
+      try {
+        await Live.adminSetTee(t.dataset.teeSet, roundId, t.dataset.teeKey);
+        say(null, `${playerById(t.dataset.teeSet).name} moved to the ${COURSES[round.course].tees[t.dataset.teeKey].name} tee.`);
+      } catch (err) { say(null, err.message, true); }
+      return;
+    }
+
+    if (t.id === 'admin-add') {
+      const uidVal = document.getElementById('admin-uid').value.trim();
+      const label = document.getElementById('admin-label').value.trim();
+      if (!uidVal) { say(null, 'Paste their browser ID first.', true); return; }
+      try {
+        await Live.addAdmin(uidVal, label);
+        S.admins = await Live.listAdmins();
+        say(null, `${label || 'They'} can now use this panel.`);
+        renderPanel();
+      } catch (err) { say(null, err.message, true); }
+      return;
+    }
   });
 
-  document.getElementById('edit-load').addEventListener('click', renderEditArea);
-  document.getElementById('tee-round').addEventListener('change', renderTeeArea);
-
-  document.getElementById('admin-add').addEventListener('click', async () => {
-    const uidVal = document.getElementById('admin-uid').value.trim();
-    const label = document.getElementById('admin-label').value.trim();
-    if (!uidVal) { say('admin-status', 'Paste their browser ID first.', true); return; }
-    try {
-      await Live.addAdmin(uidVal, label);
-      S.admins = await Live.listAdmins();
-      say('admin-status', `${label || 'They'} can now use this panel.`);
-      renderPanel();
-    } catch (e) { say('admin-status', e.message, true); }
+  document.addEventListener('change', (e) => {
+    if (e.target.id === 'tee-round') renderTeeArea();
   });
 }
 
@@ -274,8 +307,16 @@ function renderEditArea() {
       <button class="btn btn-sm btn-primary" id="edit-save">Save card</button>
     </div>`;
 
-  document.getElementById('edit-save').addEventListener('click', async () => {
-    say('edit-status', 'Saving…');
+}
+
+async function saveEditedCard() {
+  const roundId = document.getElementById('edit-round').value;
+  const playerId = document.getElementById('edit-player').value;
+  const round = ROUNDS.find(r => r.id === roundId);
+  const course = COURSES[round.course];
+  const existing = ((S.scores[roundId] || {})[playerId]) || {};
+  {
+    say(null, 'Saving…');
     const inputs = document.querySelectorAll('#edit-area input[data-hole]');
     let saved = 0, capped = 0;
     try {
@@ -290,10 +331,10 @@ function renderEditArea() {
         await Live.submitScore({ roundId, playerId, hole, strokes: val });
         saved++;
       }
-      say('edit-status', `Saved ${saved} hole${saved === 1 ? '' : 's'}.` +
+      say(null, `Saved ${saved} hole${saved === 1 ? '' : 's'}.` +
         (capped ? ` ${capped} capped to triple bogey.` : ''));
-    } catch (e) { say('edit-status', e.message, true); }
-  });
+    } catch (e) { say(null, e.message, true); }
+  }
 }
 
 function renderTeeArea() {
@@ -317,12 +358,4 @@ function renderTeeArea() {
     </div>`;
   }).join('');
 
-  document.querySelectorAll('[data-tee-set]').forEach(b => {
-    b.addEventListener('click', async () => {
-      try {
-        await Live.adminSetTee(b.dataset.teeSet, roundId, b.dataset.teeKey);
-        say('tee-status', `${playerById(b.dataset.teeSet).name} moved to the ${COURSES[round.course].tees[b.dataset.teeKey].name} tee.`);
-      } catch (e) { say('tee-status', e.message, true); }
-    });
-  });
 }

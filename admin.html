@@ -58,6 +58,13 @@
   .admin-status.err { color: var(--clay); }
   .gate { text-align: center; padding: 70px 20px; }
   .gate h1 { font-family: var(--font-display); font-weight: 500; }
+  .admin-flash {
+    position: sticky; top: 0; z-index: 20;
+    padding: 12px 16px; margin-bottom: 18px; border-radius: var(--radius);
+    background: var(--forest); color: #F3EFE4; font-size: 14px;
+  }
+  .admin-flash[hidden] { display: none !important; }
+  .admin-flash.err { background: var(--clay); }
 </style>
 </head>
 <body>
@@ -65,6 +72,8 @@
 <header class="site-header" id="site-header"></header>
 
 <main class="wrap admin-main">
+  <!-- Lives outside admin-root so a live database update can't wipe it. -->
+  <div id="admin-flash" class="admin-flash" hidden></div>
   <div id="admin-root">
     <p class="muted">Connecting…</p>
   </div>
