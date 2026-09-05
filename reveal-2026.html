@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026 Team Reveal — Sycamore Cup Classic</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/reveal.css">
+</head>
+<body class="reveal-body">
+
+<div class="reveal-stage">
+
+  <div class="reveal-topbar">
+    <div class="brandmark">
+      <img src="assets/logos/sycamore-cup-logo.png" alt="Sycamore Cup Classic">
+      <h1 id="event-title">2026 Sycamore Cup Classic Teams <span class="pipe">|</span> <em>The Reveal</em></h1>
+    </div>
+    <div class="reveal-controls">
+      <button class="btn" id="fullscreen-btn" type="button">Fullscreen</button>
+      <button class="btn btn-primary" id="reveal-btn" type="button">Reveal Next Player</button>
+    </div>
+  </div>
+
+  <div class="reveal-progress">
+    <span id="progress-label">0 of 0 revealed</span>
+    <div class="reveal-progress-bar"><div class="reveal-progress-bar-fill" id="progress-fill" style="width:0%;"></div></div>
+  </div>
+
+  <div class="reveal-main">
+    <aside class="reveal-pool-col">
+      <div class="reveal-pool-head">
+        <h3>On the Board</h3>
+        <span class="muted" style="color:rgba(255,255,255,0.5); font-size:0.78rem;" id="pool-count"></span>
+      </div>
+      <div class="reveal-pool" id="reveal-pool"></div>
+    </aside>
+
+    <div class="reveal-teams" id="reveal-teams">
+      <!-- team sections rendered by JS, stacked top to bottom -->
+    </div>
+  </div>
+
+  <div class="reveal-complete" id="reveal-complete">
+    <h2>🏆 The 2026 teams are set.</h2>
+    <p>Good luck out there.</p>
+  </div>
+
+  <p class="reveal-footer-note">
+    Click a mystery card, click "Reveal Next Player," or hit <strong>space</strong> / <strong>→</strong> to advance.
+    Edit <code>data/reveal-2026.json</code> to set the real teams and reveal order — photos are pulled automatically from <code>assets/players/</code>. This page is unlisted — it's not linked from the site nav.
+  </p>
+
+</div>
+
+<script src="js/reveal-2026.js"></script>
+</body>
+</html>

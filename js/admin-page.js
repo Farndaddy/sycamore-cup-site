@@ -1,0 +1,328 @@
+// =========================================================
+// Sycamore Cup Classic — admin panel
+// =========================================================
+// Everything Farnia needs when something goes sideways on the course.
+
+import { COURSES, PLAYERS, TEAMS, ROUNDS, playerById, teamById } from './tournament-2026.js';
+import { courseHandicap, capGross } from './scoring-engine.js';
+import * as Live from './live.js';
+
+initShell('admin');
+
+const root = document.getElementById('admin-root');
+const S = { players: {}, scores: {}, rounds: {}, admins: {}, editing: null };
+
+(async function boot() {
+  if (!Live.isConfigured()) {
+    root.innerHTML = `<div class="gate"><h1>Not connected</h1>
+      <p class="muted">The Firebase settings are missing from this build.</p></div>`;
+    return;
+  }
+
+  try { await Live.start(); }
+  catch (e) {
+    root.innerHTML = `<div class="gate"><h1>Couldn't connect</h1><p class="muted">${e.message}</p></div>`;
+    return;
+  }
+
+  Live.watchPlayers(p => { S.players = p; render(); });
+  Live.watchAllScores(s => { S.scores = s; render(); });
+  Live.watchRounds(r => { S.rounds = r; render(); });
+  try { S.admins = await Live.listAdmins(); } catch { S.admins = {}; }
+
+  render();
+})();
+
+function render() {
+  if (!Live.isAdmin()) { renderGate(); return; }
+  renderPanel();
+}
+
+// ---------------------------------------------------------
+// THE BOOTSTRAP GATE
+// ---------------------------------------------------------
+// The very first admin cannot be created from inside the app — the rules
+// only let an existing admin grant admin. So this screen hands Farnia the
+// exact ID she needs to paste into the Firebase console once.
+function renderGate() {
+  root.innerHTML = `
+    <div class="admin-sec">
+      <h2>You're not an admin yet</h2>
+      <p class="sec-note">This is expected the first time. Security rules only let an existing
+      admin create another one, so the first admin has to be made by hand — once.</p>
+
+      <p style="font-size:14px;">Here is this browser's ID:</p>
+      <div class="uid-box" id="uid-box">${Live.uid() || '—'}</div>
+      <button class="btn btn-sm btn-quiet" id="copy-uid" type="button">Copy ID</button>
+
+      <ol style="font-size:14px; line-height:1.8; margin-top:20px; padding-left:20px;">
+        <li>Open the <strong>Firebase console</strong> → your <strong>sycamore-cup</strong> project → <strong>Firestore Database</strong>.</li>
+        <li>Click <strong>Start collection</strong> and name it exactly <code>admins</code>.</li>
+        <li>For <strong>Document ID</strong>, paste the ID above.</li>
+        <li>Add one field: name it <code>label</code>, type string, value <code>Farnia</code>.</li>
+        <li>Save, then reload this page.</li>
+      </ol>
+
+      <p class="sec-note" style="margin-top:16px;">One catch worth knowing: this ID belongs to this
+      browser on this computer. If you later want to run admin from your phone, open this page there
+      and add that ID as a second admin from the panel.</p>
+    </div>`;
+
+  document.getElementById('copy-uid').addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(Live.uid());
+      document.getElementById('copy-uid').textContent = 'Copied';
+    } catch {
+      document.getElementById('copy-uid').textContent = 'Select it manually';
+    }
+  });
+}
+
+// ---------------------------------------------------------
+// THE PANEL
+// ---------------------------------------------------------
+function renderPanel() {
+  const seeded = Object.keys(S.players).length;
+
+  root.innerHTML = `
+    <div class="admin-sec">
+      <h2>Setup</h2>
+      <p class="sec-note">Run once, before anyone tries to sign in.</p>
+      <div class="admin-row">
+        <div class="r-main">
+          <strong>Player records</strong>
+          <small>${seeded === 0
+            ? 'Not created yet. Nobody can claim a card until this runs.'
+            : `${seeded} of ${PLAYERS.length} players set up.`}</small>
+        </div>
+        <div class="admin-actions">
+          <button class="btn btn-sm ${seeded === 0 ? 'btn-primary' : 'btn-quiet'}" id="seed-btn">
+            ${seeded === 0 ? 'Create player records' : 'Add any missing'}
+          </button>
+        </div>
+      </div>
+      <div class="admin-status" id="seed-status"></div>
+    </div>
+
+    <div class="admin-sec">
+      <h2>Cards</h2>
+      <p class="sec-note">A card is tied to the phone that claimed it. If someone switches devices
+      or forgets his PIN, release it here and he can claim it again.</p>
+      ${PLAYERS.map(p => {
+        const doc = S.players[p.id];
+        const claimed = doc && doc.uid;
+        return `<div class="admin-row">
+          <div class="r-main">
+            <strong>${p.name}</strong>
+            <small>${teamById(p.team).name} · index ${p.index}
+              ${!doc ? ' · no record yet' : ''}</small>
+          </div>
+          <span class="pill ${claimed ? 'claimed' : 'open'}">${claimed ? 'claimed' : 'open'}</span>
+          <div class="admin-actions">
+            <button class="btn btn-sm btn-quiet" data-release="${p.id}" ${claimed ? '' : 'disabled'}>Release</button>
+          </div>
+        </div>`;
+      }).join('')}
+      <div class="admin-status" id="card-status"></div>
+    </div>
+
+    <div class="admin-sec">
+      <h2>Rounds</h2>
+      <p class="sec-note">Lock a round once the money is settled. Locked rounds refuse new scores
+      from players — you can still fix them here.</p>
+      ${ROUNDS.map(r => {
+        const locked = S.rounds[r.id] && S.rounds[r.id].locked;
+        const c = COURSES[r.course];
+        return `<div class="admin-row">
+          <div class="r-main">
+            <strong>${r.day} · ${c.short}${r.scramble ? ' (Scramble)' : ''}</strong>
+            <small>${r.holes} holes · ${r.format}</small>
+          </div>
+          <span class="pill ${locked ? 'locked' : 'open'}">${locked ? 'final' : 'open'}</span>
+          <div class="admin-actions">
+            <button class="btn btn-sm btn-quiet" data-lock="${r.id}" data-to="${locked ? 'open' : 'lock'}">
+              ${locked ? 'Reopen' : 'Mark final'}
+            </button>
+          </div>
+        </div>`;
+      }).join('')}
+      <div class="admin-status" id="round-status"></div>
+    </div>
+
+    <div class="admin-sec">
+      <h2>Fix a scorecard</h2>
+      <p class="sec-note">Pick a round and a player, then type over any hole. Blank leaves it unscored.
+      The triple-bogey cap still applies.</p>
+      <div class="admin-actions" style="margin-bottom:14px;">
+        <select class="admin-input" id="edit-round">
+          ${ROUNDS.filter(r => !r.scramble).map(r =>
+            `<option value="${r.id}">${r.day} — ${COURSES[r.course].short}</option>`).join('')}
+        </select>
+        <select class="admin-input" id="edit-player">
+          ${PLAYERS.map(p => `<option value="${p.id}">${p.name}</option>`).join('')}
+        </select>
+        <button class="btn btn-sm btn-quiet" id="edit-load">Load card</button>
+      </div>
+      <div id="edit-area"></div>
+      <div class="admin-status" id="edit-status"></div>
+    </div>
+
+    <div class="admin-sec">
+      <h2>Tees</h2>
+      <p class="sec-note">Players set their own tee, but you can override it — useful for the guy
+      who never gets around to it.</p>
+      <div class="admin-actions" style="margin-bottom:14px;">
+        <select class="admin-input" id="tee-round">
+          ${ROUNDS.map(r => `<option value="${r.id}">${r.day} — ${COURSES[r.course].short}</option>`).join('')}
+        </select>
+      </div>
+      <div id="tee-area"></div>
+      <div class="admin-status" id="tee-status"></div>
+    </div>
+
+    <div class="admin-sec">
+      <h2>Co-admins</h2>
+      <p class="sec-note">Have the person open this page on their own phone, copy the ID it shows them,
+      and paste it here.</p>
+      ${Object.keys(S.admins).length
+        ? Object.entries(S.admins).map(([id, v]) => `<div class="admin-row">
+            <div class="r-main"><strong>${v.label || 'Unnamed'}</strong><small>${id}</small></div>
+          </div>`).join('')
+        : '<p class="muted" style="font-size:13px;">Just you so far.</p>'}
+      <div class="admin-actions" style="margin-top:14px;">
+        <input class="admin-input" id="admin-uid" placeholder="Their browser ID" style="flex:1;min-width:220px;">
+        <input class="admin-input" id="admin-label" placeholder="Name" style="max-width:140px;">
+        <button class="btn btn-sm btn-quiet" id="admin-add">Add</button>
+      </div>
+      <div class="admin-status" id="admin-status"></div>
+    </div>
+  `;
+
+  wirePanel();
+  renderTeeArea();
+}
+
+// ---------------------------------------------------------
+// WIRING
+// ---------------------------------------------------------
+function say(id, msg, isErr) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = msg;
+  el.classList.toggle('err', !!isErr);
+}
+
+function wirePanel() {
+  document.getElementById('seed-btn').addEventListener('click', async () => {
+    say('seed-status', 'Creating…');
+    try { await Live.seedPlayers(); say('seed-status', 'Player records are ready.'); }
+    catch (e) { say('seed-status', e.message, true); }
+  });
+
+  document.querySelectorAll('[data-release]').forEach(b => {
+    b.addEventListener('click', async () => {
+      const id = b.dataset.release;
+      try {
+        await Live.releaseCard(id);
+        say('card-status', `${playerById(id).name}'s card is free — he can claim it again on any phone.`);
+      } catch (e) { say('card-status', e.message, true); }
+    });
+  });
+
+  document.querySelectorAll('[data-lock]').forEach(b => {
+    b.addEventListener('click', async () => {
+      try {
+        await Live.setRoundLocked(b.dataset.lock, b.dataset.to === 'lock');
+        say('round-status', b.dataset.to === 'lock' ? 'Round marked final.' : 'Round reopened.');
+      } catch (e) { say('round-status', e.message, true); }
+    });
+  });
+
+  document.getElementById('edit-load').addEventListener('click', renderEditArea);
+  document.getElementById('tee-round').addEventListener('change', renderTeeArea);
+
+  document.getElementById('admin-add').addEventListener('click', async () => {
+    const uidVal = document.getElementById('admin-uid').value.trim();
+    const label = document.getElementById('admin-label').value.trim();
+    if (!uidVal) { say('admin-status', 'Paste their browser ID first.', true); return; }
+    try {
+      await Live.addAdmin(uidVal, label);
+      S.admins = await Live.listAdmins();
+      say('admin-status', `${label || 'They'} can now use this panel.`);
+      renderPanel();
+    } catch (e) { say('admin-status', e.message, true); }
+  });
+}
+
+function renderEditArea() {
+  const roundId = document.getElementById('edit-round').value;
+  const playerId = document.getElementById('edit-player').value;
+  const round = ROUNDS.find(r => r.id === roundId);
+  const course = COURSES[round.course];
+  const existing = ((S.scores[roundId] || {})[playerId]) || {};
+
+  document.getElementById('edit-area').innerHTML = `
+    <div class="edit-grid">
+      ${course.pars.map((par, i) => `
+        <div class="edit-cell">
+          <label>${i + 1} · par ${par}</label>
+          <input type="number" min="1" max="${par + 3}" data-hole="${i + 1}"
+                 value="${existing[i + 1] !== undefined ? existing[i + 1] : ''}">
+        </div>`).join('')}
+    </div>
+    <div class="admin-actions" style="margin-top:14px;">
+      <button class="btn btn-sm btn-primary" id="edit-save">Save card</button>
+    </div>`;
+
+  document.getElementById('edit-save').addEventListener('click', async () => {
+    say('edit-status', 'Saving…');
+    const inputs = document.querySelectorAll('#edit-area input[data-hole]');
+    let saved = 0, capped = 0;
+    try {
+      for (const inp of inputs) {
+        const hole = Number(inp.dataset.hole);
+        const raw = inp.value.trim();
+        if (raw === '') continue;
+        const par = course.pars[hole - 1];
+        const val = capGross(Number(raw), par);
+        if (Number(raw) > val) capped++;
+        if (existing[hole] === val) continue;
+        await Live.submitScore({ roundId, playerId, hole, strokes: val });
+        saved++;
+      }
+      say('edit-status', `Saved ${saved} hole${saved === 1 ? '' : 's'}.` +
+        (capped ? ` ${capped} capped to triple bogey.` : ''));
+    } catch (e) { say('edit-status', e.message, true); }
+  });
+}
+
+function renderTeeArea() {
+  const roundId = document.getElementById('tee-round').value;
+  const round = ROUNDS.find(r => r.id === roundId);
+  const course = COURSES[round.course];
+
+  document.getElementById('tee-area').innerHTML = PLAYERS.map(p => {
+    const doc = S.players[p.id];
+    const chosen = (doc && doc.tees && doc.tees[roundId]) || course.defaultTee;
+    return `<div class="admin-row">
+      <div class="r-main">
+        <strong>${p.name}</strong>
+        <small>plays off ${courseHandicap(p.index, course, chosen)} from ${course.tees[chosen].name}</small>
+      </div>
+      <div class="admin-actions">
+        ${Object.entries(course.tees).map(([key, t]) =>
+          `<button class="tee-btn ${key === chosen ? 'on' : ''}" data-tee-set="${p.id}" data-tee-key="${key}">${t.name}</button>`
+        ).join('')}
+      </div>
+    </div>`;
+  }).join('');
+
+  document.querySelectorAll('[data-tee-set]').forEach(b => {
+    b.addEventListener('click', async () => {
+      try {
+        await Live.adminSetTee(b.dataset.teeSet, roundId, b.dataset.teeKey);
+        say('tee-status', `${playerById(b.dataset.teeSet).name} moved to the ${COURSES[round.course].tees[b.dataset.teeKey].name} tee.`);
+      } catch (e) { say('tee-status', e.message, true); }
+    });
+  });
+}

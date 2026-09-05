@@ -1,0 +1,24 @@
+{
+  "_note": "REAL 2026 rosters (confirmed by Farnia 2026-08-04) — keep this file OFF GitHub until the actual reveal event. 'index' drives the live 'Team Handicap' / 'Ave. Handicap' footer. Team names are still placeholders ('Team One/Two/Three') — swap in real names whenever Farnia has them. Alex Kampmann has no photo uploaded yet, so his card will show initials until one is added to assets/players/alex-kampmann.<ext>.",
+  "eventTitle": "2026 Sycamore Cup Classic",
+  "eventSubtitle": "The Reveal",
+  "teams": [
+    { "id": "team-1", "name": "Team One", "accent": "forest" },
+    { "id": "team-2", "name": "Team Two", "accent": "clay" },
+    { "id": "team-3", "name": "Team Three", "accent": "brass" }
+  ],
+  "order": [
+    { "name": "Robert Stong", "team": "team-1", "playerId": "robert-stong", "index": 12 },
+    { "name": "Klayton McClosin", "team": "team-2", "playerId": "klayton-mcclosin", "index": 8 },
+    { "name": "Alex Kampmann", "team": "team-3", "playerId": "alex-kampmann", "index": 3 },
+    { "name": "Scottie Collins", "team": "team-1", "playerId": "scottie-collins", "index": 3 },
+    { "name": "Mike Grosh", "team": "team-2", "playerId": "mike-grosh", "index": 11 },
+    { "name": "Nick Fowler", "team": "team-3", "playerId": "nick-fowler", "index": 2 },
+    { "name": "Auston Chen", "team": "team-1", "playerId": "auston-chen", "index": 14 },
+    { "name": "Rob Vassallo", "team": "team-2", "playerId": "rob-vassallo", "index": 9 },
+    { "name": "Farnia Ghavami", "team": "team-3", "playerId": "farnia-ghavami", "index": 16 },
+    { "name": "Nigel Scott", "team": "team-1", "playerId": "nigel-scott", "index": 5 },
+    { "name": "Gregg Suglia", "team": "team-2", "playerId": "gregg-suglia", "index": 5 },
+    { "name": "Anthony Gjonaj", "team": "team-3", "playerId": "anthony-gjonaj", "index": 13 }
+  ]
+}

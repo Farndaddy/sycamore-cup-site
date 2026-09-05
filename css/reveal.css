@@ -1,0 +1,189 @@
+/* =========================================================
+   2026 TEAM REVEAL — presenter-controlled draft board
+   Loaded only on reveal-2026.html, on top of style.css.
+   ========================================================= */
+
+.reveal-body {
+  background: radial-gradient(ellipse at top, #24463A 0%, var(--forest) 45%, #12241D 100%);
+  min-height: 100vh;
+  color: var(--ivory);
+  overflow-x: hidden;
+  perspective: 1400px;
+}
+
+.reveal-stage { max-width: 1400px; margin: 0 auto; padding: 40px 32px 90px; }
+
+.reveal-topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 34px; flex-wrap: wrap; gap: 14px;
+}
+.reveal-topbar .brandmark { display: flex; align-items: center; gap: 32px; }
+.reveal-topbar .brandmark img { height: 231px; width: 231px; object-fit: contain; flex-shrink: 0; }
+.reveal-topbar h1 { color: #fff; font-size: clamp(1.5rem, 3vw, 2.15rem); margin: 0; line-height: 1.25; }
+.reveal-topbar h1 .pipe { color: rgba(255,255,255,0.3); font-weight: 300; padding: 0 4px; }
+.reveal-topbar h1 em { color: #E9D9AE; }
+
+@media (max-width: 640px) {
+  .reveal-topbar .brandmark img { height: 140px; width: 140px; }
+}
+
+.reveal-controls { display: flex; gap: 10px; align-items: center; }
+.reveal-controls .btn { border-color: rgba(255,255,255,0.35); color: #fff; }
+.reveal-controls .btn:hover { background: rgba(255,255,255,0.12); }
+.reveal-controls .btn-primary { background: var(--brass); border-color: var(--brass); color: #201E1A; }
+.reveal-controls .btn-primary:hover { background: #C4A160; border-color: #C4A160; }
+
+.reveal-progress {
+  font-family: var(--font-mono); font-size: 0.78rem; color: rgba(255,255,255,0.65);
+  letter-spacing: 0.04em; text-align: center; margin-bottom: 30px;
+}
+.reveal-progress-bar { height: 3px; background: rgba(255,255,255,0.15); border-radius: 3px; margin-top: 8px; overflow: hidden; }
+.reveal-progress-bar-fill { height: 100%; background: var(--brass); transition: width .5s ease; }
+
+/* ---------- Presenter layout: pool rail (left) + stacked teams (right) ---------- */
+.reveal-main { display: grid; grid-template-columns: 210px 1fr; gap: 40px; align-items: start; margin-bottom: 48px; }
+.reveal-pool-col { position: sticky; top: 24px; }
+
+/* ---------- Team columns (3 side by side; each roster stacks vertically) ---------- */
+.reveal-teams { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; align-items: start; }
+.reveal-team-col {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 4px; padding: 22px; min-height: 120px;
+  display: flex; flex-direction: column;
+}
+.reveal-team-head {
+  margin-bottom: 14px; padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.14);
+}
+.reveal-team-col h2 {
+  color: #fff; font-size: 1.4rem; margin-bottom: 0;
+  display: flex; align-items: center; gap: 10px;
+}
+.reveal-team-col .swatch { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+.reveal-team-col.accent-forest .swatch { background: #6FA98A; }
+.reveal-team-col.accent-clay .swatch { background: #D79A7C; }
+.reveal-team-col.accent-brass .swatch { background: var(--brass); }
+.reveal-team-col .count {
+  font-family: var(--font-mono); font-size: 0.75rem; color: rgba(255,255,255,0.5);
+  margin-bottom: 18px; display: block;
+}
+.reveal-roster { display: flex; flex-direction: column; gap: 24px; }
+.reveal-roster-empty { color: rgba(255,255,255,0.3); font-size: 0.85rem; font-style: italic; padding: 20px 0; text-align: center; }
+
+/* Full, uncropped card per player — nothing trimmed off, page just gets long. */
+.roster-tile {
+  width: 100%;
+  animation: tile-in .4s ease both;
+}
+@keyframes tile-in { from { opacity: 0; transform: translateY(8px) scale(0.96); } to { opacity: 1; transform: none; } }
+.roster-tile .thumb {
+  width: 100%; aspect-ratio: 5/7; border-radius: 10px; overflow: hidden;
+  border: 1px solid rgba(233,217,174,0.4); background: rgba(255,255,255,0.06);
+  display: flex; align-items: center; justify-content: center; margin-bottom: 10px;
+}
+.roster-tile .thumb img { width: 100%; height: 100%; object-fit: contain; }
+.roster-tile .thumb .initials {
+  font-family: var(--font-display); font-style: italic; font-size: 2.4rem; color: #E9D9AE;
+}
+.roster-tile .rname { font-size: 1.15rem; color: #fff; font-weight: 600; line-height: 1.3; text-align: center; }
+
+/* ---------- Team handicap stats (top of column, next to team name) ---------- */
+.team-stats {
+  margin-top: 12px;
+  display: flex; gap: 24px;
+}
+.team-stats .stat { text-align: left; }
+.team-stats .stat-label {
+  display: block; font-family: var(--font-mono); font-size: 0.68rem;
+  letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.5);
+  margin-bottom: 3px;
+}
+.team-stats .stat-value {
+  display: block; font-family: var(--font-display); font-size: 1.5rem; color: #E9D9AE;
+}
+
+/* ---------- Mystery pool (left rail, numbered 1-12 top to bottom) ---------- */
+.reveal-pool-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 16px; }
+.reveal-pool-head h3 { color: #fff; font-size: 1rem; margin: 0; letter-spacing: 0.02em; }
+.reveal-pool {
+  display: flex; flex-direction: column; gap: 10px;
+}
+
+.mystery-card {
+  border-radius: 8px; cursor: pointer;
+  position: relative;
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 14px;
+  background:
+    repeating-linear-gradient(135deg, rgba(233,217,174,0.06) 0 10px, rgba(233,217,174,0.0) 10px 20px),
+    linear-gradient(160deg, #1E3A2F 0%, #12241D 100%);
+  border: 1px solid rgba(233,217,174,0.3);
+  transition: transform .15s ease;
+}
+.mystery-card:hover { transform: translateX(4px); }
+.mystery-card.is-next { box-shadow: 0 0 0 2px var(--brass), 0 8px 24px rgba(0,0,0,0.4); }
+.mystery-card.is-gone { visibility: hidden; }
+
+.mystery-card .pick-num {
+  font-family: var(--font-mono); font-size: 0.72rem; color: rgba(255,255,255,0.45);
+  width: 18px; flex-shrink: 0; text-align: center;
+}
+.mystery-card .flag { font-size: 1.1rem; opacity: 0.8; flex-shrink: 0; }
+.mystery-card .q { font-family: var(--font-display); font-style: italic; font-size: 1.2rem; color: #E9D9AE; opacity: 0.85; margin-left: auto; }
+
+@media (max-width: 980px) {
+  .reveal-main { grid-template-columns: 1fr; }
+  .reveal-pool-col { position: static; }
+  .reveal-pool { flex-direction: row; flex-wrap: wrap; }
+  .mystery-card { flex: 1 1 140px; }
+  .reveal-teams { grid-template-columns: 1fr; }
+}
+
+/* ---------- Flying reveal clone (fixed position, animated via JS) ---------- */
+.flying-card {
+  position: fixed; z-index: 999; border-radius: 10px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.55);
+  transition: top .7s cubic-bezier(.2,.8,.2,1), left .7s cubic-bezier(.2,.8,.2,1),
+              width .7s cubic-bezier(.2,.8,.2,1), height .7s cubic-bezier(.2,.8,.2,1),
+              transform .6s ease, opacity .3s ease;
+  transform-style: preserve-3d;
+  pointer-events: none;
+}
+.flying-card .face {
+  position: absolute; inset: 0; backface-visibility: hidden;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  border-radius: 10px;
+}
+.flying-card .face.front {
+  background: linear-gradient(160deg, #2C5342 0%, #1E3A2F 100%);
+  border: 1px solid rgba(233,217,174,0.35);
+  transform: rotateY(180deg);
+}
+.flying-card .face.front img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; }
+.flying-card .face.front .initials-big { font-family: var(--font-display); font-style: italic; font-size: 2.4rem; color: #E9D9AE; }
+.flying-card .face.back { background: linear-gradient(160deg, #1E3A2F 0%, #12241D 100%); border: 1px solid rgba(233,217,174,0.3); }
+.flying-card .face.back .q { font-family: var(--font-display); font-style: italic; font-size: 2rem; color: #E9D9AE; }
+.flying-card.is-flipping { transform: rotateY(180deg); }
+.flying-card .nameplate {
+  position: absolute; left: 0; right: 0; bottom: 0; padding: 10px 8px 8px;
+  background: linear-gradient(0deg, rgba(0,0,0,0.75), rgba(0,0,0,0));
+  color: #fff; font-size: 0.85rem; text-align: center; opacity: 0; transition: opacity .3s ease .5s;
+  border-radius: 0 0 10px 10px;
+}
+.flying-card.show-name .nameplate { opacity: 1; }
+
+/* ---------- Complete banner ---------- */
+.reveal-complete {
+  text-align: center; margin-top: 40px; padding: 34px; border-radius: 6px;
+  background: rgba(233,217,174,0.08); border: 1px solid rgba(233,217,174,0.3);
+  display: none;
+}
+.reveal-complete.show { display: block; animation: tile-in .5s ease both; }
+.reveal-complete h2 { color: #E9D9AE; margin-bottom: 6px; }
+.reveal-complete p { color: rgba(255,255,255,0.7); margin: 0; }
+
+.reveal-footer-note {
+  text-align: center; margin-top: 60px; font-size: 0.72rem; color: rgba(255,255,255,0.3);
+}
+.reveal-footer-note a { text-decoration: underline; color: rgba(255,255,255,0.45); }

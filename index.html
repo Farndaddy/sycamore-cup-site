@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Sycamore Cup Classic</title>
+<meta name="description" content="Home of the Sycamore Cup Classic — annual golf trip, team standings, player history, and a live leaderboard.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header" id="site-header"></header>
+
+<section class="hero-photo" style="background-image:url('assets/photos/hero-sunset-tree-v2.jpg');">
+  <div class="wrap">
+    <p class="eyebrow">Est. 2021 · The One &amp; Only</p>
+    <h1 style="white-space:nowrap; font-size:clamp(1.6rem, 7vw, 4.5rem);">Sycamore Cup Classic</h1>
+    <p class="lead">Where legendary stories are born and memories are made.</p>
+    <div class="hero-cta-row">
+      <a class="btn btn-primary" href="leaderboard.html">Live Leaderboard →</a>
+      <a class="btn btn-light" href="players.html">Player Directory</a>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div><span class="eyebrow">The Trips</span><h2>Every Year, One Click Away</h2></div>
+    </div>
+    <div class="grid grid-3" id="year-cards"></div>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0;">
+  <div class="wrap">
+    <p class="pull-quote">"The Wall of Jackie." "The Infamous Hole in One." Three years in, this trip has more lore than most tour stops.</p>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0;">
+  <div class="wrap">
+    <div class="section-head">
+      <div><span class="eyebrow">The Record Book</span><h2>Cup Champions</h2></div>
+    </div>
+    <div class="grid grid-3" id="champ-cards"></div>
+  </div>
+</section>
+
+<footer class="site-footer" id="site-footer"></footer>
+
+<script src="js/app.js"></script>
+<script>
+  initShell('home');
+
+  const YEAR_PHOTOS = {
+    2023: 'assets/photos/2023-orlando-stairs.jpg',
+    2024: 'assets/photos/2024-evermore-links-group.jpg',
+    2025: 'assets/photos/2025-turning-stone-huddle.jpg',
+  };
+
+  loadData().then(data => {
+    const cardsEl = document.getElementById('year-cards');
+    const years = Object.values(data.years).sort((a,b) => b.year - a.year);
+    cardsEl.innerHTML = years.map(y => `
+      <a class="trip-card" href="years/${y.year}.html">
+        <img src="${YEAR_PHOTOS[y.year] || ''}" alt="${y.year} Sycamore Cup Classic">
+        <div class="trip-info">
+          <div class="yr">${y.year}</div>
+          <div class="loc">${y.location}</div>
+          ${y.teamChampion ? `<span class="champ-tag">🏆 ${y.teamChampion}</span>` : `<span class="champ-tag">In Progress</span>`}
+        </div>
+      </a>
+    `).join('');
+
+    const champCardsEl = document.getElementById('champ-cards');
+    const yearsWithTeamChamps = Object.values(data.years).filter(y => y.teamChampion).sort((a,b) => b.year - a.year);
+    champCardsEl.innerHTML = yearsWithTeamChamps.map(y => {
+      const champTeam = y.teams.find(t => t.name === y.teamChampion);
+      const roster = champTeam ? champTeam.roster : [];
+      const rosterNames = roster.map(r => {
+        const player = data.players.find(p => p.id === r.playerId);
+        return player ? player.name : (r.displayName || r.playerId);
+      });
+      return `
+        <div class="card" style="padding:26px;">
+          <span class="eyebrow">${y.year} Champion</span>
+          <h3 style="margin-top:8px; margin-bottom:16px;">🏆 ${y.teamChampion}</h3>
+          <ul style="padding-left:18px; margin:0; color:var(--ink-soft); font-size:0.92rem; line-height:1.8;">
+            ${rosterNames.map(n => `<li>${n}</li>`).join('')}
+          </ul>
+        </div>`;
+    }).join('');
+  });
+</script>
+</body>
+</html>

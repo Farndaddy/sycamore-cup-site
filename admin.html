@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Admin — 2026 Sycamore Cup Classic</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/scoring.css">
+<style>
+  .admin-main { padding: 30px 0 80px; }
+  .admin-sec {
+    background: var(--paper); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 22px 24px; margin-bottom: 20px;
+  }
+  .admin-sec h2 {
+    font-family: var(--font-display); font-weight: 500; font-size: 20px;
+    margin: 0 0 4px;
+  }
+  .admin-sec .sec-note { font-size: 13.5px; color: var(--ink-soft); margin: 0 0 18px; }
+  .uid-box {
+    font-family: var(--font-mono); font-size: 13px; word-break: break-all;
+    background: var(--sand); padding: 12px 14px; border-radius: var(--radius);
+    border: 1px solid var(--line); margin: 12px 0;
+  }
+  .admin-row {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 14px; padding: 11px 0; border-bottom: 1px solid var(--line); flex-wrap: wrap;
+  }
+  .admin-row:last-child { border-bottom: none; }
+  .admin-row .r-main { flex: 1; min-width: 180px; }
+  .admin-row .r-main strong { font-size: 14.5px; }
+  .admin-row .r-main small { display: block; font-size: 12px; color: var(--ink-soft); margin-top: 2px; }
+  .admin-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .pill {
+    display: inline-block; padding: 2px 8px; border-radius: 2px;
+    font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase;
+  }
+  .pill.claimed { background: var(--forest); color: #F3EFE4; }
+  .pill.open { background: var(--sand); color: var(--ink-soft); }
+  .pill.locked { background: var(--clay); color: #fff; }
+  .admin-input {
+    padding: 9px 11px; font-family: var(--font-mono); font-size: 13px;
+    border: 1px solid var(--line-strong); border-radius: var(--radius);
+    background: var(--ivory); color: var(--ink); min-width: 120px;
+  }
+  .edit-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(56px,1fr)); gap: 6px; margin-top: 12px; }
+  .edit-cell { display: flex; flex-direction: column; gap: 3px; }
+  .edit-cell label { font-size: 10px; color: var(--ink-soft); text-align: center; }
+  .edit-cell input {
+    width: 100%; padding: 8px 2px; text-align: center;
+    font-family: var(--font-mono); font-size: 15px;
+    border: 1px solid var(--line-strong); border-radius: var(--radius);
+    background: var(--ivory); color: var(--ink);
+  }
+  .admin-status { font-size: 13px; color: var(--forest); margin-top: 12px; min-height: 18px; }
+  .admin-status.err { color: var(--clay); }
+  .gate { text-align: center; padding: 70px 20px; }
+  .gate h1 { font-family: var(--font-display); font-weight: 500; }
+</style>
+</head>
+<body>
+
+<header class="site-header" id="site-header"></header>
+
+<main class="wrap admin-main">
+  <div id="admin-root">
+    <p class="muted">Connecting…</p>
+  </div>
+</main>
+
+<footer class="site-footer" id="site-footer"></footer>
+
+<script src="js/app.js"></script>
+<script type="module" src="js/admin-page.js"></script>
+</body>
+</html>

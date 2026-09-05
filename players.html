@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Players — Sycamore Cup Classic</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="site-header" id="site-header"></header>
+
+<section class="hero-plain">
+  <div class="wrap">
+    <p class="eyebrow">Career Records</p>
+    <h1>Player <em>Directory</em></h1>
+    <p class="lead">Every guy who's teed it up at a Sycamore Cup, with index history and years attended. Click a name for the full profile — titles, fun facts, and every team they've played on.</p>
+  </div>
+</section>
+
+<section class="section" style="padding-top:56px;">
+  <div class="wrap">
+    <div class="scorecard-wrap">
+      <table class="scorecard" style="min-width:0;">
+        <thead>
+          <tr><th style="text-align:left;"></th><th style="text-align:left;">Player</th><th>2023</th><th>2024</th><th>2025</th><th>2026</th><th>Years Attended</th></tr>
+        </thead>
+        <tbody id="player-rows"></tbody>
+      </table>
+    </div>
+
+    <div id="data-notes" class="card" style="padding:24px; margin-top:36px;"></div>
+  </div>
+</section>
+
+<footer class="site-footer" id="site-footer"></footer>
+
+<script src="js/app.js"></script>
+<script>
+  initShell('players');
+  loadData().then(data => {
+    const rows = [...data.players].sort((a,b) => a.name.localeCompare(b.name));
+    document.getElementById('player-rows').innerHTML = rows.map(p => `
+      <tr onclick="window.location='players/player.html?id=${p.id}'" style="cursor:pointer;">
+        <td style="width:1%; padding-right:0;">${avatarHTML(p, 'avatar-sm')}</td>
+        <td class="hole-name">${p.name}</td>
+        <td>${fmtIndex(p.indexByYear['2023'])}</td>
+        <td>${fmtIndex(p.indexByYear['2024'])}</td>
+        <td>${fmtIndex(p.indexByYear['2025'])}</td>
+        <td>${fmtIndex(p.indexByYear['2026'])}</td>
+        <td style="font-family:var(--font-body);">${p.yearsAttended.join(', ')}</td>
+      </tr>
+    `).join('');
+
+    const notes = (data.meta && data.meta.dataNotes) || [];
+    const notesEl = document.getElementById('data-notes');
+    if (notes.length) {
+      notesEl.innerHTML = `
+        <h3 class="mt-0">Data Notes</h3>
+        <ul style="color:var(--ink-soft); padding-left:20px; margin-bottom:0;">
+          ${notes.map(n => `<li style="margin-bottom:8px;">${n}</li>`).join('')}
+        </ul>`;
+    } else {
+      notesEl.style.display = 'none';
+    }
+  });
+</script>
+</body>
+</html>

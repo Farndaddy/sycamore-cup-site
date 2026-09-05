@@ -1,0 +1,35 @@
+// Paste this into Firebase Console > Firestore Database > Rules, then Publish.
+// This intentionally has NO login system (any of the guys can enter scores from
+// their phone with just the site URL) but blocks deleting data and caps how much
+// text can be written per field so a stray bot can't trash the database.
+
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /scores/{scoreId} {
+      allow read: if true;
+      allow create, update: if
+        request.resource.data.strokes is number &&
+        request.resource.data.strokes > 0 &&
+        request.resource.data.strokes < 20 &&
+        request.resource.data.hole is number &&
+        request.resource.data.hole > 0 &&
+        request.resource.data.hole <= 18;
+      allow delete: if false;
+    }
+
+    match /courses/{courseId} {
+      allow read: if true;
+      allow create, update: if request.resource.data.pars is list;
+      allow delete: if false;
+    }
+  }
+}
+
+// Later, if you want to restrict WRITES to just your group (not the whole internet),
+// the simplest upgrade is Firebase Anonymous Auth + a shared invite link, or a
+// single shared "trip password" checked in the app before allowing submitScore().
+// Ask Claude to add either of these when you're ready — the data model above
+// doesn't need to change.

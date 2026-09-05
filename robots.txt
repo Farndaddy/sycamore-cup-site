@@ -1,0 +1,5 @@
+# This is a private site for a golf trip among friends.
+# It is reachable by anyone with the link, but we would rather it
+# did not turn up in search results under people's real names.
+User-agent: *
+Disallow: /

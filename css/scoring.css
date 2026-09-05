@@ -1,0 +1,377 @@
+/* =========================================================
+   Sycamore Cup Classic — live scoring
+   Built for a phone in one hand and a beer in the other.
+   Inherits the site tokens from style.css; everything here is
+   about touch targets, glanceability, and standing in the sun.
+   ========================================================= */
+
+.scoring-body { background: var(--ivory); }
+
+.scoring-shell { padding-bottom: 40px; }
+
+/* ---------- identity ---------- */
+.ident-bar {
+  background: var(--forest);
+  color: #F3EFE4;
+  padding: 10px 0;
+}
+.ident-inner {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
+.ident-label {
+  display: block;
+  font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
+  opacity: .65; margin-bottom: 1px;
+}
+.ident-who strong { font-size: 16px; font-weight: 600; }
+.ident-bar .btn-light { background: rgba(255,255,255,.14); color: #F3EFE4; border-color: rgba(255,255,255,.28); }
+.ident-bar .btn-light:hover { background: rgba(255,255,255,.24); }
+
+/* ---------- round picker ---------- */
+.round-bar { background: var(--paper); border-bottom: 1px solid var(--line); padding: 14px 0 12px; }
+.round-select {
+  width: 100%; padding: 11px 12px;
+  font-family: var(--font-body); font-size: 15px; font-weight: 600;
+  color: var(--ink); background: var(--sand);
+  border: 1px solid var(--line-strong); border-radius: var(--radius);
+}
+.round-meta {
+  margin-top: 7px; font-size: 12.5px; color: var(--ink-soft);
+  font-family: var(--font-mono);
+}
+.round-locked {
+  display: inline-block; margin-left: 8px; padding: 1px 7px;
+  background: var(--clay); color: #fff; border-radius: 2px;
+  font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+}
+
+/* ---------- tabs ---------- */
+.tabbar {
+  display: flex; gap: 0;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line-strong);
+  overflow-x: auto; -webkit-overflow-scrolling: touch;
+  position: sticky; top: 0; z-index: 30;
+}
+.tabbar::-webkit-scrollbar { display: none; }
+.tab {
+  flex: 1 0 auto; min-width: 92px;
+  padding: 14px 14px 12px;
+  background: none; border: none; border-bottom: 2px solid transparent;
+  font-family: var(--font-body); font-size: 13px; font-weight: 600;
+  letter-spacing: .02em; color: var(--ink-soft); cursor: pointer;
+  white-space: nowrap;
+}
+.tab.active { color: var(--forest); border-bottom-color: var(--forest); }
+.tab:focus-visible { outline: 2px solid var(--brass); outline-offset: -2px; }
+
+.scoring-main { padding-top: 22px; }
+.tabpane { display: none; }
+.tabpane.active { display: block; }
+
+/* ---------- generic blocks ---------- */
+.pane-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 14px; margin-bottom: 14px;
+}
+.pane-head h2 {
+  font-family: var(--font-display); font-weight: 500; font-size: 22px; margin: 0;
+}
+.pane-note { font-size: 13px; color: var(--ink-soft); margin: 0 0 16px; }
+
+.banner {
+  padding: 13px 15px; border-radius: var(--radius);
+  background: var(--sand); border-left: 2px solid var(--brass);
+  font-size: 14px; margin-bottom: 18px;
+}
+.banner.warn { border-left-color: var(--clay); }
+.banner strong { display: block; margin-bottom: 2px; }
+
+/* ---------- the scorecard ---------- */
+.card-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 -20px; padding: 0 20px; }
+.sc-table {
+  width: 100%; border-collapse: collapse;
+  font-family: var(--font-mono); font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+.sc-table th, .sc-table td {
+  padding: 6px 1px; text-align: center;
+  border-bottom: 1px solid var(--line);
+  min-width: 29px;
+}
+.sc-table thead th {
+  font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--ink-soft); font-weight: 600;
+  border-bottom: 1px solid var(--line-strong);
+}
+.sc-table .row-label {
+  text-align: left; white-space: nowrap;
+  font-family: var(--font-body); font-size: 11px;
+  letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft);
+  position: sticky; left: 0; background: var(--ivory); min-width: 52px;
+  padding-right: 6px;
+}
+.sc-table .col-total { background: var(--sand); font-weight: 600; }
+.sc-table .row-par td, .sc-table .row-hcp td { color: var(--ink-soft); font-size: 12px; }
+
+/* score entry cells */
+.score-cell {
+  position: relative; cursor: pointer;
+  font-size: 16px; font-weight: 600; color: var(--ink);
+  padding: 12px 1px;
+}
+.score-cell:hover { background: var(--sand); }
+.score-cell.empty { color: var(--line-strong); }
+.score-cell.locked { cursor: default; opacity: .55; }
+
+/* the pop marks — a dot per stroke received on that hole */
+.pops { position: absolute; top: 3px; right: 2px; display: flex; gap: 1.5px; }
+.pop-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--brass); }
+
+.score-under { color: var(--under-par); }
+.score-over  { color: var(--over-par); }
+.score-cell.eagle { box-shadow: inset 0 0 0 2px var(--under-par); }
+.score-cell.birdie { box-shadow: inset 0 0 0 1px var(--under-par); }
+.score-cell.bogey-plus { color: var(--over-par); }
+.score-cell.capped::after {
+  content: ''; position: absolute; bottom: 3px; left: 50%; transform: translateX(-50%);
+  width: 12px; height: 1.5px; background: var(--clay);
+}
+
+/* ---------- totals strip ---------- */
+.totals-strip {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 1px; background: var(--line);
+  border: 1px solid var(--line); border-radius: var(--radius);
+  margin: 18px 0; overflow: hidden;
+}
+.total-tile { background: var(--paper); padding: 13px 10px; text-align: center; }
+.total-tile .t-label {
+  font-size: 10px; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--ink-soft); margin-bottom: 3px;
+}
+.total-tile .t-value {
+  font-family: var(--font-mono); font-size: 21px; font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- tee picker ---------- */
+.tee-row {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  padding: 13px 15px; background: var(--paper);
+  border: 1px solid var(--line); border-radius: var(--radius);
+  margin-bottom: 18px;
+}
+.tee-row .tee-label {
+  font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft);
+}
+.tee-btn {
+  padding: 7px 13px; border-radius: var(--radius);
+  border: 1px solid var(--line-strong); background: var(--ivory);
+  font-family: var(--font-body); font-size: 13px; font-weight: 500;
+  color: var(--ink); cursor: pointer;
+}
+.tee-btn.on { background: var(--forest); border-color: var(--forest); color: #F3EFE4; }
+.tee-hcp {
+  margin-left: auto; font-family: var(--font-mono); font-size: 13px; color: var(--ink-soft);
+}
+.tee-hcp strong { color: var(--ink); font-size: 15px; }
+
+/* .btn-light in style.css is white-on-white by design — it lives on dark
+   hero sections. On these pale cards it vanishes, so light surfaces use this. */
+.btn-quiet {
+  background: var(--paper);
+  border-color: var(--line-strong);
+  color: var(--ink);
+}
+.btn-quiet:hover { background: var(--sand); border-color: var(--forest); color: var(--forest); }
+.btn-quiet[disabled] { opacity: .38; cursor: not-allowed; }
+
+/* ---------- leaderboards ---------- */
+.lb { width: 100%; border-collapse: collapse; }
+.lb th {
+  text-align: left; padding: 0 8px 8px;
+  font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink-soft); font-weight: 600;
+  border-bottom: 1px solid var(--line-strong);
+}
+.lb td { padding: 12px 8px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+.lb .num { text-align: right; font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.lb .pos {
+  width: 34px; font-family: var(--font-mono); font-size: 13px; color: var(--ink-soft);
+}
+.lb tr.is-me { background: rgba(169,136,79,.09); }
+.lb tr.is-me td:first-child { box-shadow: inset 2px 0 0 var(--brass); }
+.lb .who { font-weight: 600; }
+.lb .who small {
+  display: block; font-weight: 400; font-size: 11.5px; color: var(--ink-soft);
+  font-family: var(--font-body); margin-top: 1px;
+}
+.lb .net { font-size: 17px; font-weight: 600; }
+.lb .thru { font-size: 12px; color: var(--ink-soft); }
+
+.team-dot {
+  display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+  margin-right: 7px; vertical-align: 1px;
+}
+.dot-team-1 { background: var(--forest); }
+.dot-team-2 { background: var(--clay); }
+.dot-team-3 { background: var(--brass); }
+
+/* ---------- team cards ---------- */
+.team-card {
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--paper); margin-bottom: 14px; overflow: hidden;
+}
+.team-card-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; padding: 15px 17px; border-bottom: 1px solid var(--line);
+}
+.team-card-head h3 { margin: 0; font-family: var(--font-display); font-weight: 500; font-size: 19px; }
+.team-card-head .team-net {
+  font-family: var(--font-mono); font-size: 24px; font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.team-members { padding: 6px 17px 13px; }
+.team-member {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 7px 0; font-size: 14px; border-bottom: 1px solid var(--line);
+}
+.team-member:last-child { border-bottom: none; }
+.team-member .m-net { font-family: var(--font-mono); font-weight: 600; }
+.team-member .m-thru { font-size: 11.5px; color: var(--ink-soft); margin-left: 8px; font-weight: 400; }
+.scramble-line {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 10px 17px; background: var(--sand); font-size: 13.5px;
+}
+.scramble-line .s-net { font-family: var(--font-mono); font-weight: 600; }
+
+/* ---------- skins ---------- */
+.skins-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(74px, 1fr));
+  gap: 7px; margin-bottom: 20px;
+}
+.skin-hole {
+  border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 8px 6px; text-align: center; background: var(--paper);
+}
+.skin-hole .sh-num {
+  font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft);
+}
+.skin-hole .sh-who {
+  font-size: 12px; font-weight: 600; margin-top: 3px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.skin-hole .sh-val { font-family: var(--font-mono); font-size: 11px; color: var(--ink-soft); margin-top: 1px; }
+.skin-hole.won { border-color: var(--forest); background: rgba(30,58,47,.05); }
+.skin-hole.tied { background: var(--sand); }
+.skin-hole.tied .sh-who { color: var(--ink-soft); font-weight: 500; }
+.skin-hole.pending { opacity: .5; }
+.skin-hole.carry-in { border-left: 2px solid var(--brass); }
+
+.carry-note {
+  padding: 11px 15px; background: var(--sand); border-left: 2px solid var(--brass);
+  font-size: 13.5px; margin-bottom: 18px;
+}
+
+/* ---------- money ---------- */
+.money-group { margin-bottom: 26px; }
+.money-group h3 {
+  font-family: var(--font-body); font-size: 11px; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--ink-soft);
+  margin: 0 0 9px; padding-bottom: 7px; border-bottom: 1px solid var(--line-strong);
+}
+.money-row {
+  display: flex; align-items: baseline; gap: 12px;
+  padding: 11px 0; border-bottom: 1px solid var(--line);
+}
+.money-row .m-label { flex: 1; font-size: 14px; }
+.money-row .m-lead { font-size: 12.5px; color: var(--ink-soft); margin-top: 2px; }
+.money-row .m-amount {
+  font-family: var(--font-mono); font-size: 15px; font-weight: 600;
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+.money-row .m-per { font-size: 11px; color: var(--ink-soft); display: block; text-align: right; }
+.money-total {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 15px 0 0; margin-top: 6px; border-top: 2px solid var(--ink);
+  font-family: var(--font-display); font-size: 19px;
+}
+.money-total .mt-amount { font-family: var(--font-mono); font-weight: 600; }
+
+/* ---------- sheets (sign-in, keypad) ---------- */
+/* The hidden attribute must win over the display rule below, or these
+   invisible overlays sit on top of the page and swallow every tap. */
+.sheet-backdrop[hidden] { display: none !important; }
+
+.sheet-backdrop {
+  position: fixed; inset: 0; z-index: 100;
+  background: rgba(32,30,26,.55);
+  display: flex; align-items: flex-end; justify-content: center;
+  padding: 0;
+}
+.sheet {
+  background: var(--ivory); width: 100%; max-width: 560px;
+  border-radius: 10px 10px 0 0; padding: 26px 22px calc(26px + env(safe-area-inset-bottom));
+  max-height: 92vh; overflow-y: auto;
+}
+.sheet h2 { font-family: var(--font-display); font-weight: 500; font-size: 22px; margin: 0 0 5px; }
+.sheet .muted { font-size: 13.5px; margin: 0 0 18px; }
+.sheet-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 18px; }
+
+.name-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.name-btn {
+  padding: 14px 12px; text-align: left;
+  background: var(--paper); border: 1px solid var(--line-strong);
+  border-radius: var(--radius); cursor: pointer;
+  font-family: var(--font-body); font-size: 14.5px; font-weight: 600; color: var(--ink);
+}
+.name-btn small { display: block; font-weight: 400; font-size: 11.5px; color: var(--ink-soft); margin-top: 2px; }
+.name-btn:hover { border-color: var(--forest); }
+.name-btn.taken { opacity: .45; }
+.name-btn:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+
+.pin-block label {
+  display: block; font-size: 11px; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ink-soft); margin-bottom: 7px;
+}
+.pin-input {
+  width: 100%; padding: 15px; text-align: center;
+  font-family: var(--font-mono); font-size: 28px; letter-spacing: .5em;
+  border: 1px solid var(--line-strong); border-radius: var(--radius);
+  background: var(--paper); color: var(--ink);
+}
+.pin-error { color: var(--clay); font-size: 13px; margin: 9px 0 0; }
+
+/* keypad */
+.keypad-sheet { max-width: 420px; }
+.keypad-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; margin-bottom: 18px; }
+.keypad-head h2 { margin: 2px 0 3px; }
+.keypad-head .muted { margin: 0; }
+.keypad-pops { text-align: right; }
+.keypad-pops .kp-dots { display: flex; gap: 3px; justify-content: flex-end; margin-bottom: 3px; }
+.keypad-pops .kp-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--brass); }
+.keypad-pops .kp-text {
+  font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--brass);
+}
+.keypad-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.key {
+  padding: 17px 0; font-family: var(--font-mono); font-size: 20px; font-weight: 600;
+  background: var(--paper); border: 1px solid var(--line-strong);
+  border-radius: var(--radius); cursor: pointer; color: var(--ink);
+}
+.key:hover { border-color: var(--forest); }
+.key.on { background: var(--forest); border-color: var(--forest); color: #F3EFE4; }
+.key.max { border-style: dashed; }
+.key.clear { font-family: var(--font-body); font-size: 13px; color: var(--ink-soft); }
+.keypad-note { font-size: 12.5px; color: var(--clay); margin: 13px 0 0; }
+
+@media (min-width: 700px) {
+  .sheet-backdrop { align-items: center; padding: 24px; }
+  .sheet { border-radius: 4px; }
+  .name-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}

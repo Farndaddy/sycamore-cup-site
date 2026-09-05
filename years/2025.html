@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>2025 — Sycamore Cup Classic</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site-header" id="site-header"></header>
+
+<section class="hero-photo" id="year-hero">
+  <div class="wrap">
+    <p class="eyebrow" id="year-loc"></p>
+    <h1 id="year-title">2025</h1>
+    <p class="lead" id="year-champ" style="margin-top:6px;"></p>
+    <div class="hero-cta-row" id="year-cta"></div>
+  </div>
+</section>
+
+<section class="section" id="year-content">
+  <div class="wrap">
+    <div class="section-head">
+      <div><span class="eyebrow">Trip Gallery</span><h2>From the Course</h2></div>
+    </div>
+    <div class="gallery" id="year-gallery" style="margin-bottom:60px;"></div>
+
+    <div class="grid grid-2" style="align-items:start; margin-bottom:56px;">
+      <div>
+        <span class="eyebrow">Courses Played</span>
+        <ul id="year-courses" style="padding-left:20px; color:var(--ink-soft); margin-top:14px;"></ul>
+      </div>
+      <div>
+        <span class="eyebrow">About This Year</span>
+        <p class="muted" style="margin-top:14px;" id="year-about"></p>
+      </div>
+    </div>
+
+    <div class="section-head"><div><span class="eyebrow">The Field</span><h2>Teams &amp; Rosters</h2></div></div>
+    <div id="year-teams"></div>
+
+    <div id="year-schedule" style="display:none; margin-top:56px;"></div>
+  </div>
+</section>
+
+<footer class="site-footer" id="site-footer"></footer>
+
+<script src="../js/app.js"></script>
+<script src="../js/year.js"></script>
+<script>
+  initShell('2025');
+  renderYearPage(2025);
+</script>
+</body>
+</html>

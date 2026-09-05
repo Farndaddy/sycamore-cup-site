@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Enter Scores — Sycamore Cup Classic</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="site-header" id="site-header"></header>
+
+<section class="hero-plain">
+  <div class="wrap">
+    <p class="eyebrow">On The Course</p>
+    <h1><em>Enter Scores</em></h1>
+    <p class="lead">Punch in strokes hole by hole. Everything syncs live to the leaderboard — anyone in the group can enter for themselves or their group.</p>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0;">
+  <div class="wrap">
+    <div id="config-banner"></div>
+
+    <div class="grid grid-2" style="align-items:start;">
+      <div class="card" style="padding:24px;">
+        <h3 class="mt-0">Your Entry</h3>
+
+        <div class="field">
+          <label for="your-name">Your name (for the record)</label>
+          <input type="text" id="your-name" placeholder="e.g. Nick Fowler">
+        </div>
+
+        <div class="field">
+          <label for="year-select">Year</label>
+          <select id="year-select"></select>
+        </div>
+
+        <div class="field">
+          <label for="session-select">Session / Round</label>
+          <select id="session-select"></select>
+        </div>
+
+        <div class="field">
+          <label for="holecount-select">Holes in this round</label>
+          <select id="holecount-select">
+            <option value="9">9 holes</option>
+            <option value="18" selected>18 holes</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="player-select">Player</label>
+          <select id="player-select"></select>
+        </div>
+
+        <div class="field">
+          <label for="hole-select">Hole</label>
+          <select id="hole-select"></select>
+        </div>
+
+        <div class="field">
+          <label for="strokes-input">Strokes</label>
+          <input type="number" id="strokes-input" min="1" max="15" placeholder="e.g. 5">
+        </div>
+
+        <button class="btn btn-primary" id="submit-score" style="width:100%; justify-content:center;">Save Score</button>
+        <p id="submit-status" class="muted" style="margin-top:10px; margin-bottom:0; font-size:0.85rem;"></p>
+      </div>
+
+      <div class="card" style="padding:24px;">
+        <h3 class="mt-0">This Player's Card So Far</h3>
+        <p class="muted" id="player-card-sub" style="margin-top:-8px;"></p>
+        <div class="scorecard-wrap">
+          <table class="scorecard" style="min-width:0;">
+            <thead><tr id="card-header"></tr></thead>
+            <tbody><tr id="card-row"></tr></tbody>
+          </table>
+        </div>
+
+        <hr class="divider">
+
+        <details>
+          <summary style="cursor:pointer; font-family:var(--font-mono); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.04em; color:var(--ink-soft);">Set par for this course (optional)</summary>
+          <div id="par-setup" style="margin-top:16px;"></div>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer" id="site-footer"></footer>
+
+<script src="js/app.js"></script>
+<script src="js/scoring-shared.js"></script>
+<script type="module" src="js/score-entry-page.js"></script>
+</body>
+</html>

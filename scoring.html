@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Live Scoring — 2026 Sycamore Cup Classic</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/scoring.css">
+</head>
+<body class="scoring-body">
+
+<header class="site-header" id="site-header"></header>
+
+<div class="scoring-shell">
+
+  <!-- ============ IDENTITY BAR ============ -->
+  <div class="ident-bar" id="ident-bar">
+    <div class="wrap ident-inner">
+      <div class="ident-who">
+        <span class="ident-label">Scoring as</span>
+        <strong id="ident-name">—</strong>
+      </div>
+      <button class="btn btn-sm btn-light" id="ident-switch" type="button">Change</button>
+    </div>
+  </div>
+
+  <!-- ============ ROUND PICKER ============ -->
+  <div class="round-bar">
+    <div class="wrap">
+      <select id="round-select" class="round-select" aria-label="Choose round"></select>
+      <div class="round-meta" id="round-meta"></div>
+    </div>
+  </div>
+
+  <!-- ============ TABS ============ -->
+  <nav class="tabbar" id="tabbar" role="tablist">
+    <button class="tab active" data-tab="card"   role="tab">My Card</button>
+    <button class="tab"        data-tab="indiv"  role="tab">Individual</button>
+    <button class="tab"        data-tab="teams"  role="tab">Teams</button>
+    <button class="tab"        data-tab="skins"  role="tab">Skins</button>
+    <button class="tab"        data-tab="money"  role="tab">The Money</button>
+  </nav>
+
+  <main class="wrap scoring-main">
+    <div id="status-banner"></div>
+
+    <section class="tabpane active" id="pane-card"></section>
+    <section class="tabpane" id="pane-indiv"></section>
+    <section class="tabpane" id="pane-teams"></section>
+    <section class="tabpane" id="pane-skins"></section>
+    <section class="tabpane" id="pane-money"></section>
+  </main>
+</div>
+
+<!-- ============ SIGN-IN SHEET ============ -->
+<div class="sheet-backdrop" id="signin-sheet" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="signin-title">
+    <h2 id="signin-title">Who's playing?</h2>
+    <p class="muted" id="signin-sub">Pick your name, then set a 4-digit PIN. You'll only do this once on this phone.</p>
+    <div class="name-grid" id="signin-names"></div>
+    <div class="pin-block" id="pin-block" hidden>
+      <label for="pin-input" id="pin-label">Set your PIN</label>
+      <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="4" id="pin-input" class="pin-input" autocomplete="off">
+      <p class="pin-error" id="pin-error" hidden></p>
+      <div class="sheet-actions">
+        <button class="btn btn-quiet btn-sm" id="pin-back" type="button">Back</button>
+        <button class="btn btn-primary" id="pin-go" type="button">Let's play</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SCORE KEYPAD ============ -->
+<div class="sheet-backdrop" id="keypad-sheet" hidden>
+  <div class="sheet keypad-sheet" role="dialog" aria-modal="true" aria-labelledby="keypad-title">
+    <div class="keypad-head">
+      <div>
+        <span class="eyebrow" id="keypad-eyebrow">Hole</span>
+        <h2 id="keypad-title">Hole 1</h2>
+        <p class="muted" id="keypad-sub">Par 4 · 370 yds</p>
+      </div>
+      <div class="keypad-pops" id="keypad-pops"></div>
+    </div>
+    <div class="keypad-grid" id="keypad-grid"></div>
+    <p class="keypad-note" id="keypad-note" hidden></p>
+    <div class="sheet-actions">
+      <button class="btn btn-quiet btn-sm" id="keypad-close" type="button">Close</button>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer" id="site-footer"></footer>
+
+<script src="js/app.js"></script>
+<script type="module" src="js/scoring-page.js"></script>
+</body>
+</html>

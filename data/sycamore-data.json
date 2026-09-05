@@ -1,0 +1,1135 @@
+{
+  "meta": {
+    "name": "Sycamore Cup Classic",
+    "founded": 2021,
+    "sourceNote": "Data transcribed from the 2023, 2024, and 2025 brochures. Confirmed with Farnia on 2026-07-26.",
+    "dataNotes": [
+      "2025 has no fun-fact fields in the source brochure (golfer/movie/food-style questions) \u2014 only handicap indexes and match pairings. Farnia will add 2025 fun facts (and other profile info) via the Sheet CMS once it's connected to a live GitHub repo."
+    ]
+  },
+  "players": [
+    {
+      "id": "anthony-gjonaj",
+      "name": "Anthony Gjonaj",
+      "yearsAttended": [
+        2023,
+        2024,
+        2025
+      ],
+      "indexByYear": {
+        "2023": 10,
+        "2024": 13,
+        "2025": 12
+      }
+    },
+    {
+      "id": "auston-chen",
+      "name": "Auston Chen",
+      "yearsAttended": [
+        2024,
+        2025
+      ],
+      "indexByYear": {
+        "2023": null,
+        "2024": 12,
+        "2025": 17
+      }
+    },
+    {
+      "id": "ben-conway",
+      "name": "Ben Conway",
+      "yearsAttended": [
+        2025
+      ],
+      "indexByYear": {
+        "2023": null,
+        "2024": null,
+        "2025": 5
+      }
+    },
+    {
+      "id": "brian-danahy",
+      "name": "Brian Danahy",
+      "yearsAttended": [
+        2023,
+        2024,
+        2025
+      ],
+      "indexByYear": {
+        "2023": 25,
+        "2024": 25,
+        "2025": 25
+      }
+    },
+    {
+      "id": "casey-godfrey",
+      "name": "Casey Godfrey",
+      "yearsAttended": [
+        2023,
+        2024,
+        2025
+      ],
+      "indexByYear": {
+        "2023": null,
+        "2024": 7,
+        "2025": 8
+      }
+    },
+    {
+      "id": "chris-clement",
+      "name": "Chris Clement",
+      "yearsAttended": [
+        2023
+      ],
+      "indexByYear": {
+        "2023": 13,
+        "2024": null,
+        "2025": null
+      }
+    },
+    {
+      "id": "collin-jewett",
+      "name": "Collin Jewett",
+      "yearsAttended": [
+        2024,
+        2025
+      ],
+      "indexByYear": {
+        "2023": null,
+        "2024": null,
+        "2025": 9
+      }
+    },
+    {
+      "id": "david-schultz",
+      "name": "David Schultz",
+      "yearsAttended": [
+        2025
+      ],
+      "indexByYear": {
+        "2023": null,
+        "2024": null,
+        "2025": 17
+      }
+    },
+    {
+      "id": "farnia-ghavami",
+      "name": "Farnia Ghavami",
+      "yearsAttended": [
+        2023,
+        2024,
+        2025
+      ],
+      "indexByYear": {
+        "2023": 19,
+        "2024": 19,
+        "2025": 18
+      }
+    },
+    {
+      "id": "gregg-suglia",
+      "name": "Gregg Suglia",
+      "yearsAttended": [
+        2023,
+        2024,
+        2025
+      ],
+      "indexByYear": {
+        "2023": 8,
+        "2024": 7,
+        "2025": 7
+      }
+    },
+    {
+      "id": "jack-mccarthy",
+      "name": "Jack McCarthy",
+      "yearsAttended": [
+        2023,
+        2025
+      ],
+      "indexByYear": {
+        "2023": 2,
+        "2024": null,
+        "2025": 2
+      }
+    },
+    {
+      "id": "mike-grosh",
+      "name": "Mike Grosh",
+      "yearsAttended": [
+        2023,
+        2024,
+        2025
+      ],
+      "indexByYear": {
+        "2023": 10,
+        "2024": 9,
+        "2025": 9
+      }
+    },
+    {
+      "id": "nick-fowler",
+      "name": "Nick Fowler",
+      "yearsAttended": [
+        2023,
+        2024,
+        2025
+      ],
+      "indexByYear": {
+        "2023": 3,
+        "2024": 6,
+        "2025": 3
+      }
+    },
+    {
+      "id": "nigel-scott",
+      "name": "Nigel Scott",
+      "yearsAttended": [
+        2023,
+        2024,
+        2025
+      ],
+      "indexByYear": {
+        "2023": 6,
+        "2024": 6,
+        "2025": 5
+      }
+    },
+    {
+      "id": "rob-vassallo",
+      "name": "Rob Vassallo",
+      "yearsAttended": [
+        2024,
+        2025
+      ],
+      "indexByYear": {
+        "2023": null,
+        "2024": 9,
+        "2025": 9
+      }
+    },
+    {
+      "id": "robert-stong",
+      "name": "Robert Stong",
+      "yearsAttended": [
+        2023,
+        2024,
+        2025
+      ],
+      "indexByYear": {
+        "2023": 10,
+        "2024": 12,
+        "2025": 12
+      }
+    },
+    {
+      "id": "scottie-collins",
+      "name": "Scottie Collins",
+      "yearsAttended": [
+        2023,
+        2024,
+        2025
+      ],
+      "indexByYear": {
+        "2023": 4,
+        "2024": 6,
+        "2025": 3
+      }
+    }
+  ],
+  "years": {
+    "2023": {
+      "year": 2023,
+      "location": "Orlando, FL",
+      "courses": [
+        "Southern Hills Plantation",
+        "Shingle Creek",
+        "Providence",
+        "Grand Cypress Links",
+        "Reunion Resort - Jack's (Nicklaus Course)"
+      ],
+      "teamChampion": "Bird Dogs",
+      "teams": [
+        {
+          "id": "2023-palm-lickers",
+          "name": "Palm Lickers",
+          "captain": "Anthony Gjonaj",
+          "result": "Runner-up",
+          "roster": [
+            {
+              "playerId": "anthony-gjonaj",
+              "displayName": "Anthony",
+              "surname": "Gjonaj",
+              "jerseyNumber": 10,
+              "titles": "The Detroit Native, Dukie Fuckboy #1, A to the G, The Founder, The LOUDMouth from da D",
+              "funFacts": {
+                "golfer": "Payne Stewart",
+                "sportsTeam": "Mighty Ducks",
+                "athlete": "Serena",
+                "comedian": "Jamie Foxx",
+                "actress": "Milla Jovovich",
+                "jersey": "White Dream Team #15",
+                "chip": "Cheddar Sour Cream",
+                "candy": "Reece's Pieces"
+              }
+            },
+            {
+              "playerId": "mike-grosh",
+              "displayName": "Mikey",
+              "surname": "Groshie",
+              "jerseyNumber": 10,
+              "titles": "Southsidezinksi, Buttercup Draw, Upperdeckies Only",
+              "funFacts": {
+                "golfer": "Freddie",
+                "sportsTeam": "Beloit Snappers",
+                "athlete": "Bo Knows",
+                "comedian": "The Nicest-Man in Standup",
+                "actress": "Charlize Theron",
+                "jersey": "Leroy Butler 36 WU",
+                "chip": "Cool Ranch",
+                "candy": "(Left) Twix"
+              }
+            },
+            {
+              "playerId": "jack-mccarthy",
+              "displayName": "Jackie",
+              "surname": "McCarthy",
+              "jerseyNumber": 2,
+              "titles": "The Stick, Beantown's Finest, Close'nough To Smell Ya",
+              "funFacts": {
+                "golfer": "DJ",
+                "sportsTeam": "Hartford Whalers",
+                "athlete": "The Truth",
+                "comedian": "Jerry Seinfeld",
+                "actress": "Halle Berry",
+                "jersey": "Bengals",
+                "chip": "Cool Ranch",
+                "candy": "Reece's Pieces"
+              }
+            },
+            {
+              "playerId": "chris-clement",
+              "displayName": "Chris",
+              "surname": "Clement",
+              "jerseyNumber": 13,
+              "titles": "The Weatherman, North Kakalacka's One and Only",
+              "funFacts": {
+                "golfer": "Max Homa",
+                "sportsTeam": "Redskins",
+                "athlete": "Darryl Strawberry",
+                "comedian": "Let the Boy Watch",
+                "actress": "Jenna Jameson",
+                "jersey": "Rodman #91 Bulls",
+                "chip": "Fritos",
+                "candy": "Swedish Fish"
+              }
+            },
+            {
+              "playerId": "casey-godfrey",
+              "displayName": "Casey",
+              "surname": "Godfrey",
+              "jerseyNumber": 7,
+              "titles": "Da Dom Dolla, Indy's Smoovest, Urshermoves",
+              "funFacts": {
+                "golfer": "J-Speith",
+                "sportsTeam": "90's Hornets",
+                "athlete": "Roger Dorn",
+                "comedian": "Jerry",
+                "actress": "Paige Spiranac",
+                "jersey": "Latrell Spreewell",
+                "chip": "Chex Mix",
+                "candy": "Take 5"
+              }
+            },
+            {
+              "playerId": "farnia-ghavami",
+              "displayName": "Farnia",
+              "surname": "Ghavami",
+              "jerseyNumber": 19,
+              "titles": "The Brown Mamba, The Farn, The Take Care-n-Brush Yo Hair",
+              "funFacts": {
+                "golfer": "The Hamburglar",
+                "sportsTeam": "Polk High + Any Team vs LeQueen",
+                "athlete": "Your Mom or Penny Hardaway",
+                "comedian": "Redd Fox",
+                "actress": "Jennifer Love Hewitt",
+                "jersey": "Swishahouse",
+                "chip": "Cape Kod Jalepeno",
+                "candy": "Yosistasboxinzki"
+              }
+            }
+          ]
+        },
+        {
+          "id": "2023-bird-dogs",
+          "name": "Bird Dogs",
+          "captain": "Gregg Suglia",
+          "result": "Champion",
+          "roster": [
+            {
+              "playerId": "gregg-suglia",
+              "displayName": "Gregg",
+              "surname": "Suglia",
+              "jerseyNumber": 8,
+              "titles": "The Young Buck, there are two-G's in Gregg Boys, Putters in the Bag",
+              "funFacts": {
+                "golfer": "Jackie the Stick",
+                "sportsTeam": "Average Joe's",
+                "athlete": "Nick Kyrgios",
+                "comedian": "Joaquin Phoenix \"Joker\"",
+                "actress": "Margot Robbie (no other answer, he says)",
+                "jersey": "Average Joe's",
+                "chip": "Anywhere off the Green",
+                "candy": "3 Muskateers"
+              }
+            },
+            {
+              "playerId": "scottie-collins",
+              "displayName": "Scottie",
+              "surname": "Collins",
+              "jerseyNumber": 4,
+              "titles": "No holds bar, been there done that, you need me to put a nipple on that for you",
+              "funFacts": {
+                "golfer": "Rory McAvoy",
+                "sportsTeam": "Western University Dolphins",
+                "athlete": "Bird Man",
+                "comedian": "Long Ball Larry",
+                "actress": "Abella Danger",
+                "jersey": "90s Bulls Black w/Red Pin Stripes",
+                "chip": "$1K Aria Baccarat",
+                "candy": "Red Vines"
+              }
+            },
+            {
+              "playerId": "nick-fowler",
+              "displayName": "Nickie",
+              "surname": "Fowler",
+              "jerseyNumber": 3,
+              "titles": "The Spur Lover, Lady Back Bubbler Tickler, the Rife of Your Life",
+              "funFacts": {
+                "golfer": "Joel Dahmen",
+                "sportsTeam": "Brazilian Women's Sand Volleyball",
+                "athlete": "Alex Honnold",
+                "comedian": "Nasty Nate - Tennesee Kid",
+                "actress": "Gal Gadot",
+                "jersey": "90s Fiesta Spurs",
+                "chip": "Zapps Voodoo",
+                "candy": "Watermelon Sour Patch"
+              }
+            },
+            {
+              "playerId": "robert-stong",
+              "displayName": "Rob",
+              "surname": "Stong",
+              "jerseyNumber": 10,
+              "titles": "Da Chokehold, Dead Sleeper, Pillows Deep from the Heart of Texas",
+              "funFacts": {
+                "golfer": "Bubba \"dat man good\" Watson",
+                "sportsTeam": "85' Bears",
+                "athlete": "The Ironman",
+                "comedian": "Doug Stanhope",
+                "actress": "Jennifer Lawrence",
+                "jersey": "The Glove - Supersonics",
+                "chip": "Any Tortilla Chip",
+                "candy": "Kit Kat"
+              }
+            },
+            {
+              "playerId": "nigel-scott",
+              "displayName": "Nigel",
+              "surname": "Scott",
+              "jerseyNumber": 6,
+              "titles": "Right Here Maaaan, The Green Reader from the Back Row",
+              "funFacts": {
+                "golfer": "Delroy Cambridge",
+                "sportsTeam": "Canadian Curling Team",
+                "athlete": "Usain Bolt",
+                "comedian": "Bernie Mac",
+                "actress": "Sofia Vergara",
+                "jersey": "Pedro Cerrano - Indians #13",
+                "chip": "Flaming Hot Cheetos",
+                "candy": "Crunch"
+              }
+            },
+            {
+              "playerId": "brian-danahy",
+              "displayName": "Brian",
+              "surname": "Danahy",
+              "jerseyNumber": 25,
+              "titles": "Can't Giveit Da Fuqup, Mr. Smiles, Cadillac Jackblack",
+              "funFacts": {
+                "golfer": "Graeme McDowell",
+                "sportsTeam": "Avalanche",
+                "athlete": "Dave Stewart",
+                "comedian": "Chris Rock",
+                "actress": "Tara Patrick",
+                "jersey": "Powder Blue Chargers",
+                "chip": "Chili Cheese Fritos",
+                "candy": "Twix"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "2024": {
+      "year": 2024,
+      "location": "Orlando, FL",
+      "courses": [
+        "Southern Hills Plantation",
+        "Orange County National - Crooked Cat",
+        "Shingle Creek",
+        "Evermore Links (GC)",
+        "Evermore Cypress"
+      ],
+      "teamChampion": "Sycamore Swingers",
+      "teams": [
+        {
+          "id": "2024-sycamore-swingers",
+          "name": "Sycamore Swingers",
+          "captain": "Anthony Gjonaj",
+          "result": "Champion",
+          "roster": [
+            {
+              "playerId": "anthony-gjonaj",
+              "displayName": "Swinger Bell Gjonaj",
+              "jerseyNumber": 13,
+              "titles": "Slang-er of shoes, clubs, hoes, and strokes",
+              "funFacts": {
+                "golfClub": "54 degree",
+                "distanceShot": "88 meters",
+                "album": "Station to Station (David Bowie)",
+                "dish": "Pasta",
+                "star": "Brittany Bakeer",
+                "warMovie": "Gladiator",
+                "sportsMovie": "Varsity Blues",
+                "comedyMovie": "Ace Ventura"
+              }
+            },
+            {
+              "playerId": "mike-grosh",
+              "displayName": "Lost & Found Groshie",
+              "jerseyNumber": 9,
+              "titles": "Half-human, half-alien, a true unicorn in the age of time travel and space, Green Card Holder",
+              "funFacts": {
+                "golfClub": "7 iron",
+                "distanceShot": "130 yards",
+                "album": "Only Built for Cuban Links (Raekwon)",
+                "dish": "Gochujang Wagyu Steak Skewers",
+                "star": "Alexis Fawx",
+                "warMovie": "Predator",
+                "sportsMovie": "Major League",
+                "comedyMovie": "The Other Guys"
+              }
+            },
+            {
+              "playerId": "nick-fowler",
+              "displayName": "FB Marketplace Fowler",
+              "jerseyNumber": 6,
+              "titles": "Uncle Algo, Gone Fishin', Married to Da Rife DDN Texas Style",
+              "funFacts": {
+                "golfClub": "60 degree",
+                "distanceShot": "77 yards",
+                "album": "The Presidents of the USA",
+                "dish": "Sushi",
+                "star": "Kendra Sutherland",
+                "warMovie": "Red Dawn",
+                "sportsMovie": "Caddyshack",
+                "comedyMovie": "Kung Pow Enter the Fist"
+              }
+            },
+            {
+              "playerId": "robert-stong",
+              "displayName": "Stongerino",
+              "jerseyNumber": 12,
+              "titles": "Da Birthday Boy, the Straight Sticka to da Vikings, The Texas Wedger of Da South",
+              "funFacts": {
+                "golfClub": "6 iron",
+                "distanceShot": null,
+                "album": "Ten (Pearl Jam)",
+                "dish": "Fettuccine Alfredo",
+                "star": "Amy Anderssen",
+                "warMovie": "Fury",
+                "sportsMovie": "Seabiscuit",
+                "comedyMovie": "Office Space"
+              }
+            },
+            {
+              "playerId": "rob-vassallo",
+              "displayName": "Back9 Bobby",
+              "jerseyNumber": 9,
+              "titles": "Pedal to the metal, get on it toots, dis D-don't **** itself",
+              "funFacts": {
+                "golfClub": "8 iron",
+                "distanceShot": "115 yards",
+                "album": "Californication (RHCP)",
+                "dish": "Lamb Chops",
+                "star": "Cherokee from Milf Hunter",
+                "warMovie": "Forrest Gump",
+                "sportsMovie": "Rocky Gump",
+                "comedyMovie": "Tommy Boy"
+              }
+            },
+            {
+              "playerId": "farnia-ghavami",
+              "displayName": "Berna Parma, Parma Berna",
+              "jerseyNumber": 20,
+              "titles": "The homie on dem (Google) sheets, and gettin' off yo sista in (dem Egyptian) sheets",
+              "funFacts": {
+                "golfClub": "Gap wedge",
+                "distanceShot": "124 yards",
+                "album": "Random Access Memories (Daft Punk)",
+                "dish": "Bone-in-Dry-Aged-Ribeye w/Mash Potatoes",
+                "star": "Kendra Lust",
+                "warMovie": "Full Metal Jacket",
+                "sportsMovie": "White Men Can't Jump",
+                "comedyMovie": "Dumb & Dumber"
+              }
+            }
+          ]
+        },
+        {
+          "id": "2024-bird-dogs",
+          "name": "Bird Dogs",
+          "captain": "Gregg Suglia",
+          "result": "Defending champion, runner-up",
+          "roster": [
+            {
+              "playerId": "gregg-suglia",
+              "displayName": "Enter Da Sandman Suglia",
+              "jerseyNumber": 7,
+              "titles": "The Ruler of the Desert, the IDGAF of the Generation, the \"I've had this talk a lot about this topic\" man, LeBron D-Rider A-Team",
+              "funFacts": {
+                "golfClub": "9 iron with some ice cubes",
+                "distanceShot": "5-yards off the green",
+                "album": "Carter III (Weezy)",
+                "dish": "Farn's Sister",
+                "star": "Riley Reid",
+                "warMovie": "Joker",
+                "sportsMovie": "Dodgeball",
+                "comedyMovie": "Saw III"
+              }
+            },
+            {
+              "playerId": "scottie-collins",
+              "displayName": "Scottie IG Collins",
+              "jerseyNumber": 6,
+              "titles": "Sex, Drama and Rock-n-Roll, Algo4Days, Orgasms-n-Putts, Gotta Be the Shoes Maaaaan",
+              "funFacts": {
+                "golfClub": "Pitching Wedge",
+                "distanceShot": "Dogleg left over water",
+                "album": "1989 (Taylor Swift)",
+                "dish": "Pizza",
+                "star": "Maximo Garcia",
+                "warMovie": "Braveheart",
+                "sportsMovie": "White Men Can't Jump",
+                "comedyMovie": "Tommy Boy"
+              }
+            },
+            {
+              "playerId": "casey-godfrey",
+              "displayName": "The Dom Droppa Godfrey",
+              "jerseyNumber": 6,
+              "titles": "100+ Rounds Logged, Golfaholic in Dem Short Shorts, Clubs Cost More Than His Caaaar",
+              "funFacts": {
+                "golfClub": "Hybrid",
+                "distanceShot": "125 yards",
+                "album": "What's Your Name (Adam Sandler)",
+                "dish": "Pizza",
+                "star": "Mia Khalifa",
+                "warMovie": "Saving Private Ryan",
+                "sportsMovie": "Major League",
+                "comedyMovie": "Hangover"
+              }
+            },
+            {
+              "playerId": "nigel-scott",
+              "displayName": "He's Asian Mon",
+              "jerseyNumber": 6,
+              "titles": "Compacter of Irons, Da Dandata of Dem Greens, DaBabyFace Assassin and Da Puker of Rentalz",
+              "funFacts": {
+                "golfClub": "8 iron",
+                "distanceShot": "120 yards",
+                "album": "Art and Life (Beanie Man)",
+                "dish": "Rice, Beans & Fried Chicken",
+                "star": "Whoever Mandingo layin' it on",
+                "warMovie": "Rambo",
+                "sportsMovie": "Water Boy",
+                "comedyMovie": "Mr. Brown"
+              }
+            },
+            {
+              "playerId": "auston-chen",
+              "displayName": "Austonia De Bisonia Chen",
+              "jerseyNumber": 12,
+              "titles": "He's got 5 on it while twistin' up a dozen, BisonLova, NukeTown Tee Box Bomber",
+              "funFacts": {
+                "golfClub": "Pitching Wedge",
+                "distanceShot": "135 yards",
+                "album": "Paradise Valley (John Mayer)",
+                "dish": "Pho",
+                "star": "Angela White",
+                "warMovie": "Lord of the Rings Trilogy",
+                "sportsMovie": "Water Boy",
+                "comedyMovie": "Step Brothers"
+              }
+            },
+            {
+              "playerId": "brian-danahy",
+              "displayName": "GITFU Danahy",
+              "jerseyNumber": 25,
+              "titles": "The Man Behind Da Man, Cadillac Grillz, Cadillac Billz, Cadillac Jack, Cadillac Black",
+              "funFacts": {
+                "golfClub": "Gap Wedge",
+                "distanceShot": "100 yards",
+                "album": "Paul's Boutique (Beastie Boys)",
+                "dish": "Veal Piccata",
+                "star": "Nina Hartley",
+                "warMovie": "Stripes",
+                "sportsMovie": "Happy Gilmore",
+                "comedyMovie": "Slap Shot"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "2025": {
+      "year": 2025,
+      "location": "Turning Stone Resort, Verona, NY",
+      "courses": [
+        "Atunyote",
+        "Kaluhyat",
+        "Shenendoah",
+        "Sandstone (Par 3)"
+      ],
+      "teamChampion": "DOMinators",
+      "teams": [
+        {
+          "id": "2025-sycamore-swingers",
+          "name": "Sycamore Swingers",
+          "captain": "Mike Grosh",
+          "result": "Runner-up",
+          "roster": [
+            {
+              "playerId": "nick-fowler",
+              "index": 3
+            },
+            {
+              "playerId": "robert-stong",
+              "index": 12
+            },
+            {
+              "playerId": "anthony-gjonaj",
+              "index": 12
+            },
+            {
+              "playerId": "brian-danahy",
+              "index": 25
+            },
+            {
+              "playerId": "mike-grosh",
+              "index": 9
+            },
+            {
+              "playerId": "rob-vassallo",
+              "index": 9,
+              "displayName": "Bobby Vassallo"
+            },
+            {
+              "playerId": "jack-mccarthy",
+              "index": 2
+            },
+            {
+              "playerId": "ben-conway",
+              "index": 5
+            }
+          ]
+        },
+        {
+          "id": "2025-dominators",
+          "name": "DOMinators",
+          "captain": "Casey Godfrey",
+          "result": "Champion",
+          "roster": [
+            {
+              "playerId": "casey-godfrey",
+              "index": 8
+            },
+            {
+              "playerId": "collin-jewett",
+              "index": 9
+            },
+            {
+              "playerId": "nigel-scott",
+              "index": 5
+            },
+            {
+              "playerId": "auston-chen",
+              "index": 17
+            },
+            {
+              "playerId": "scottie-collins",
+              "index": 3
+            },
+            {
+              "playerId": "farnia-ghavami",
+              "index": 18
+            },
+            {
+              "playerId": "gregg-suglia",
+              "index": 7
+            },
+            {
+              "playerId": "david-schultz",
+              "index": 17
+            }
+          ]
+        }
+      ],
+      "schedule": [
+        {
+          "session": "Thursday AM",
+          "course": "Sandstone (Par 3)",
+          "format": "Team Mod Alt Shot",
+          "cupPoints": 1,
+          "matches": [
+            {
+              "time": "10:00 AM",
+              "swingers": [
+                "Nick Fowler (3)",
+                "Robert Stong (12)"
+              ],
+              "dominators": [
+                "Casey Godfrey (8)",
+                "Collin Jewett (9)"
+              ]
+            },
+            {
+              "time": "10:10 AM",
+              "swingers": [
+                "Anthony Gjonaj (12)",
+                "Brian Danahy (25)"
+              ],
+              "dominators": [
+                "Nigel Scott (5)",
+                "Auston Chen (17)"
+              ]
+            },
+            {
+              "time": "10:20 AM",
+              "swingers": [
+                "Mike Grosh (9)",
+                "Bobby Vassallo (9)"
+              ],
+              "dominators": [
+                "Scottie Collins (3)",
+                "Farnia Ghavami (18)"
+              ]
+            }
+          ]
+        },
+        {
+          "session": "Thursday PM",
+          "course": "Kaluhyat",
+          "format": "9 Holes Shamble + 9 Holes Scramble",
+          "cupPoints": 3,
+          "matches": [
+            {
+              "time": "1:00 PM",
+              "swingers": [
+                "Nick Fowler (3)",
+                "Bobby Vassallo (9)"
+              ],
+              "dominators": [
+                "Casey Godfrey (8)",
+                "Collin Jewett (9)"
+              ]
+            },
+            {
+              "time": "1:10 PM",
+              "swingers": [
+                "Mike Grosh (9)",
+                "Anthony Gjonaj (12)"
+              ],
+              "dominators": [
+                "Scottie Collins (3)",
+                "Farnia Ghavami (18)"
+              ]
+            },
+            {
+              "time": "1:20 PM",
+              "swingers": [
+                "Robert Stong (12)",
+                "Brian Danahy (25)"
+              ],
+              "dominators": [
+                "Nigel Scott (5)",
+                "Auston Chen (17)"
+              ]
+            }
+          ]
+        },
+        {
+          "session": "Friday AM",
+          "course": "Atunyote",
+          "format": "Team Best Ball (Net), 9 Hole Matches",
+          "cupPoints": 6,
+          "matches": [
+            {
+              "time": "9:10 AM",
+              "swingers": [
+                "Bobby Vassallo (9)",
+                "Anthony Gjonaj (12)"
+              ],
+              "dominators": [
+                "Scottie Collins (3)",
+                "Casey Godfrey (8)"
+              ]
+            },
+            {
+              "time": "9:20 AM",
+              "swingers": [
+                "Mike Grosh (9)",
+                "Robert Stong (12)"
+              ],
+              "dominators": [
+                "Collin Jewett (9)",
+                "Auston Chen (17)"
+              ]
+            },
+            {
+              "time": "9:30 AM",
+              "swingers": [
+                "Nick Fowler (3)",
+                "Brian Danahy (25)"
+              ],
+              "dominators": [
+                "Nigel Scott (5)",
+                "Farnia Ghavami (18)"
+              ]
+            }
+          ]
+        },
+        {
+          "session": "Friday PM",
+          "course": "Atunyote",
+          "format": "Team Best Ball (Net), 9 Hole Matches",
+          "cupPoints": 6,
+          "matches": [
+            {
+              "time": "3:00 PM",
+              "swingers": [
+                "Nick Fowler (3)",
+                "Anthony Gjonaj (12)"
+              ],
+              "dominators": [
+                "Scottie Collins (3)",
+                "Nigel Scott (5)"
+              ]
+            },
+            {
+              "time": "3:10 PM",
+              "swingers": [
+                "Bobby Vassallo (9)",
+                "Robert Stong (12)"
+              ],
+              "dominators": [
+                "Casey Godfrey (8)",
+                "Collin Jewett (9)"
+              ]
+            },
+            {
+              "time": "3:20 PM",
+              "swingers": [
+                "Mike Grosh (9)",
+                "Brian Danahy (25)"
+              ],
+              "dominators": [
+                "Auston Chen (17)",
+                "Farnia Ghavami (18)"
+              ]
+            }
+          ]
+        },
+        {
+          "session": "Saturday AM",
+          "course": "Kaluhyat",
+          "format": "H2H Singles (Net), 18 Hole Matches",
+          "cupPoints": 8,
+          "matches": [
+            {
+              "time": "8:40 AM",
+              "swingers": [
+                "Nick Fowler (3)"
+              ],
+              "dominators": [
+                "Scottie Collins (3)"
+              ]
+            },
+            {
+              "time": "8:40 AM",
+              "swingers": [
+                "Robert Stong (12)"
+              ],
+              "dominators": [
+                "Casey Godfrey (8)"
+              ]
+            },
+            {
+              "time": "8:50 AM",
+              "swingers": [
+                "Jack McCarthy (2)"
+              ],
+              "dominators": [
+                "Gregg Suglia (7)"
+              ]
+            },
+            {
+              "time": "8:50 AM",
+              "swingers": [
+                "Ben Conway (5)"
+              ],
+              "dominators": [
+                "Nigel Scott (5)"
+              ]
+            },
+            {
+              "time": "9:00 AM",
+              "swingers": [
+                "Mike Grosh (9)"
+              ],
+              "dominators": [
+                "Farnia Ghavami (18)"
+              ]
+            },
+            {
+              "time": "9:00 AM",
+              "swingers": [
+                "Anthony Gjonaj (12)"
+              ],
+              "dominators": [
+                "David Schultz (17)"
+              ]
+            },
+            {
+              "time": "9:10 AM",
+              "swingers": [
+                "Bobby Vassallo (9)"
+              ],
+              "dominators": [
+                "Collin Jewett (9)"
+              ]
+            },
+            {
+              "time": "9:10 AM",
+              "swingers": [
+                "Brian Danahy (25)"
+              ],
+              "dominators": [
+                "Auston Chen (17)"
+              ]
+            }
+          ]
+        },
+        {
+          "session": "Saturday PM",
+          "course": "Shenendoah",
+          "format": "H2H Singles (Net), 18 Hole Matches",
+          "cupPoints": 8,
+          "matches": [
+            {
+              "time": "2:40 PM",
+              "swingers": [
+                "Jack McCarthy (2)"
+              ],
+              "dominators": [
+                "Scottie Collins (3)"
+              ]
+            },
+            {
+              "time": "2:40 PM",
+              "swingers": [
+                "Nick Fowler (3)"
+              ],
+              "dominators": [
+                "Gregg Suglia (7)"
+              ]
+            },
+            {
+              "time": "2:50 PM",
+              "swingers": [
+                "Anthony Gjonaj (12)"
+              ],
+              "dominators": [
+                "Nigel Scott (5)"
+              ]
+            },
+            {
+              "time": "2:50 PM",
+              "swingers": [
+                "Bobby Vassallo (9)"
+              ],
+              "dominators": [
+                "Casey Godfrey (8)"
+              ]
+            },
+            {
+              "time": "3:00 PM",
+              "swingers": [
+                "Ben Conway (5)"
+              ],
+              "dominators": [
+                "Auston Chen (17)"
+              ]
+            },
+            {
+              "time": "3:00 PM",
+              "swingers": [
+                "Mike Grosh (9)"
+              ],
+              "dominators": [
+                "Collin Jewett (9)"
+              ]
+            },
+            {
+              "time": "3:10 PM",
+              "swingers": [
+                "Robert Stong (12)"
+              ],
+              "dominators": [
+                "Farnia Ghavami (18)"
+              ]
+            },
+            {
+              "time": "3:10 PM",
+              "swingers": [
+                "Brian Danahy (25)"
+              ],
+              "dominators": [
+                "David Schultz (17)"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "championshipHistory": [
+    {
+      "year": 2023,
+      "teamChampion": "Bird Dogs",
+      "teamRunnerUp": "Palm Lickers"
+    },
+    {
+      "year": 2024,
+      "teamChampion": "Sycamore Swingers",
+      "teamRunnerUp": "Bird Dogs"
+    },
+    {
+      "year": 2025,
+      "teamChampion": "DOMinators",
+      "teamRunnerUp": "Sycamore Swingers"
+    }
+  ]
+}
