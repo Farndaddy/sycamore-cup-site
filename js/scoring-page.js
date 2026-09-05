@@ -566,6 +566,45 @@ function dailyIndividualAwards(dayNum) {
   return out;
 }
 
+// Same pooling rule as the daily prizes, applied to the four end-of-week
+// individual places. Two players tied for 2nd don't take 2nd and 3rd — they
+// pool both and split. Three tied for 4th split the one prize between them.
+function eventIndividualAwards() {
+  const rows = individualStandings(S.scores, teeMap(S.roundId));
+  if (!rows.length) return [];
+
+  const prizes = PAYOUTS
+    .filter(x => x.scope === 'event-individual')
+    .sort((a, b) => a.place - b.place)
+    .map(x => x.amount);
+
+  const groups = [];
+  rows.forEach(r => {
+    const last = groups[groups.length - 1];
+    const key = `${r.roundsComplete}:${r.total}`;
+    if (last && last.key === key) last.players.push(r);
+    else groups.push({ key, total: r.total, provisional: r.provisional, players: [r] });
+  });
+
+  const out = [];
+  let place = 0;
+  for (const g of groups) {
+    if (place >= prizes.length) break;
+    const spans = prizes.slice(place, place + g.players.length);
+    const pool = spans.reduce((s, v) => s + v, 0);
+    const each = pool / g.players.length;
+    const names = g.players.map(x => x.player.name).join(' & ');
+    const prov = g.provisional ? ' (provisional)' : '';
+    for (let i = 0; i < spans.length; i++) {
+      out.push(g.players.length > 1
+        ? `${names} tied at ${g.total} — ${formatMoney(each)} each${prov}`
+        : `${names} at ${g.total}${prov}`);
+    }
+    place += g.players.length;
+  }
+  return out;
+}
+
 function renderMoney() {
   const pane = $('pane-money');
 
@@ -585,14 +624,18 @@ function renderMoney() {
         const sk = skinsForRound(rd, scoresFor(rd.id), teeMap(rd.id), p.amount);
         return sk.winners.length ? `${sk.winners[0].player.name} holds ${sk.winners[0].units}` : null;
       }
+      if (p.scope === 'event-individual') {
+        const a = eventIndividualAwards();
+        return a[p.place - 1] || null;
+      }
       if (p.scope === 'event-team') {
         const rows = teamEventStandings(S.scores, teeMap(S.roundId), S.teamScores);
-        return rows.length ? `${rows[0].team.name} at ${rows[0].net}` : null;
-      }
-      if (p.scope === 'event-individual') {
-        const rows = individualStandings(S.scores, teeMap(S.roundId));
-        const row = rows[p.place - 1];
-        return row ? `${row.player.name} at ${row.total}${row.provisional ? ' (provisional)' : ''}` : null;
+        if (!rows.length) return null;
+        const tied = rows.filter(r => r.net === rows[0].net);
+        const prize = PAYOUTS.find(x => x.id === 'team-champ').amount;
+        return tied.length > 1
+          ? `${tied.map(t => t.team.name).join(' & ')} tied at ${rows[0].net} — ${formatMoney(prize / tied.length)} each`
+          : `${rows[0].team.name} at ${rows[0].net}`;
       }
     } catch { return null; }
     return null;
