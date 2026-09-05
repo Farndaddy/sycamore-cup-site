@@ -10,7 +10,7 @@ import * as Live from './live.js';
 initShell('admin');
 
 const root = document.getElementById('admin-root');
-const S = { players: {}, scores: {}, rounds: {}, admins: {}, editing: null };
+const S = { players: {}, scores: {}, rounds: {}, admins: {}, edited: [], log: [], editing: null };
 
 (async function boot() {
   if (!Live.isConfigured()) {
@@ -28,6 +28,8 @@ const S = { players: {}, scores: {}, rounds: {}, admins: {}, editing: null };
   Live.watchPlayers(p => { S.players = p; render(); });
   Live.watchAllScores(s => { S.scores = s; render(); });
   Live.watchRounds(r => { S.rounds = r; render(); });
+  Live.watchEditedScores(e => { S.edited = e; render(); });
+  Live.watchScoreLog(l => { S.log = l; render(); }, 200);
   try { S.admins = await Live.listAdmins(); } catch { S.admins = {}; }
 
   render();
@@ -85,6 +87,49 @@ function renderPanel() {
   const seeded = Object.keys(S.players).length;
 
   root.innerHTML = `
+    <div class="admin-sec">
+      <h2>Changed scores</h2>
+      <p class="sec-note">Every hole keeps the number that was first entered. The database will not
+      let anyone overwrite that original — not a player, not an admin, not me. So if a score was
+      changed after it went in, it shows up here with the original still attached.</p>
+      ${S.edited.length === 0
+        ? '<p class="muted" style="font-size:13.5px;">No score has been changed since it was entered.</p>'
+        : S.edited.map(e => {
+            const p = playerById(e.playerId);
+            const r = ROUNDS.find(x => x.id === e.roundId);
+            const who = e.updatedBy === e.firstBy ? 'same person' : 'someone else';
+            return `<div class="admin-row">
+              <div class="r-main">
+                <strong>${p ? p.name : e.playerId} — hole ${e.hole}</strong>
+                <small>${r ? r.day + ' · ' + COURSES[r.course].short : e.roundId}
+                  · entered as <strong>${e.firstStrokes}</strong>, now <strong>${e.strokes}</strong>
+                  · ${e.editCount} change${e.editCount === 1 ? '' : 's'} · edited by ${who}</small>
+              </div>
+              <span class="pill ${e.strokes < e.firstStrokes ? 'locked' : 'open'}">
+                ${e.strokes < e.firstStrokes ? 'lowered' : 'raised'}
+              </span>
+            </div>`;
+          }).join('')}
+    </div>
+
+    <div class="admin-sec">
+      <h2>Change history</h2>
+      <p class="sec-note">Append-only. Entries cannot be edited or deleted by anyone, including you.</p>
+      ${S.log.length === 0
+        ? '<p class="muted" style="font-size:13.5px;">Nothing logged yet.</p>'
+        : S.log.slice(0, 40).map(l => {
+            const p = playerById(l.playerId);
+            const r = ROUNDS.find(x => x.id === l.roundId);
+            const when = l.at && l.at.toDate ? l.at.toDate().toLocaleString() : '—';
+            return `<div class="admin-row">
+              <div class="r-main">
+                <strong>${p ? p.name : l.playerId} · hole ${l.hole} · ${l.from} → ${l.to}</strong>
+                <small>${r ? r.day : l.roundId} · ${when}${l.viaAdmin ? ' · via admin panel' : ''}</small>
+              </div>
+            </div>`;
+          }).join('')}
+    </div>
+
     <div class="admin-sec">
       <h2>Setup</h2>
       <p class="sec-note">Run once, before anyone tries to sign in.</p>
@@ -328,7 +373,7 @@ async function saveEditedCard() {
         const val = capGross(Number(raw), par);
         if (Number(raw) > val) capped++;
         if (existing[hole] === val) continue;
-        await Live.submitScore({ roundId, playerId, hole, strokes: val });
+        await Live.submitScore({ roundId, playerId, hole, strokes: val, viaAdmin: true });
         saved++;
       }
       say(null, `Saved ${saved} hole${saved === 1 ? '' : 's'}.` +

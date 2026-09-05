@@ -16,8 +16,8 @@ import { initializeAppCheck, ReCaptchaEnterpriseProvider }
 import { getAuth, signInAnonymously, onAuthStateChanged }
   from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
 import {
-  getFirestore, doc, collection, setDoc, updateDoc, getDoc, getDocs,
-  onSnapshot, query, where, serverTimestamp, deleteField
+  getFirestore, doc, collection, setDoc, updateDoc, getDoc, getDocs, addDoc,
+  onSnapshot, query, where, orderBy, limit, serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
 import { PLAYERS, ROUNDS, COURSES } from './tournament-2026.js';
@@ -163,15 +163,87 @@ export function scoreId(roundId, playerId, hole) {
   return `${roundId}__${playerId}__h${hole}`;
 }
 
-export async function submitScore({ roundId, playerId, hole, strokes }) {
-  await setDoc(doc(db, 'scores', scoreId(roundId, playerId, hole)), {
-    session: roundId,
-    roundId,
-    playerId,
-    hole: Number(hole),
-    strokes: Number(strokes),
+// Writing a score keeps the ORIGINAL value alongside the current one.
+// firstStrokes and firstAt are locked by the security rules — once a hole
+// is entered, nothing can rewrite what was first put in, not even an admin.
+// That is what makes the change log worth trusting: a later edit can change
+// the score, but it cannot hide what the score used to be.
+export async function submitScore({ roundId, playerId, hole, strokes, viaAdmin }) {
+  const id = scoreId(roundId, playerId, hole);
+  const ref = doc(db, 'scores', id);
+  const snap = await getDoc(ref);
+  const n = Number(strokes);
+
+  if (!snap.exists()) {
+    await setDoc(ref, {
+      session: roundId, roundId, playerId,
+      hole: Number(hole),
+      strokes: n,
+      firstStrokes: n,
+      firstAt: serverTimestamp(),
+      firstBy: uid(),
+      editCount: 0,
+      updatedAt: serverTimestamp(),
+      updatedBy: uid()
+    });
+    return { created: true };
+  }
+
+  const prev = snap.data();
+  if (Number(prev.strokes) === n) return { unchanged: true };
+
+  await setDoc(ref, {
+    ...prev,
+    strokes: n,
+    editCount: (prev.editCount || 0) + 1,
     updatedAt: serverTimestamp(),
     updatedBy: uid()
+  });
+
+  // Append-only history. Entries can never be edited or removed.
+  await addDoc(collection(db, 'scoreLog'), {
+    roundId, playerId,
+    hole: Number(hole),
+    from: Number(prev.strokes),
+    to: n,
+    original: Number(prev.firstStrokes !== undefined ? prev.firstStrokes : prev.strokes),
+    at: serverTimestamp(),
+    by: uid(),
+    viaAdmin: !!viaAdmin
+  });
+
+  return { edited: true, from: Number(prev.strokes), to: n };
+}
+
+// Scores that have been changed since they were first entered.
+export function watchEditedScores(cb) {
+  return onSnapshot(collection(db, 'scores'), snap => {
+    const out = [];
+    snap.forEach(d => {
+      const v = d.data();
+      if ((v.editCount || 0) > 0) out.push({ id: d.id, ...v });
+    });
+    out.sort((a, b) => (b.updatedAt?.seconds || 0) - (a.updatedAt?.seconds || 0));
+    cb(out);
+  });
+}
+
+// The full change history, newest first.
+export function watchScoreLog(cb, max) {
+  const q = query(collection(db, 'scoreLog'), orderBy('at', 'desc'), limit(max || 100));
+  return onSnapshot(q, snap => {
+    const out = [];
+    snap.forEach(d => out.push({ id: d.id, ...d.data() }));
+    cb(out);
+  }, err => {
+    // orderBy needs the field present; fall back to unordered rather than break the page
+    console.warn('[sycamore] score log query failed, falling back:', err.message);
+    onSnapshot(collection(db, 'scoreLog'), s2 => {
+      const out = [];
+      s2.forEach(d => out.push({ id: d.id, ...d.data() }));
+      out.sort((a, b) => (b.at?.seconds || 0) - (a.at?.seconds || 0));
+      cb(out);
+    });
   });
 }
 
