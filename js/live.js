@@ -250,17 +250,36 @@ export function watchScoreLog(cb, max) {
 // Live feed of every score in the event. Twelve players over six rounds
 // is a small enough set to watch in one subscription, which keeps every
 // leaderboard on the page in sync with no extra plumbing.
+// Emits both the plain strokes (what the leaderboards need) and per-hole
+// metadata (what the self-edit window needs).
 export function watchAllScores(cb) {
   return onSnapshot(collection(db, 'scores'), snap => {
-    const byRound = {};
+    const byRound = {}, meta = {};
     snap.forEach(d => {
       const s = d.data();
-      if (!byRound[s.roundId]) byRound[s.roundId] = {};
-      if (!byRound[s.roundId][s.playerId]) byRound[s.roundId][s.playerId] = {};
+      if (!byRound[s.roundId]) { byRound[s.roundId] = {}; meta[s.roundId] = {}; }
+      if (!byRound[s.roundId][s.playerId]) { byRound[s.roundId][s.playerId] = {}; meta[s.roundId][s.playerId] = {}; }
       byRound[s.roundId][s.playerId][s.hole] = s.strokes;
+      meta[s.roundId][s.playerId][s.hole] = {
+        firstAt: s.firstAt || null,
+        firstStrokes: s.firstStrokes,
+        editCount: s.editCount || 0
+      };
     });
-    cb(byRound);
+    cb(byRound, meta);
   });
+}
+
+// A player may fix his own hole for this long after first entering it.
+// After that only an admin can change it. Mirrors the security rule exactly —
+// the rule is what enforces it; this just keeps the UI honest about it.
+export const SELF_EDIT_MINUTES = 2;
+
+export function selfEditSecondsLeft(metaForHole) {
+  if (!metaForHole || !metaForHole.firstAt) return SELF_EDIT_MINUTES * 60;
+  const first = metaForHole.firstAt.toDate ? metaForHole.firstAt.toDate() : new Date(metaForHole.firstAt);
+  const left = SELF_EDIT_MINUTES * 60 - (Date.now() - first.getTime()) / 1000;
+  return Math.max(0, Math.round(left));
 }
 
 // ---------------------------------------------------------

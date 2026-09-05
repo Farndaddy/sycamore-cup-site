@@ -21,6 +21,7 @@ initShell('scoring');
 // ---------------------------------------------------------
 const S = {
   scores: {},        // { roundId: { playerId: { hole: strokes } } }
+  scoreMeta: {},     // same shape, carrying firstAt / editCount
   teamScores: {},    // { roundId: { teamId: { hole: strokes } } }
   players: {},       // firestore player docs
   rounds: {},        // firestore round docs (locked flags)
@@ -54,7 +55,7 @@ const $ = id => document.getElementById(id);
   }
 
   Live.watchPlayers(p => { S.players = p; resolveMe(); render(); });
-  Live.watchAllScores(s => { S.scores = s; render(); });
+  Live.watchAllScores((s, m) => { S.scores = s; S.scoreMeta = m; render(); });
   Live.watchTeamScores(t => { S.teamScores = t; render(); });
   Live.watchRounds(r => { S.rounds = r; render(); });
 
@@ -778,6 +779,25 @@ function openKeypad(hole, scramble) {
     ? ((S.teamScores[round.id] || {})[playerById(S.me).team] || {})[hole]
     : ((scoresFor(round.id)[S.me]) || {})[hole];
 
+  // Once a hole has been in for more than the self-edit window, only an
+  // admin can change it. Say so plainly instead of letting the save fail.
+  const meta = scramble ? null : (((S.scoreMeta[round.id] || {})[S.me] || {})[hole]);
+  const secondsLeft = meta ? Live.selfEditSecondsLeft(meta) : Live.SELF_EDIT_MINUTES * 60;
+  const lockedToMe = !scramble && current !== undefined && secondsLeft === 0 && !Live.isAdmin();
+
+  if (lockedToMe) {
+    $('keypad-grid').innerHTML =
+      `<div style="grid-column:1/-1;text-align:center;padding:22px 8px;">
+         <div style="font-family:var(--font-mono);font-size:34px;font-weight:600;">${current}</div>
+         <p class="muted" style="margin:8px 0 0;font-size:13.5px;">This hole is locked in.</p>
+       </div>`;
+    $('keypad-note').hidden = false;
+    $('keypad-note').textContent =
+      'You had ' + Live.SELF_EDIT_MINUTES + ' minutes to fix it. Ask Farnia to change it now — every change is logged.';
+    $('keypad-sheet').hidden = false;
+    return;
+  }
+
   const keys = [];
   for (let v = 1; v <= max; v++) {
     keys.push(`<button class="key ${v === current ? 'on' : ''} ${v === max ? 'max' : ''}" data-val="${v}">${v}</button>`);
@@ -785,7 +805,9 @@ function openKeypad(hole, scramble) {
   $('keypad-grid').innerHTML = keys.join('');
 
   $('keypad-note').hidden = false;
-  $('keypad-note').textContent = `${max} is the most you can card here — gross triple bogey.`;
+  $('keypad-note').textContent = current !== undefined && !Live.isAdmin()
+    ? `${secondsLeft}s left to change this yourself. After that only Farnia can.`
+    : `${max} is the most you can card here — gross triple bogey.`;
 
   $('keypad-grid').querySelectorAll('.key').forEach(k => {
     k.addEventListener('click', async () => {
