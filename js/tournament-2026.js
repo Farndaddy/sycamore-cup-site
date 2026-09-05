@@ -98,13 +98,12 @@ export const COURSES = {
 // ---------------------------------------------------------
 // THE FIELD
 // ---------------------------------------------------------
-// Three teams of four. Team names for teams 1 and 2 are placeholders
-// until Farnia supplies the real ones — change `name` only, the `id`
-// is what everything else keys on.
+// Three teams of four. To rename a team, change `name` only — the `id`
+// is what every score, rule and leaderboard keys on.
 
 export const TEAMS = [
-  { id: 'team-1', name: 'Team One',       accent: 'forest' },
-  { id: 'team-2', name: 'Team Two',       accent: 'clay'   },
+  { id: 'team-1', name: 'Bison Boys',     accent: 'forest' },
+  { id: 'team-2', name: 'Frombys',        accent: 'clay'   },
   { id: 'team-3', name: 'Starz & Scrubz', accent: 'brass'  }
 ];
 
