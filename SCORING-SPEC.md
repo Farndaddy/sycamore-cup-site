@@ -36,8 +36,9 @@ Worked example — Farnia, index 16:
 
 | Course / Tee | Slope | Rating | Course HCP |
 |---|---|---|---|
+| Southern Hills — Championship | 146 | 76.9 | 26 |
+| Southern Hills — Yellow | 141 | 73.9 | 22 |
 | Southern Hills — Blue | 138 | 72.0 | 20 |
-| Southern Hills — Blue/White | 137 | 70.0 | 17 |
 | Bay Hill — Yellow | 133 | 71.5 | 18 |
 | Bay Hill — Yellow/Red | 130 | 70.5 | 18 |
 | Evermore Cypress — Gold | 125 | 72.2 | 18 |
