@@ -17,6 +17,9 @@
 // their own tee and the handicap formula needs both.
 
 export const COURSES = {
+  // Updated 2026-09-05 from the current scorecard. Pars and the stroke
+  // index row are unchanged from the previous card; the tee sets are not —
+  // Blue/White is gone and Championship and Yellow are new.
   'southern-hills': {
     name: 'Southern Hills Plantation',
     short: 'Southern Hills',
@@ -27,8 +30,18 @@ export const COURSES = {
     pars: [4,4,3,4,5,4,5,3,4, 4,4,5,3,4,4,5,3,4],
     hcp:  [5,9,17,7,11,1,3,15,13, 6,8,14,18,2,10,12,16,4],
     tees: {
-      blue:       { name: 'Blue',       yards: 6494, rating: 72.0, slope: 138 },
-      blueWhite:  { name: 'Blue/White', yards: 6153, rating: 70.0, slope: 137 }
+      championship: {
+        name: 'Championship', yards: 7557, rating: 76.9, slope: 146,
+        holeYards: [434,422,238,421,541,478,618,212,330, 463,491,564,170,507,390,609,188,481]
+      },
+      yellow: {
+        name: 'Yellow', yards: 6962, rating: 73.9, slope: 141,
+        holeYards: [392,372,197,388,505,452,567,187,321, 410,471,538,148,447,373,563,167,464]
+      },
+      blue: {
+        name: 'Blue', yards: 6455, rating: 72.0, slope: 138,
+        holeYards: [373,342,171,372,492,419,531,154,300, 387,399,490,136,419,358,533,156,423]
+      }
     },
     defaultTee: 'blue'
   },

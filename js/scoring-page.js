@@ -767,7 +767,9 @@ function openKeypad(hole, scramble) {
 
   $('keypad-eyebrow').textContent = scramble ? 'Team scramble' : `${course.short} · ${teeInfo.name} tee`;
   $('keypad-title').textContent = `Hole ${hole}`;
-  $('keypad-sub').textContent = `Par ${par} · stroke index ${course.hcp[hole - 1]}`;
+  const holeYards = teeInfo.holeYards ? teeInfo.holeYards[hole - 1] : null;
+  $('keypad-sub').textContent =
+    `Par ${par}${holeYards ? ' · ' + holeYards + ' yds' : ''} · stroke index ${course.hcp[hole - 1]}`;
 
   $('keypad-pops').innerHTML = pops > 0
     ? `<div class="kp-dots">${Array.from({ length: pops }, () => '<span class="kp-dot"></span>').join('')}</div>
