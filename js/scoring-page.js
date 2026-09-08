@@ -849,11 +849,11 @@ function openKeypad(hole, scramble) {
     pops = strokesByHole(courseHandicap(player.index, course, tee), course)[hole - 1];
   }
 
-  $('keypad-eyebrow').textContent = scramble ? 'Team scramble' : `${course.short} · ${teeInfo.name} tee`;
+  $('keypad-eyebrow').textContent = scramble ? 'Team scramble' : `${teeInfo.name} tee`;
   $('keypad-title').textContent = `Hole ${hole}`;
   const holeYards = teeInfo.holeYards ? teeInfo.holeYards[hole - 1] : null;
   $('keypad-sub').textContent =
-    `Par ${par}${holeYards ? ' · ' + holeYards + ' yds' : ''} · stroke index ${course.hcp[hole - 1]}`;
+    `Par ${par}${holeYards ? ' · ' + holeYards + 'y' : ''} · SI ${course.hcp[hole - 1]}`;
 
   $('keypad-pops').innerHTML = pops > 0
     ? `<div class="kp-dots">${Array.from({ length: pops }, () => '<span class="kp-dot"></span>').join('')}</div>
@@ -880,6 +880,7 @@ function openKeypad(hole, scramble) {
     $('keypad-note').hidden = false;
     $('keypad-note').textContent =
       'A score locks ' + Live.SELF_EDIT_MINUTES + ' minutes after it goes in. Ask Farnia to change it now — every change is logged.';
+    setKeypadNav(hole, course.holes);
     $('keypad-sheet').hidden = false;
     return;
   }
@@ -906,17 +907,42 @@ function openKeypad(hole, scramble) {
         } else {
           await Live.submitScore({ roundId: round.id, playerId: S.me, hole, strokes: val });
         }
-        $('keypad-sheet').hidden = true;
+        // Walk straight on to the next hole. Going hole to hole is the whole job
+        // out there; closing the sheet after every score meant hunting for the
+        // next cell on a phone. The last hole still closes.
+        if (hole < course.holes) openKeypad(hole + 1, scramble);
+        else $('keypad-sheet').hidden = true;
       } catch (e) {
         $('keypad-note').textContent = 'Could not save: ' + e.message;
       }
     });
   });
 
+  setKeypadNav(hole, course.holes);
   $('keypad-sheet').hidden = false;
 }
 
+function setKeypadNav(hole, holeCount) {
+  $('keypad-prev').disabled = hole <= 1;
+  $('keypad-next').disabled = hole >= holeCount;
+}
+
+function stepHole(delta) {
+  const course = COURSES[currentRound().course];
+  const next = keypadHole + delta;
+  if (next < 1 || next > course.holes) return;
+  openKeypad(next, keypadIsScramble);
+}
+
 $('keypad-close').addEventListener('click', () => { $('keypad-sheet').hidden = true; });
+$('keypad-prev').addEventListener('click', () => stepHole(-1));
+$('keypad-next').addEventListener('click', () => stepHole(1));
+
+document.addEventListener('keydown', e => {
+  if ($('keypad-sheet').hidden) return;
+  if (e.key === 'ArrowLeft') stepHole(-1);
+  if (e.key === 'ArrowRight') stepHole(1);
+});
 $('keypad-sheet').addEventListener('click', e => {
   if (e.target === $('keypad-sheet')) $('keypad-sheet').hidden = true;
 });

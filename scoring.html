@@ -68,12 +68,14 @@
 <div class="sheet-backdrop" id="keypad-sheet" hidden>
   <div class="sheet keypad-sheet" role="dialog" aria-modal="true" aria-labelledby="keypad-title">
     <div class="keypad-head">
-      <div>
+      <button class="kp-nav" id="keypad-prev" type="button" aria-label="Previous hole">&lsaquo;</button>
+      <div class="kp-mid">
         <span class="eyebrow" id="keypad-eyebrow">Hole</span>
         <h2 id="keypad-title">Hole 1</h2>
         <p class="muted" id="keypad-sub">Par 4 · 370 yds</p>
       </div>
       <div class="keypad-pops" id="keypad-pops"></div>
+      <button class="kp-nav" id="keypad-next" type="button" aria-label="Next hole">&rsaquo;</button>
     </div>
     <div class="keypad-grid" id="keypad-grid"></div>
     <p class="keypad-note" id="keypad-note" hidden></p>

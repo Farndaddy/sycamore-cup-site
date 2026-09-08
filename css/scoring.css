@@ -359,7 +359,18 @@
 
 /* keypad */
 .keypad-sheet { max-width: 420px; }
-.keypad-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; margin-bottom: 18px; }
+.keypad-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 18px; }
+.keypad-head .kp-mid { flex: 1; min-width: 0; }
+/* Big round targets at the edges of the sheet — the two places a thumb already
+   rests when you are holding a phone one-handed in a cart. */
+.kp-nav {
+  flex: 0 0 auto; width: 46px; height: 46px; border-radius: 50%; cursor: pointer;
+  border: 1px solid var(--line-strong); background: var(--paper); color: var(--ink);
+  font-size: 26px; line-height: 1; display: flex; align-items: center; justify-content: center;
+}
+.kp-nav:active { background: var(--sand); }
+.kp-nav:disabled { opacity: .28; cursor: default; }
+.kp-nav:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
 .keypad-head h2 { margin: 2px 0 3px; }
 .keypad-head .muted { margin: 0; }
 .keypad-pops { text-align: right; }
@@ -538,3 +549,14 @@
 
 /* Money filters: the second row can run to four chips, so let it wrap. */
 .money-chips { flex-wrap: wrap; }
+
+/* The keypad head carries two 46px targets plus the stroke indicator; on a phone
+   the middle column has to give a little or every line wraps. */
+@media (max-width: 560px) {
+  .kp-nav { width: 40px; height: 40px; font-size: 23px; }
+  .keypad-head { gap: 8px; }
+  .keypad-head .kp-mid h2 { font-size: 19px; }
+  .keypad-head .kp-mid .muted { font-size: 12px; }
+  .keypad-head .eyebrow { font-size: 9.5px; letter-spacing: .08em; }
+  .keypad-pops .kp-text { font-size: 9.5px; }
+}
