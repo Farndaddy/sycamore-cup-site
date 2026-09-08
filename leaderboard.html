@@ -2,63 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>Live Leaderboard — Sycamore Cup Classic</title>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400..600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/cards.css">
+<title>Live Leaderboard &mdash; Sycamore Cup Classic</title>
+<script>
+  // The 2026 page carries the live leaderboard now — this old standalone board
+  // was replaced by it. Anything still pointing here lands on the real one.
+  location.replace('years/2026.html#leaderboard');
+</script>
 </head>
-<body>
-<header class="site-header" id="site-header"></header>
-
-<section class="hero-plain">
-  <div class="wrap">
-    <p class="eyebrow">Updates Live</p>
-    <h1><em>Leaderboard</em></h1>
-    <p class="lead">Net scoring against index, LIV-style, updated the second someone punches in a score on the course.</p>
-  </div>
-</section>
-
-<section class="section" style="padding-top:0;">
-  <div class="wrap">
-    <div id="config-banner"></div>
-
-    <div class="grid grid-3" style="align-items:end; margin-bottom:28px;">
-      <div class="field mb-0">
-        <label for="year-select">Year</label>
-        <select id="year-select"></select>
-      </div>
-      <div class="field mb-0">
-        <label for="session-select">Session / Round</label>
-        <select id="session-select"></select>
-      </div>
-      <div class="field mb-0">
-        <label for="holecount-select">Holes</label>
-        <select id="holecount-select">
-          <option value="9">9 holes</option>
-          <option value="18" selected>18 holes</option>
-        </select>
-      </div>
-    </div>
-
-    <div id="team-totals" class="grid grid-2" style="margin-bottom:28px;"></div>
-
-    <div class="scorecard-wrap">
-      <table class="scorecard">
-        <thead><tr id="lb-header"></tr></thead>
-        <tbody id="lb-body"></tbody>
-      </table>
-    </div>
-    <p class="muted" style="font-size:0.78rem; margin-top:14px;">Net total = gross strokes minus a handicap allowance from each player's index (full index for 18-hole rounds, half for 9-hole rounds). This is a simple placeholder formula — swap in real per-hole stroke-index allocation once you have it for these courses.</p>
-  </div>
-</section>
-
-<footer class="site-footer" id="site-footer"></footer>
-
-<script src="js/app.js"></script>
-<script src="js/scoring-shared.js"></script>
-<script type="module" src="js/leaderboard-page.js"></script>
-<script type="module" src="js/player-card.js"></script>
-</body>
+<body><p>Taking you to the live leaderboard&hellip;</p></body>
 </html>
