@@ -44,10 +44,24 @@ const YEAR_PHOTOS = {
   },
   2025: {
     hero: '../assets/photos/2025-cover-team-lineup.jpg',
+    layout: 'masonry',
     gallery: [
-      { src: '../assets/photos/2025-cover-team-lineup.jpg', caption: 'Turning Stone Resort, Verona NY', wide: true },
-      { src: '../assets/photos/2025-wall-of-jackie.jpg', caption: 'The Infamous Wall of Jackie' },
-      { src: '../assets/photos/2025-hole-in-one.jpg', caption: 'The Infamous Hole in One' },
+      { src: '../assets/photos/2025-belt-celebration.jpg', caption: 'Championship belt, earned', hero: true },
+      { src: '../assets/photos/2025-tee-box-view.jpg',     caption: 'Over the fescue, Turning Stone' },
+      { src: '../assets/photos/2025-line-dancing.jpg',     caption: 'Line dancing at the Tin Rooster' },
+      { src: '../assets/photos/2025-sunrise-course.jpg',   caption: 'First light' },
+      { src: '../assets/photos/2025-fountain-selfie.jpg',  caption: 'Lobby laps' },
+      { src: '../assets/photos/2025-geese-field.jpg',      caption: 'Outnumbered by geese' },
+      { src: '../assets/photos/2025-casino-floor.jpg',     caption: 'On the floor' },
+      { src: '../assets/photos/2025-hole-flag.jpg',        caption: 'Dead center' },
+      { src: '../assets/photos/2025-tin-rooster-hug.jpg',  caption: 'Brotherly love' },
+      { src: '../assets/photos/2025-marquee.jpg',          caption: 'The marquee said it best' },
+      { src: '../assets/photos/2025-phone-booth.jpg',      caption: 'Taking a call' },
+      { src: '../assets/photos/2025-piggyback.jpg',        caption: 'Transportation, solved' },
+      { src: '../assets/photos/2025-speaker-wall.jpg',     caption: 'The speaker wall' },
+      { src: '../assets/photos/2025-neon-promenade.jpg',   caption: 'The promenade' },
+      { src: '../assets/photos/2025-resort-hallway.jpg',   caption: 'The long green hallway' },
+      { src: '../assets/photos/2025-shower-cap.jpg',       caption: 'Recovery day' }
     ]
   }
 };
