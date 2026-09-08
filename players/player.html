@@ -2,97 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>Player Profile — Sycamore Cup Classic</title>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400..600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../css/style.css">
-</head>
-<body>
-<header class="site-header" id="site-header"></header>
-
-<section class="hero-plain">
-  <div class="wrap profile-hero">
-    <div id="avatar-wrap"></div>
-    <div>
-      <p class="eyebrow" id="years-attended"></p>
-      <h1 id="player-name">Loading…</h1>
-    </div>
-  </div>
-</section>
-
-<section class="section" style="padding-top:56px;">
-  <div class="wrap">
-    <span class="eyebrow">Index History</span>
-    <div class="scorecard-wrap" style="margin-top:14px; margin-bottom:56px;">
-      <table class="scorecard" style="min-width:0;">
-        <thead><tr><th>2023</th><th>2024</th><th>2025</th></tr></thead>
-        <tbody id="index-row"></tbody>
-      </table>
-    </div>
-
-    <div id="year-sections"></div>
-  </div>
-</section>
-
-<footer class="site-footer" id="site-footer"></footer>
-
-<script src="../js/app.js"></script>
+<title>Players &mdash; Sycamore Cup Classic</title>
 <script>
-  initShell('players');
-
-  const params = new URLSearchParams(window.location.search);
-  const playerId = params.get('id');
-
-  loadData().then(data => {
-    const player = data.players.find(p => p.id === playerId);
-    if (!player) {
-      document.getElementById('player-name').textContent = 'Player not found';
-      return;
-    }
-    document.title = `${player.name} — Sycamore Cup Classic`;
-    document.getElementById('player-name').innerHTML = `<em>${player.name}</em>`;
-    document.getElementById('avatar-wrap').innerHTML = avatarHTML(player);
-    document.getElementById('years-attended').textContent = `Played: ${player.yearsAttended.join(', ')}`;
-    document.getElementById('index-row').innerHTML = `
-      <tr>
-        <td>${fmtIndex(player.indexByYear['2023'])}</td>
-        <td>${fmtIndex(player.indexByYear['2024'])}</td>
-        <td>${fmtIndex(player.indexByYear['2025'])}</td>
-        <td>${fmtIndex(player.indexByYear['2026'])}</td>
-      </tr>`;
-
-    const sectionsEl = document.getElementById('year-sections');
-    let html = '';
-    Object.values(data.years).sort((a,b) => b.year - a.year).forEach(y => {
-      y.teams.forEach(team => {
-        const entry = team.roster.find(r => r.playerId === playerId);
-        if (!entry) return;
-        const funFacts = entry.funFacts;
-        html += `
-          <div class="card" style="padding:28px; margin-bottom:24px;">
-            <div class="section-head" style="margin-bottom:18px;">
-              <div>
-                <p class="eyebrow">${y.year} · Team ${team.name}</p>
-                <h3 class="mt-0 mb-0">${entry.displayName || player.name}</h3>
-                ${entry.titles ? `<p class="muted" style="margin-top:6px; font-style:italic;">${entry.titles}</p>` : ''}
-              </div>
-              <a class="btn btn-sm" href="../years/${y.year}.html">View ${y.year} →</a>
-            </div>
-            ${funFacts ? `
-              <table class="fact-table">
-                <tbody>
-                  ${Object.entries(funFacts).filter(([,v]) => v).map(([k,v]) => `
-                    <tr><th>${k.replace(/([A-Z])/g, ' $1')}</th><td>${v}</td></tr>
-                  `).join('')}
-                </tbody>
-              </table>
-            ` : `<p class="muted mb-0">No fun facts on file for ${y.year} yet.</p>`}
-          </div>`;
-      });
-    });
-    sectionsEl.innerHTML = html || '<p class="muted">No year-by-year data found for this player.</p>';
-  });
+  // Individual player pages were retired — the card popup replaced them.
+  // Anything still linking here lands on the card directory instead.
+  var id = new URLSearchParams(location.search).get('id');
+  location.replace('../players.html' + (id ? '#' + id : ''));
 </script>
-</body>
+</head>
+<body><p>Redirecting to the player cards&hellip;</p></body>
 </html>

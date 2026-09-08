@@ -125,7 +125,7 @@ function renderYearPage(yearNum) {
         const displayName = r.displayName || (player ? player.name : r.playerId);
         const idxVal = r.index !== undefined ? r.index : (player ? player.indexByYear[String(yearNum)] : null);
         return `
-          <a class="player-row" href="../players/player.html?id=${r.playerId}">
+          <a class="player-row" href="#" data-player-card="${r.playerId}">
             <div class="jersey-num">${r.jerseyNumber !== undefined ? '#'+r.jerseyNumber : '⛳'}</div>
             <div>
               <div class="pname">${displayName}${player ? ` <span class="muted" style="font-family:var(--font-body); font-size:0.82rem; font-style:normal;">(${player.name})</span>` : ''}</div>

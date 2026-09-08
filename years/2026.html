@@ -7,6 +7,7 @@
 <title>2026 — Sycamore Cup Classic</title>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400..600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/cards.css">
 <link rel="stylesheet" href="../css/scoring.css">
 </head>
 <body>
@@ -77,7 +78,7 @@
         </div>
         <div class="roster-cards" style="--team-accent:var(--${team.accent});">
           ${roster.map(p => `
-            <a class="tcard" href="../players/player.html?id=${p.id}" title="${p.name}">
+            <a class="tcard" href="#" data-player-card="${p.id}" title="${p.name}">
               <img src="../assets/players/${p.id}.png" alt="${p.name} trading card" loading="lazy"
                    onerror="tcardFallback(this, '${p.name.replace(/'/g, "\\'")}', ${p.index})">
             </a>`).join('')}
@@ -121,5 +122,6 @@
   }).join('');
 </script>
 <script type="module" src="../js/live-board.js"></script>
+<script type="module" src="../js/player-card.js"></script>
 </body>
 </html>

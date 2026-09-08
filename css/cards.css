@@ -199,3 +199,46 @@
 @media (prefers-reduced-motion: reduce) {
   .flipcard-inner { transition: none; }
 }
+
+/* ---------- Player card popup ----------
+ * Opens wherever a player is clicked. The card inside is the same .flipcard
+ * used on the players page, so it flips identically. */
+
+.pc-modal { position: fixed; inset: 0; z-index: 200; display: flex;
+  align-items: center; justify-content: center; padding: 24px; }
+.pc-modal[hidden] { display: none; }
+body.pc-open { overflow: hidden; }
+
+.pc-backdrop { position: absolute; inset: 0; background: rgba(12,20,15,.72);
+  backdrop-filter: blur(3px); animation: pc-fade .18s ease; }
+
+.pc-shell { position: relative; display: flex; flex-direction: column;
+  align-items: center; gap: 12px; animation: pc-rise .22s cubic-bezier(.2,.7,.3,1); }
+
+/* The card is 4:5 — size it off the viewport height so it never overflows. */
+.pc-card { width: min(86vw, calc((100vh - 150px) * 0.8), 430px); }
+.pc-card .flipcard { perspective: 1600px; }
+
+.pc-close { position: absolute; top: -42px; right: -6px; z-index: 2;
+  width: 34px; height: 34px; border-radius: 50%; cursor: pointer;
+  border: 1px solid rgba(240,230,201,.35); background: rgba(0,0,0,.35);
+  color: #F0E6C9; font-size: 21px; line-height: 1; }
+.pc-close:hover { background: rgba(0,0,0,.6); border-color: var(--card-gold); }
+.pc-close:focus-visible { outline: 2px solid var(--card-gold); outline-offset: 2px; }
+
+.pc-tip { margin: 0; font-family: var(--font-mono); font-size: 10px;
+  letter-spacing: .12em; text-transform: uppercase; color: rgba(240,230,201,.6); }
+
+@keyframes pc-fade { from { opacity: 0; } }
+@keyframes pc-rise { from { opacity: 0; transform: translateY(14px) scale(.97); } }
+@media (prefers-reduced-motion: reduce) {
+  .pc-backdrop, .pc-shell { animation: none; }
+}
+@media (max-width: 560px) {
+  .pc-modal { padding: 16px; }
+  .pc-card { width: min(92vw, calc((100vh - 130px) * 0.8)); }
+  .pc-close { top: -40px; right: 0; }
+}
+
+/* Clickable player rows and cards get a real cursor + hover cue */
+.player-row[data-player-card] { cursor: pointer; }

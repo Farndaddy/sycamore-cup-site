@@ -98,7 +98,7 @@ function render(scores) {
 
   document.getElementById('lb-body').innerHTML = parRow + rows.map((r, i) => `
     <tr ${i === 0 && r.gross !== null ? 'style="background:rgba(198,154,70,0.12);"' : ''}>
-      <td class="hole-name">${i === 0 && r.gross !== null ? '🏆 ' : ''}<a href="players/player.html?id=${r.playerId}" style="color:var(--pine);">${r.name}</a></td>
+      <td class="hole-name">${i === 0 && r.gross !== null ? '🏆 ' : ''}<a href="#" data-player-card="${r.playerId}" style="color:var(--pine);">${r.name}</a></td>
       <td><span class="team-pill ${r.team === rows[0].team ? 'a' : 'b'}">${r.team}</span></td>
       ${r.holeVals.map((v, hi) => `<td class="${hasPars ? parClass(v, currentPars[hi]) : ''}">${v !== undefined ? v : '–'}</td>`).join('')}
       <td><strong>${r.gross !== null ? r.gross : '–'}</strong></td>
