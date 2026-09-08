@@ -2,6 +2,13 @@
 // This intentionally has NO login system (any of the guys can enter scores from
 // their phone with just the site URL) but blocks deleting data and caps how much
 // text can be written per field so a stray bot can't trash the database.
+//
+// 2026-09-08: the app's PIN / card-claim step was removed so anyone can enter a
+// score for anyone. THESE RULES DID NOT CHANGE and did not need to — they never
+// checked identity in the first place. The PIN was only ever a client-side
+// convention about whose card you were on, not security. What protects the data
+// is unchanged: scores can be created and updated but never deleted, and every
+// edit appends to scoreLog with the original score preserved.
 
 rules_version = '2';
 

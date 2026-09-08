@@ -199,7 +199,8 @@ export const ROUNDS = [
 // `scope` tells the leaderboard how to resolve a winner:
 //   day-team       - lowest team net that day
 //   day-individual - lowest individual net that day (place 1 or 2)
-//   day-skins      - the day's net skins pot
+//   day-skins       - the day's net skins pot
+//   day-gross-skins - the day's gross skins pot (same holes, raw strokes)
 //   event-team     - lowest team net across all four days
 //   event-individual - all four rounds combined, by place
 
@@ -225,6 +226,14 @@ export const PAYOUTS = [
   { id: 'd3-skins',  label: 'Day 3 Skins', amount: 120, scope: 'day-skins', dayNum: 3 },
   { id: 'd4-skins',  label: 'Day 4 Skins', amount: 120, scope: 'day-skins', dayNum: 4 },
 
+  // Gross skins — a second, separate skins game on the same holes, decided on raw
+  // strokes instead of net. Added 2026-09-08 at Farnia's call: $60 a day on top of
+  // the $120 net pot, so the buy-in goes from $272.92 to $292.92 a man.
+  { id: 'd1-gskins', label: 'Day 1 Gross Skins', amount: 60, scope: 'day-gross-skins', dayNum: 1 },
+  { id: 'd2-gskins', label: 'Day 2 Gross Skins', amount: 60, scope: 'day-gross-skins', dayNum: 2 },
+  { id: 'd3-gskins', label: 'Day 3 Gross Skins', amount: 60, scope: 'day-gross-skins', dayNum: 3 },
+  { id: 'd4-gskins', label: 'Day 4 Gross Skins', amount: 60, scope: 'day-gross-skins', dayNum: 4 },
+
   { id: 'team-champ', label: 'Overall Team Champion', amount: 720, perPerson: 180, scope: 'event-team' },
 
   { id: 'ind-1', label: 'Individual Champion',  amount: 300, perPerson: 300, scope: 'event-individual', place: 1 },
@@ -247,7 +256,8 @@ export const RULES = {
   // 4-man scramble allowance: 20% of the four combined course handicaps.
   scrambleAllowancePct: 0.20,
 
-  // Net skins carry over to the next hole when a hole is tied.
+  // Skins carry over to the next hole when a hole is tied — same rule for both
+  // the net and the gross game.
   skinsCarryover: true,
 
   // Gross triple bogey is the most anyone can card. Enforced at entry.

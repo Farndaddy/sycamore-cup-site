@@ -25,11 +25,12 @@ const S = {
   teamScores: {},    // { roundId: { teamId: { hole: strokes } } }
   players: {},       // firestore player docs
   rounds: {},        // firestore round docs (locked flags)
-  me: null,          // my playerId
+  me: null,          // whose card is on screen (anyone can score for anyone)
   roundId: ROUNDS[0].id,
   tab: 'card',
   indivView: 'round',
   teamView: 'day',
+  skinsView: 'net',  // 'net' | 'gross' — two separate skins games
   ready: false
 };
 
@@ -54,23 +55,17 @@ const $ = id => document.getElementById(id);
     return;
   }
 
-  Live.watchPlayers(p => { S.players = p; resolveMe(); render(); });
+  Live.watchPlayers(p => { S.players = p; render(); });
   Live.watchAllScores((s, m) => { S.scores = s; S.scoreMeta = m; render(); });
   Live.watchTeamScores(t => { S.teamScores = t; render(); });
   Live.watchRounds(r => { S.rounds = r; render(); });
 
-  S.me = await Live.myPlayerId();
+  S.me = rememberedWho();
   S.ready = true;
 
   if (!S.me) openSignIn();
   render();
 })();
-
-function resolveMe() {
-  const myUid = Live.uid();
-  const found = Object.entries(S.players).find(([, v]) => v.uid && v.uid === myUid);
-  S.me = found ? found[0] : null;
-}
 
 function banner(kind, title, body) {
   $('status-banner').innerHTML =
@@ -146,7 +141,7 @@ function render() {
 function renderIdent() {
   const p = S.me ? playerById(S.me) : null;
   $('ident-name').textContent = p ? p.name : 'Not signed in';
-  $('ident-switch').textContent = p ? 'Change' : 'Sign in';
+  $('ident-switch').textContent = p ? 'Change' : 'Pick player';
 }
 
 function renderRoundMeta() {
@@ -167,8 +162,8 @@ function renderCard() {
   const course = COURSES[round.course];
 
   if (!S.me) {
-    pane.innerHTML = `<div class="banner"><strong>Pick your name to start scoring</strong>
-      Tap "Sign in" up top, choose yourself, and set a PIN.</div>`;
+    pane.innerHTML = `<div class="banner"><strong>Pick a name to start scoring</strong>
+      Tap &ldquo;Pick player&rdquo; up top and choose whose card to open. You can enter scores for anybody.</div>`;
     return;
   }
 
@@ -478,14 +473,19 @@ function renderSkins() {
     return;
   }
 
-  const pot = (PAYOUTS.find(p => p.scope === 'day-skins' && p.dayNum === round.dayNum) || {}).amount || 0;
-  const sk = skinsForRound(round, scoresFor(round.id), teeMap(round.id), pot);
+  // Two separate games on the same holes: net (handicap applied) and gross (raw
+  // strokes), each with its own pot and its own winners.
+  const gross = S.skinsView === 'gross';
+  const scope = gross ? 'day-gross-skins' : 'day-skins';
+  const pot = (PAYOUTS.find(p => p.scope === scope && p.dayNum === round.dayNum) || {}).amount || 0;
+  const sk = skinsForRound(round, scoresFor(round.id), teeMap(round.id), pot, gross ? 'gross' : 'net');
+  const word = gross ? 'gross' : 'net';
 
   const grid = sk.holes.map(h => {
     const cls = ['skin-hole', h.status, h.atStake > 1 ? 'carry-in' : ''].filter(Boolean).join(' ');
     let who = '—', val = '';
-    if (h.status === 'won') { who = h.winner.short; val = `net ${h.low}${h.atStake > 1 ? ` · ${h.atStake} skins` : ''}`; }
-    else if (h.status === 'tied') { who = `${h.tiedCount} tied`; val = `net ${h.low} · carries`; }
+    if (h.status === 'won') { who = h.winner.short; val = `${word} ${h.low}${h.atStake > 1 ? ` · ${h.atStake} skins` : ''}`; }
+    else if (h.status === 'tied') { who = `${h.tiedCount} tied`; val = `${word} ${h.low} · carries`; }
     else { who = '—'; val = 'not in'; }
     return `<div class="${cls}">
       <div class="sh-num">Hole ${h.hole}</div>
@@ -498,6 +498,11 @@ function renderSkins() {
     <div class="pane-head">
       <h2>${round.day} skins</h2>
       <span class="muted">${formatMoney(pot)} pot</span>
+    </div>
+
+    <div class="tee-row" style="margin-bottom:16px;">
+      <button class="tee-btn ${gross ? '' : 'on'}" data-skinsview="net" type="button">Net Skins</button>
+      <button class="tee-btn ${gross ? 'on' : ''}" data-skinsview="gross" type="button">Gross Skins</button>
     </div>
 
     ${sk.carrying > 0 ? `<div class="carry-note"><strong>${sk.carrying} skin${sk.carrying > 1 ? 's' : ''} carrying.</strong>
@@ -516,7 +521,7 @@ function renderSkins() {
 
     <div class="skins-grid">${grid}</div>
 
-    <p class="pane-note">Net skins. Low net alone on a hole takes it, plus anything carried.
+    <p class="pane-note">${gross ? 'Gross skins — raw strokes, no handicap. Low gross' : 'Net skins — handicap applied. Low net'} alone on a hole takes it, plus anything carried.
     ${sk.unitsAwarded > 0 ? `Right now each skin is worth ${formatMoney(sk.perUnit)} —
     that moves as more skins are won.` : ''}
     Skins still carrying when the round ends are not paid; the pot splits across the skins actually won.</p>
@@ -619,10 +624,11 @@ function renderMoney() {
         const a = dailyIndividualAwards(p.dayNum);
         return a[p.place - 1] || null;
       }
-      if (p.scope === 'day-skins') {
+      if (p.scope === 'day-skins' || p.scope === 'day-gross-skins') {
         const rd = ROUNDS.find(r => r.dayNum === p.dayNum && r.counts.skins);
         if (!rd) return null;
-        const sk = skinsForRound(rd, scoresFor(rd.id), teeMap(rd.id), p.amount);
+        const mode = p.scope === 'day-gross-skins' ? 'gross' : 'net';
+        const sk = skinsForRound(rd, scoresFor(rd.id), teeMap(rd.id), p.amount, mode);
         return sk.winners.length ? `${sk.winners[0].player.name} holds ${sk.winners[0].units}` : null;
       }
       if (p.scope === 'event-individual') {
@@ -643,10 +649,10 @@ function renderMoney() {
   };
 
   const groups = [
-    { title: 'Wednesday · Southern Hills', ids: ['d1-team', 'd1-ind-1', 'd1-ind-2', 'd1-skins'] },
-    { title: 'Thursday · Bay Hill',        ids: ['d2-team', 'd2-ind-1', 'd2-ind-2', 'd2-skins'] },
-    { title: 'Friday · Bay Hill',          ids: ['d3-team', 'd3-ind-1', 'd3-ind-2', 'd3-skins'] },
-    { title: 'Saturday · Evermore Cypress',ids: ['d4-team', 'd4-ind-1', 'd4-ind-2', 'd4-skins'] },
+    { title: 'Wednesday · Southern Hills', ids: ['d1-team', 'd1-ind-1', 'd1-ind-2', 'd1-skins', 'd1-gskins'] },
+    { title: 'Thursday · Bay Hill',        ids: ['d2-team', 'd2-ind-1', 'd2-ind-2', 'd2-skins', 'd2-gskins'] },
+    { title: 'Friday · Bay Hill',          ids: ['d3-team', 'd3-ind-1', 'd3-ind-2', 'd3-skins', 'd3-gskins'] },
+    { title: 'Saturday · Evermore Cypress',ids: ['d4-team', 'd4-ind-1', 'd4-ind-2', 'd4-skins', 'd4-gskins'] },
     { title: 'The whole week',             ids: ['team-champ', 'ind-1', 'ind-2', 'ind-3', 'ind-4'] }
   ];
 
@@ -673,71 +679,38 @@ function renderMoney() {
 // ---------------------------------------------------------
 // SIGN-IN SHEET
 // ---------------------------------------------------------
-let pendingPlayer = null;
-let pendingMode = 'claim';
+// Nobody signs in any more. Everyone can enter a score for anyone, so picking a
+// name here only chooses whose card you are looking at — it is remembered on this
+// phone so you land on your own card next time, and you can switch at any moment.
+const WHO_KEY = 'sycamore-2026-scoring-as';
+
+function rememberWho(playerId) {
+  try { localStorage.setItem(WHO_KEY, playerId || ''); } catch (e) { /* private mode */ }
+}
+function rememberedWho() {
+  try { return localStorage.getItem(WHO_KEY) || null; } catch (e) { return null; }
+}
 
 function openSignIn() {
   const sheet = $('signin-sheet');
   const grid = $('signin-names');
 
-  grid.innerHTML = PLAYERS.map(p => {
-    const doc = S.players[p.id];
-    const taken = doc && doc.uid && doc.uid !== Live.uid();
-    const mine = doc && doc.uid === Live.uid();
-    return `<button class="name-btn ${taken ? 'taken' : ''}" data-player="${p.id}">
-      ${p.name}<small>${mine ? 'this phone' : taken ? 'claimed elsewhere' : `index ${p.index}`}</small>
-    </button>`;
-  }).join('');
+  grid.innerHTML = PLAYERS.map(p => `
+    <button class="name-btn ${p.id === S.me ? 'is-current' : ''}" data-player="${p.id}">
+      ${p.name}<small>${p.id === S.me ? 'showing now' : `index ${p.index}`}</small>
+    </button>`).join('');
 
   grid.querySelectorAll('.name-btn').forEach(b => {
     b.addEventListener('click', () => {
-      pendingPlayer = b.dataset.player;
-      const doc = S.players[pendingPlayer];
-      const claimedByMe = doc && doc.uid === Live.uid();
-      const claimedByOther = doc && doc.uid && !claimedByMe;
-
-      if (claimedByOther) {
-        $('pin-error').textContent = `${playerById(pendingPlayer).name} is already claimed on another phone. Farnia can release it from the admin panel.`;
-        $('pin-error').hidden = false;
-        return;
-      }
-
-      pendingMode = claimedByMe ? 'verify' : 'claim';
-      $('pin-label').textContent = claimedByMe ? 'Enter your PIN' : 'Set a 4-digit PIN';
-      $('pin-block').hidden = false;
-      $('pin-error').hidden = true;
-      $('pin-input').value = '';
-      $('pin-input').focus();
+      S.me = b.dataset.player;
+      rememberWho(S.me);
+      sheet.hidden = true;
+      render();
     });
   });
 
-  $('pin-block').hidden = true;
-  $('pin-error').hidden = true;
   sheet.hidden = false;
 }
-
-$('pin-back').addEventListener('click', () => { $('pin-block').hidden = true; });
-
-$('pin-go').addEventListener('click', async () => {
-  const pin = $('pin-input').value.trim();
-  const err = $('pin-error');
-  if (!/^\d{4}$/.test(pin)) {
-    err.textContent = 'Four digits, please.'; err.hidden = false; return;
-  }
-  try {
-    if (pendingMode === 'verify') {
-      const ok = await Live.verifyPin(pendingPlayer, pin);
-      if (!ok) { err.textContent = "That PIN doesn't match."; err.hidden = false; return; }
-    } else {
-      await Live.claimCard(pendingPlayer, pin);
-    }
-    S.me = pendingPlayer;
-    $('signin-sheet').hidden = true;
-    render();
-  } catch (e) {
-    err.textContent = e.message; err.hidden = false;
-  }
-});
 
 // The sign-in sheet is always dismissable — plenty of people just want to watch
 // the leaderboard and never claim a card. Previously it could only be closed by
@@ -807,7 +780,7 @@ function openKeypad(hole, scramble) {
        </div>`;
     $('keypad-note').hidden = false;
     $('keypad-note').textContent =
-      'You had ' + Live.SELF_EDIT_MINUTES + ' minutes to fix it. Ask Farnia to change it now — every change is logged.';
+      'A score locks ' + Live.SELF_EDIT_MINUTES + ' minutes after it goes in. Ask Farnia to change it now — every change is logged.';
     $('keypad-sheet').hidden = false;
     return;
   }

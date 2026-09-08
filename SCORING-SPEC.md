@@ -93,7 +93,7 @@ Was $3,155 with 3 skins days. Add $120 for Saturday.
 
 **Ties: split the money.** For now. Farnia may add a card playoff later, so the tiebreak logic is built as a swappable rule rather than hardcoded — switching to back 9 / 6 / 3 / 18th is a one-line change when she wants it.
 
-**Score entry: your PIN, your card only — plus admin override.** Nobody edits your scores but you and an admin.
+**Score entry: open to everyone.** Anyone can enter or fix a score for anyone — the guys asked for this on 2026-09-08. A score still locks two minutes after it first goes in; after that only an admin can change it, and every change is logged with the original score preserved.
 
 **Max score: gross triple bogey, hard-capped in the app.**
 
@@ -105,7 +105,7 @@ Was $3,155 with 3 skins days. Add $120 for Saturday.
 
 This is enforced at entry, not just in the math — type a 9 on a par 4 and the app stores a 7 and tells you it did. No one has to remember the rule on the course.
 
-**PINs: each player sets his own on first login.** Pick your name from the list, choose a PIN, you're in. Nothing to distribute. An admin can reset any PIN from the admin panel when someone forgets.
+**No PINs, no login.** Picking a name only chooses whose card is on screen; it is remembered on that phone and can be switched at any time. Retired 2026-09-08.
 
 ## 6. The page
 
@@ -124,7 +124,6 @@ This is enforced at entry, not just in the math — type a 9 on a par 4 and the 
 **Admin panel** — separate, admin-only. Not a tab; its own screen behind an admin login.
 
 - Edit or enter any player's score, any round
-- Reset any player's PIN
 - Assign or revoke co-admin rights
 - Set each player's tee for a round (for the guy who won't do it himself)
 - Lock a round once it's final, so nothing shifts after the money's paid
@@ -180,7 +179,7 @@ Anonymous sign-in gives each browser a stable identity. The rules pin each playe
 
 ### Known cost of this model
 
-The identity lives in the browser. If a player switches from phone to iPad mid-trip, an admin has to release his card — the admin panel needs a visible "Release card" control. This is a correction to what was said when the options were presented; re-entering the PIN alone is not enough.
+Superseded 2026-09-08: cards are no longer claimed, so switching phones needs nothing. The name you pick is remembered locally and can be changed any time.
 
 ## 9. Still needed from Farnia
 

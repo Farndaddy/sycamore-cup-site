@@ -269,13 +269,17 @@ export function teamEventStandings(allScores, teeByPlayer, teamScrambleScores) {
 }
 
 // ---------------------------------------------------------
-// NET SKINS
+// SKINS — net and gross
 // ---------------------------------------------------------
-// One skin unit per hole. Low net alone on a hole takes every unit
+// One skin unit per hole. The low score alone on a hole takes every unit
 // riding on it, including any carried over from tied holes. Units still
 // carrying at the end of the round are not awarded, so the pot divides
 // among the units that were actually won.
-export function skinsForRound(round, scoresByPlayer, teeByPlayer, pot) {
+// `mode` picks which number decides the hole: 'net' (handicap applied) or
+// 'gross' (raw strokes). Both games run off the same cards and the same
+// carryover rule; they are separate pots with separate winners.
+export function skinsForRound(round, scoresByPlayer, teeByPlayer, pot, mode = 'net') {
+  const gross = mode === 'gross';
   const course = COURSES[round.course];
 
   const cards = PLAYERS.map(p => ({
@@ -290,7 +294,11 @@ export function skinsForRound(round, scoresByPlayer, teeByPlayer, pot) {
 
   for (let i = 0; i < course.holes; i++) {
     const entries = cards
-      .map(c => ({ player: c.player, net: c.round.holes[i].net, pops: c.round.holes[i].pops }))
+      .map(c => ({
+        player: c.player,
+        net: gross ? c.round.holes[i].gross : c.round.holes[i].net,
+        pops: c.round.holes[i].pops
+      }))
       .filter(e => e.net !== null);
 
     const atStake = carry + 1;
@@ -332,6 +340,7 @@ export function skinsForRound(round, scoresByPlayer, teeByPlayer, pot) {
 
   return {
     roundId: round.id,
+    mode,
     holes,
     winners,
     unitsAwarded,

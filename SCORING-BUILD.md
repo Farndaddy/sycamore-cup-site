@@ -34,7 +34,7 @@ Reload the page.
 Nobody can claim a card until this runs.
 
 **3. Send everyone the link.** Each guy opens `scoring.html`, picks his name, sets a
-4-digit PIN. That's it.
+name from the list. No PIN — that step was retired 2026-09-08; anyone can enter a score for anyone.
 
 ## How the money works, as built
 

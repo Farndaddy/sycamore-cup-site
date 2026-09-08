@@ -151,8 +151,9 @@ function renderPanel() {
 
     <div class="admin-sec">
       <h2>Cards</h2>
-      <p class="sec-note">A card is tied to the phone that claimed it. If someone switches devices
-      or forgets his PIN, release it here and he can claim it again.</p>
+      <p class="sec-note">Card claiming and PINs were retired &mdash; anyone can enter a score for
+      anyone now. These rows are just a record of who claimed what before the change; releasing
+      one is harmless and no longer affects scoring.</p>
       ${PLAYERS.map(p => {
         const doc = S.players[p.id];
         const claimed = doc && doc.uid;
