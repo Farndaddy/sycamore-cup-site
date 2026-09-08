@@ -151,39 +151,45 @@ export const ROUNDS = [
     id: '2026-wed-southern-hills',
     day: 'Wednesday', dayNum: 1, label: 'Day 1',
     course: 'southern-hills', holes: 18, format: 'Individual stroke play',
-    counts: { individual: true, team: true, skins: true }
+    counts: { individual: true, team: true, skins: true },
+    teeTimes: null
   },
   {
     id: '2026-thu-bay-hill',
     day: 'Thursday', dayNum: 2, label: 'Day 2',
     course: 'bay-hill', holes: 18, format: 'Individual stroke play',
-    counts: { individual: true, team: true, skins: true }
+    counts: { individual: true, team: true, skins: true },
+    teeTimes: ['10:40 AM', '10:50 AM', '11:00 AM']
   },
   {
     id: '2026-thu-charger-scramble',
     day: 'Thursday', dayNum: 2, label: 'Day 2 Scramble',
     course: 'bay-hill-charger', holes: 9, format: '4-man team scramble',
     scramble: true,
-    counts: { individual: false, team: true, skins: false }
+    counts: { individual: false, team: true, skins: false },
+    teeTimes: ['4:30 PM', '4:40 PM', '4:50 PM']
   },
   {
     id: '2026-fri-bay-hill',
     day: 'Friday', dayNum: 3, label: 'Day 3',
     course: 'bay-hill', holes: 18, format: 'Individual stroke play',
-    counts: { individual: true, team: true, skins: true }
+    counts: { individual: true, team: true, skins: true },
+    teeTimes: ['9:40 AM', '9:50 AM', '10:00 AM']
   },
   {
     id: '2026-fri-charger-scramble',
     day: 'Friday', dayNum: 3, label: 'Day 3 Scramble',
     course: 'bay-hill-charger', holes: 9, format: '4-man team scramble',
     scramble: true,
-    counts: { individual: false, team: true, skins: false }
+    counts: { individual: false, team: true, skins: false },
+    teeTimes: ['3:30 PM', '3:40 PM', '3:50 PM']
   },
   {
     id: '2026-sat-evermore',
     day: 'Saturday', dayNum: 4, label: 'Day 4',
     course: 'evermore-cypress', holes: 18, format: 'Individual stroke play',
-    counts: { individual: true, team: true, skins: true }
+    counts: { individual: true, team: true, skins: true },
+    teeTimes: ['9:00 AM', '9:10 AM', '9:20 AM']
   }
 ];
 

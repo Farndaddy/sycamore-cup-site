@@ -7,17 +7,48 @@
 <title>2026 — Sycamore Cup Classic</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/scoring.css">
 </head>
 <body>
 <header class="site-header" id="site-header"></header>
 
-<section class="hero-plain" style="text-align:center; padding:120px 0;">
+<section class="hero-plain">
   <div class="wrap">
-    <p class="eyebrow">Coming Soon</p>
+    <p class="eyebrow">Southern Hills · Bay Hill · Evermore Cypress</p>
     <h1>2026 <em>Sycamore Cup</em></h1>
-    <p class="lead" style="margin:0 auto;">Location, courses, and the field are still being finalized. Check back once the trip is booked.</p>
-    <div class="hero-cta-row" style="justify-content:center;">
-      <a class="btn btn-primary" href="2025.html">← See the 2025 Trip</a>
+    <p class="lead">Three teams, four rounds, one Cup. Team and individual scores update live as the guys tap them in on the course.</p>
+    <div class="hero-cta-row">
+      <a class="btn btn-primary" href="../scoring.html">Enter Scores →</a>
+      <a class="btn btn-light" href="../players.html">Player Directory</a>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div><span class="eyebrow">The Field</span><h2>Three Teams, Twelve Guys</h2></div>
+    </div>
+    <div id="team-rosters"></div>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0;">
+  <div class="wrap">
+    <div class="section-head">
+      <div><span class="eyebrow">Live</span><h2>Leaderboard</h2></div>
+    </div>
+    <div class="liv-board" id="liv-board"></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div><span class="eyebrow">Round By Round</span><h2>Schedule</h2></div>
+    </div>
+    <div class="card" style="padding:8px 28px;">
+      <div id="schedule"></div>
     </div>
   </div>
 </section>
@@ -25,8 +56,71 @@
 <footer class="site-footer" id="site-footer"></footer>
 
 <script src="../js/app.js"></script>
-<script>
+<script type="module">
+  import { TEAMS, PLAYERS, ROUNDS, COURSES, teamRoster } from '../js/tournament-2026.js';
+
   initShell('2026');
+
+  // ---------- team roster cards ----------
+  // Order requested: Starz & Scrubz, then Bison Boys, then Frombys.
+  const TEAM_ORDER = ['team-3', 'team-1', 'team-2'];
+
+  document.getElementById('team-rosters').innerHTML = TEAM_ORDER.map(teamId => {
+    const team = TEAMS.find(t => t.id === teamId);
+    const roster = teamRoster(teamId);
+    const combined = roster.reduce((s, p) => s + p.index, 0);
+    return `
+      <div class="team-roster-block">
+        <div class="team-roster-head">
+          <h3>${team.name}</h3>
+          <span class="combined-hcp">Combined Index ${combined}</span>
+        </div>
+        <div class="grid grid-4">
+          ${roster.map(p => `
+            <div class="roster-card" style="--team-accent:var(--${team.accent});">
+              ${avatarHTML(p, 'profile-avatar')}
+              <div class="rc-name">${p.name}</div>
+              <div class="rc-index">Index ${p.index}</div>
+            </div>`).join('')}
+        </div>
+      </div>`;
+  }).join('');
+
+  // ---------- schedule ----------
+  const COURSE_DISPLAY = {
+    'southern-hills': 'Southern Hills Plantation',
+    'bay-hill': 'Bay Hill (Championship Course)',
+    'bay-hill-charger': 'Bay Hill (Charger Course)',
+    'evermore-cypress': 'Evermore Grand Cypress'
+  };
+
+  const days = [1, 2, 3, 4].map(dayNum => ROUNDS.filter(r => r.dayNum === dayNum));
+
+  document.getElementById('schedule').innerHTML = days.map(dayRounds => {
+    const r0 = dayRounds[0];
+    return `
+      <div class="sched-day">
+        <div class="sched-daynum">
+          <div class="dn">Day ${r0.dayNum}</div>
+          <div class="dd">${r0.day}</div>
+        </div>
+        <div class="sched-body">
+          ${dayRounds.map(r => {
+            const course = COURSES[r.course];
+            return `
+              <div class="sched-block">
+                <div class="sched-course">${COURSE_DISPLAY[r.course] || course.short}</div>
+                <div class="sched-format">${r.format}${r.holes === 9 ? ' · 9 holes' : ''}</div>
+                <div class="sched-times">
+                  ${r.teeTimes ? r.teeTimes.map(t => `<span class="sched-time">${t}</span>`).join('')
+                    : `<span class="sched-time">Tee times TBD</span>`}
+                </div>
+              </div>`;
+          }).join('')}
+        </div>
+      </div>`;
+  }).join('');
 </script>
+<script type="module" src="../js/live-board.js"></script>
 </body>
 </html>

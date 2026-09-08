@@ -20,7 +20,7 @@ function renderHeader(activeKey) {
   if (!el) return;
   const links = [
     { key: 'home', href: ROOT + 'index.html', label: 'Home' },
-    { key: '2026', href: ROOT + 'years/2026.html', label: '2026', soon: true },
+    { key: '2026', href: ROOT + 'years/2026.html', label: '2026' },
     { key: '2025', href: ROOT + 'years/2025.html', label: '2025' },
     { key: '2024', href: ROOT + 'years/2024.html', label: '2024' },
     { key: '2023', href: ROOT + 'years/2023.html', label: '2023' },

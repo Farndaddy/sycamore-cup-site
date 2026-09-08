@@ -375,3 +375,106 @@
 @media (prefers-reduced-motion: reduce) {
   * { animation: none !important; transition: none !important; }
 }
+
+/* =========================================================
+   2026 landing page — team roster cards, LIV-style leaderboard,
+   schedule. Lives here because it's all live-tournament UI, same
+   as the rest of this file, even though it renders on years/2026.html
+   rather than scoring.html.
+   ========================================================= */
+
+/* ---------- team roster cards ---------- */
+.team-roster-block { margin-bottom: 44px; }
+.team-roster-head {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+  margin-bottom: 18px; padding-bottom: 10px; border-bottom: 2px solid var(--ink);
+}
+.team-roster-head h3 { margin: 0; font-size: 1.5rem; }
+.team-roster-head .combined-hcp {
+  font-family: var(--font-mono); font-size: 12.5px; color: var(--ink-soft);
+  text-transform: uppercase; letter-spacing: .06em;
+}
+.roster-card {
+  background: var(--paper); border: 1px solid var(--line);
+  border-top: 4px solid var(--team-accent, var(--forest));
+  border-radius: var(--radius); padding: 22px 16px; text-align: center;
+}
+.roster-card .profile-avatar, .roster-card .avatar-photo {
+  width: 76px; height: 76px; border-radius: 50%; overflow: hidden;
+  margin: 0 auto 14px; background: var(--sand);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono); font-weight: 700; color: var(--ink-soft);
+}
+.roster-card .avatar-photo img { width: 100%; height: 100%; object-fit: cover; }
+.roster-card .rc-name { font-family: var(--font-display); font-weight: 600; font-size: 1.05rem; margin-bottom: 4px; }
+.roster-card .rc-index { font-family: var(--font-mono); font-size: 12px; color: var(--ink-soft); }
+
+/* ---------- LIV-style live leaderboard ---------- */
+.liv-board {
+  background: var(--paper); border: 1px solid var(--line); border-radius: 18px;
+  padding: 28px 26px 8px; box-shadow: var(--shadow-card);
+}
+.liv-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 22px; }
+.liv-toggle { display: inline-flex; background: var(--sand); border-radius: 999px; padding: 4px; gap: 2px; }
+.liv-toggle button {
+  border: none; background: none; padding: 9px 20px; border-radius: 999px;
+  font-family: var(--font-body); font-weight: 700; font-size: 12.5px;
+  letter-spacing: .04em; text-transform: uppercase; color: var(--ink-soft); cursor: pointer;
+  transition: background .15s, color .15s;
+}
+.liv-toggle button.on.tp-players { background: var(--forest); color: #fff; }
+.liv-toggle button.on.tp-teams { background: var(--liv-navy, #1F3A5C); color: #fff; }
+.liv-status { background: var(--sand); border-radius: 14px; padding: 10px 18px; text-align: right; }
+.liv-status strong { display: block; color: var(--ink); font-size: 13.5px; }
+.liv-status span { color: var(--ink-soft); font-size: 11.5px; }
+.liv-heading {
+  font-family: var(--font-display); font-weight: 700; font-size: 2.3rem;
+  letter-spacing: -.01em; text-transform: uppercase; margin: 0 0 18px; color: var(--forest);
+}
+.liv-heading.tp-teams { color: var(--liv-navy, #1F3A5C); }
+.liv-table { width: 100%; border-collapse: collapse; }
+.liv-table th {
+  text-align: left; font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink-soft); font-weight: 600; padding: 0 10px 10px;
+}
+.liv-table th.num, .liv-table td.num { text-align: center; }
+.liv-table td { padding: 16px 10px; border-top: 1px solid var(--line); vertical-align: middle; }
+.liv-pos { font-family: var(--font-mono); font-weight: 600; color: var(--ink-soft); width: 36px; }
+.liv-who { display: flex; align-items: center; gap: 14px; }
+.liv-avatar {
+  width: 44px; height: 44px; border-radius: 50%; overflow: hidden; flex: 0 0 auto;
+  background: var(--sand); display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono); font-weight: 700; font-size: 13px; color: var(--ink-soft);
+}
+.liv-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.liv-namecol .n { font-family: var(--font-display); font-weight: 600; font-size: 15px; color: var(--ink); }
+.liv-namecol .t { font-size: 11.5px; color: var(--ink-soft); margin-top: 1px; }
+.liv-round { font-family: var(--font-mono); font-size: 14px; color: var(--ink); }
+.liv-round .thru { display: block; font-size: 10px; color: var(--ink-soft); font-family: var(--font-body); margin-top: 2px; }
+.liv-round.dropped { color: var(--ink-soft); text-decoration: line-through; opacity: .6; }
+.liv-round.dash { color: var(--line-strong); }
+.liv-tot { font-family: var(--font-mono); font-weight: 700; font-size: 19px; color: var(--ink); }
+.liv-tot.under { color: var(--forest); }
+.liv-note { font-size: 12.5px; color: var(--ink-soft); padding: 16px 10px 22px; }
+@media (max-width: 700px) {
+  .liv-board { padding: 20px 14px 4px; border-radius: 14px; }
+  .liv-heading { font-size: 1.6rem; }
+  .liv-who { gap: 10px; }
+  .liv-avatar { width: 36px; height: 36px; }
+  .liv-table th, .liv-table td { padding: 10px 6px; }
+  .liv-namecol .n { font-size: 13.5px; }
+}
+
+/* ---------- schedule ---------- */
+.sched-day { display: flex; gap: 24px; padding: 22px 0; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+.sched-day:last-child { border-bottom: none; }
+.sched-daynum { flex: 0 0 90px; }
+.sched-daynum .dn { font-family: var(--font-display); font-weight: 600; font-size: 1.6rem; }
+.sched-daynum .dd { font-size: 12px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .06em; }
+.sched-body { flex: 1 1 320px; }
+.sched-block { margin-bottom: 14px; }
+.sched-block:last-child { margin-bottom: 0; }
+.sched-course { font-family: var(--font-display); font-weight: 600; font-size: 1.05rem; margin-bottom: 4px; }
+.sched-format { font-size: 12.5px; color: var(--ink-soft); margin-bottom: 8px; }
+.sched-times { display: flex; gap: 8px; flex-wrap: wrap; }
+.sched-time { font-family: var(--font-mono); font-size: 12.5px; background: var(--sand); border-radius: 20px; padding: 5px 12px; }

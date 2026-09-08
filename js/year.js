@@ -27,9 +27,9 @@ const YEAR_PHOTOS = {
 };
 
 const YEAR_ABOUT = {
-  2023: "Orlando swing #1. Two teams, six-a-side: Palm Lickers vs. Bird Dogs, across Southern Hills, Shingle Creek, Providence, and Grand Cypress.",
-  2024: "Orlando, round two. Bird Dogs came in as defending champs — Sycamore Swingers (formerly Palm Lickers) took the cup back across four Orlando-area courses.",
-  2025: "First trip outside Florida — Turning Stone Resort in Verona, NY. Sycamore Swingers vs. DOMinators, 8-a-side, LIV-style team and singles sessions across three days."
+  2023: "The inaugural Sycamore Cup. Orlando swing #1. Two teams drafted, six-a-side: Palm Lickers vs. Bird Dogs, across Southern Hills, Shingle Creek, Providence, and Grand Cypress. Four days of 36, battles across every turn, every hole, every house game imaginable. In the end, Bird Dogs took the crown on the final day, becoming the first-ever Sycamore Cup Champions.",
+  2024: "Running it back, Orlando Part II. Bird Dogs came in as defending champs — Sycamore Swingers (formerly Palm Lickers) took the Cup back in grand fashion on the final hole, final putt. The battles were epic and the finish was one for the ages, but only one team stood victorious, the Sycamore Swingers!",
+  2025: "The Sycamore boys take their game to the upper northeast to Turning Stone Resort. Stacked with 4 amazing PGA level courses, the boys showed up, some on time, some late, but always there in style and with mad charisma. They hit the links hard during the day, and tables at night. DOMinators dominated in true fashion on the links, taking the 2025 Sycamore Cup by Friday! Off the course, the winner on dem carpeted floors was Stongerino, winning at every table, every slot, everything he touched, and thus we birthed the nickname, Casino Stong."
 };
 
 function renderYearPage(yearNum) {
@@ -69,7 +69,12 @@ function renderYearPage(yearNum) {
     }
 
     const teamsEl = document.getElementById('year-teams');
-    teamsEl.innerHTML = y.teams.map((team, idx) => {
+    // Champion on the left, runner-up on the right. "Champion" must match exactly —
+    // a compound result like "Defending champion, runner-up" means this team did NOT
+    // win this particular year, it only entered as the prior year's titleholder.
+    const teamsSorted = [...y.teams].sort((a, b) => (b.result === 'Champion') - (a.result === 'Champion'));
+    teamsEl.innerHTML = `<div class="grid grid-2 teams-grid">` + teamsSorted.map((team, idx) => {
+      const isChamp = team.result === 'Champion';
       const rosterRows = team.roster.map(r => {
         const player = data.players.find(p => p.id === r.playerId);
         const displayName = r.displayName || (player ? player.name : r.playerId);
@@ -85,14 +90,14 @@ function renderYearPage(yearNum) {
           </a>`;
       }).join('');
       return `
-        <div class="team-block">
+        <div class="team-block${isChamp ? ' team-block--champ' : ''}">
           <div class="team-head">
-            <h3>${team.name}${team.result ? ` <span class="muted" style="font-family:var(--font-body); font-size:0.8rem; font-weight:400;"> — ${team.result}</span>` : ''}</h3>
+            <h3>${team.name}${isChamp ? '<span class="team-badge">Champion</span>' : (team.result ? ` <span class="muted" style="font-family:var(--font-body); font-size:0.8rem; font-weight:400;"> — ${team.result}</span>` : '')}</h3>
             ${team.captain ? `<span class="cap">Captain: ${team.captain}</span>` : ''}
           </div>
           <div class="roster">${rosterRows}</div>
         </div>`;
-    }).join('');
+    }).join('') + `</div>`;
 
     // 2025 has a match schedule instead of fun facts
     const scheduleEl = document.getElementById('year-schedule');

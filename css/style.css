@@ -233,7 +233,27 @@ footer.site-footer .wrap { display: flex; justify-content: space-between; flex-w
 @media (max-width: 560px) { .gallery { grid-template-columns: 1fr; } .gallery .g-wide, .gallery .g-tall { grid-column: span 1; grid-row: span 1; } .gallery figure { height: 240px; } }
 
 /* ---------- Team block ---------- */
+.teams-grid { align-items: start; }
 .team-block { margin-bottom: 56px; }
+.team-block--champ {
+  background: var(--sand);
+  border: 1px solid var(--brass);
+  border-radius: var(--radius);
+  padding: 20px 24px 6px;
+}
+.team-block--champ .team-head { border-bottom-color: var(--brass-dark); }
+.team-block--champ .player-row { border-bottom-color: rgba(138,110,61,0.22); }
+.team-badge {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 0.62rem; font-weight: 700; letter-spacing: 0.09em;
+  text-transform: uppercase;
+  padding: 3px 10px; margin-left: 12px;
+  border-radius: 20px;
+  background: var(--brass); color: #fff;
+  vertical-align: middle;
+}
+
 .team-head {
   display: flex; align-items: baseline; justify-content: space-between;
   padding: 4px 0 16px; border-bottom: 2px solid var(--ink);
