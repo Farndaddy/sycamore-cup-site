@@ -581,3 +581,147 @@
   .keypad-head .eyebrow { font-size: 9.5px; letter-spacing: .08em; }
   .keypad-pops .kp-text { font-size: 9.5px; }
 }
+
+/* =========================================================
+   FOURSOMES — group picker, one-hole card, group scorecard
+   ========================================================= */
+
+/* ---- picker ---- */
+.gp-head h2 { font-family: var(--font-display); font-weight: 600; font-size: 1.3rem; margin: 0 0 6px; }
+.gp-head .muted { font-size: 13.5px; margin: 0 0 16px; }
+.gp-me {
+  display: flex; align-items: center; gap: 11px; padding: 12px 14px;
+  border-radius: 10px; background: var(--forest); color: #fff; margin-bottom: 4px;
+}
+.gp-me strong { display: block; font-size: 14.5px; }
+.gp-me small {
+  display: block; font-family: var(--font-mono); font-size: 10px;
+  letter-spacing: .05em; text-transform: uppercase; color: rgba(255,255,255,.7);
+}
+.gp-av {
+  width: 34px; height: 34px; border-radius: 50%; flex: 0 0 auto;
+  background: rgba(255,255,255,.16); display: grid; place-items: center;
+  font-family: var(--font-mono); font-size: 12px; font-weight: 600;
+}
+.gp-av.sm { width: 28px; height: 28px; font-size: 10.5px;
+  background: var(--sand); color: var(--ink-soft); }
+.gp-label {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--ink-soft); margin: 18px 0 8px;
+}
+.gp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.gp-pick {
+  display: flex; align-items: center; gap: 9px; padding: 10px 11px; text-align: left;
+  border: 1px solid var(--line-strong); border-radius: 9px; background: var(--paper);
+  cursor: pointer; color: var(--ink); font-family: var(--font-body);
+}
+.gp-pick strong { display: block; font-size: 13px; line-height: 1.2; }
+.gp-pick small { display: block; font-family: var(--font-mono); font-size: 10px; color: var(--ink-soft); }
+.gp-pick.on { border-color: var(--forest); background: #EAF0EC; box-shadow: inset 0 0 0 1px var(--forest); }
+.gp-pick:disabled { opacity: .45; cursor: default; }
+.gp-pick:disabled small { color: var(--clay); }
+.gp-joins { display: flex; flex-direction: column; gap: 7px; }
+.gp-join {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 10px 12px; border-radius: 9px; background: var(--sand);
+  border: 1px solid var(--line-strong); font-size: 13px;
+}
+.gp-go { margin-top: 18px; }
+
+/* ---- group bar ---- */
+.fs-groupbar {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 10px 13px; margin-bottom: 14px; border-radius: 9px;
+  background: var(--sand); border: 1px solid var(--line-strong);
+  font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .03em;
+}
+
+/* ---- hole bar ---- */
+.fs-holebar {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 12px 4px;
+}
+.fs-holemid { text-align: center; flex: 1; min-width: 0; }
+.fs-holemid strong { display: block; font-family: var(--font-display); font-weight: 600;
+  font-size: 1.4rem; line-height: 1.1; }
+.fs-holemid small { display: block; font-family: var(--font-mono); font-size: 10.5px;
+  color: var(--ink-soft); margin-top: 3px; }
+.fs-pips { display: flex; gap: 3px; padding: 0 2px 14px; }
+.fs-pip { flex: 1; height: 4px; border-radius: 2px; background: var(--line-strong); }
+.fs-pip.done { background: var(--forest); }
+.fs-pip.now { background: var(--brass); height: 6px; margin-top: -1px; }
+
+/* ---- one player's row on this hole ---- */
+.fs-rows { display: flex; flex-direction: column; gap: 9px; }
+.fs-row {
+  display: flex; align-items: center; gap: 11px; padding: 11px 12px;
+  background: var(--paper); border: 1px solid var(--line); border-radius: 10px;
+}
+.fs-av {
+  width: 34px; height: 34px; border-radius: 50%; background: var(--sand); flex: 0 0 auto;
+  display: grid; place-items: center; font-family: var(--font-mono);
+  font-size: 11px; font-weight: 600; color: var(--ink-soft);
+}
+.fs-mid { flex: 1; min-width: 0; }
+.fs-mid strong { display: block; font-size: 14px; font-weight: 600; line-height: 1.2; }
+.fs-mid small { display: block; font-family: var(--font-mono); font-size: 10px;
+  color: var(--ink-soft); margin-top: 3px; }
+.fs-chip {
+  display: inline-flex; align-items: center; gap: 5px; margin-top: 5px;
+  padding: 3px 8px 3px 6px; border-radius: 999px; background: #F3EAD8;
+  border: 1px solid rgba(169,136,79,.45);
+  font-family: var(--font-mono); font-size: 9.5px; letter-spacing: .05em;
+  text-transform: uppercase; color: var(--brass-dark); font-weight: 600;
+}
+.fs-dots { display: inline-flex; gap: 3px; }
+.fs-dots span { width: 7px; height: 7px; border-radius: 50%; background: var(--brass-dark); }
+.fs-nostroke {
+  display: inline-block; margin-top: 6px; font-family: var(--font-mono);
+  font-size: 9.5px; letter-spacing: .05em; text-transform: uppercase; color: var(--line-strong);
+}
+/* Strokes in the corner of the box, the way they sit on paper. */
+.fs-boxwrap { position: relative; flex: 0 0 auto; }
+.fs-box {
+  width: 56px; height: 50px; border-radius: 9px; cursor: pointer;
+  border: 1.5px solid var(--line-strong); background: var(--ivory);
+  font-family: var(--font-mono); font-size: 21px; font-weight: 600; color: var(--ink);
+  display: grid; place-items: center;
+}
+.fs-box.empty { color: var(--line-strong); border-style: dashed; }
+.fs-box.gs { border-color: var(--brass); background: #FCF7EC; }
+.fs-box:disabled { opacity: .55; cursor: default; }
+.fs-corner { position: absolute; top: 4px; left: 5px; display: flex; gap: 2.5px; pointer-events: none; }
+.fs-corner span { width: 5px; height: 5px; border-radius: 50%; background: var(--brass-dark); }
+.fs-foot { display: flex; justify-content: flex-end; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+
+/* ---- the foursome's full card ---- */
+.fc-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px;
+  background: var(--paper); }
+table.fc { border-collapse: collapse; font-family: var(--font-mono); font-size: 11.5px;
+  font-variant-numeric: tabular-nums; min-width: 640px; }
+table.fc th, table.fc td { padding: 6px 5px; text-align: center; border-bottom: 1px solid var(--line); }
+table.fc th { font-size: 9.5px; letter-spacing: .05em; color: var(--ink-soft); font-weight: 600; }
+/* Pinned names must sit above the tinted stroke cells sliding under them. */
+table.fc .fc-nm {
+  text-align: left; position: sticky; left: 0; z-index: 2; background: var(--paper);
+  font-family: var(--font-body); font-weight: 600; font-size: 12px;
+  padding-left: 10px; padding-right: 12px; min-width: 96px; white-space: nowrap;
+  box-shadow: 1px 0 0 var(--line), 6px 0 8px -6px rgba(32,30,26,.18);
+}
+table.fc thead .fc-nm { background: var(--sand); z-index: 3; }
+table.fc thead tr:first-child th { background: var(--sand); color: var(--ink); }
+table.fc .fc-tot { background: var(--sand); font-weight: 600; }
+table.fc .fc-si th { font-size: 9px; color: var(--brass-dark); background: #F7F2E6; }
+table.fc td.fc-cell { position: relative; padding: 0; }
+table.fc td.fc-cell.gs { background: #FCF7EC; }
+table.fc .fc-dots { position: absolute; top: 3px; left: 4px; display: flex; gap: 1.5px; }
+table.fc .fc-dots b { width: 3.5px; height: 3.5px; border-radius: 50%; background: var(--brass-dark); }
+table.fc .fc-v {
+  width: 100%; min-width: 30px; padding: 11px 2px 6px; border: 0; background: none;
+  font-family: var(--font-mono); font-size: 12.5px; color: var(--ink); cursor: pointer;
+}
+table.fc .fc-v:disabled { cursor: default; color: var(--ink-soft); }
+
+/* ---- leaderboard rows open a card ---- */
+.liv-clickable { cursor: pointer; }
+.liv-clickable:hover { background: var(--sand); }

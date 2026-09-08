@@ -149,6 +149,31 @@ export async function myPlayerId() {
   return found ? found[0] : null;
 }
 
+// ---------------------------------------------------------
+// FOURSOMES
+// ---------------------------------------------------------
+// A group is just a shared label on the player docs: groups[roundId] = groupId.
+// Everyone carrying the same label for a round is in the same four. No new
+// collection, no new listener — watchPlayers already streams these docs, and
+// the write is the same shape as setTee, which is known to pass the rules.
+export async function joinGroup(playerId, roundId, groupId) {
+  await updateDoc(doc(db, 'players', playerId), {
+    [`groups.${roundId}`]: groupId,
+    uid: uid()
+  });
+}
+
+export async function leaveGroup(playerId, roundId) {
+  await updateDoc(doc(db, 'players', playerId), {
+    [`groups.${roundId}`]: null,
+    uid: uid()
+  });
+}
+
+export async function setGroup(roundId, memberIds, groupId) {
+  for (const id of memberIds) await joinGroup(id, roundId, groupId);
+}
+
 export async function setTee(playerId, roundId, teeKey) {
   await updateDoc(doc(db, 'players', playerId), {
     [`tees.${roundId}`]: teeKey,

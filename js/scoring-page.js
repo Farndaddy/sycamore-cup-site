@@ -35,6 +35,10 @@ const S = {
   moneyDay: 1,
   moneyType: 'team',
   skinsView: 'net',  // 'net' | 'gross' — two separate skins games
+  hole: 1,           // which hole the foursome card is showing
+  cardMode: 'hole',  // 'hole' | 'full'
+  viewing: null,     // another player's card, opened from the leaderboard
+  pickGroup: [],     // in-progress foursome selection
   ready: false
 };
 
@@ -94,6 +98,9 @@ function wireTabs() {
     const btn = e.target.closest('.tab');
     if (!btn) return;
     S.tab = btn.dataset.tab;
+    // Tapping My Card yourself means your own card, not whoever you were last
+    // looking at from the leaderboard.
+    if (S.tab === 'card') S.viewing = null;
     document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t === btn));
     document.querySelectorAll('.tabpane').forEach(p => p.classList.remove('active'));
     $('pane-' + S.tab).classList.add('active');
@@ -170,6 +177,51 @@ function renderRoundMeta() {
 }
 
 // ---------------------------------------------------------
+// FOURSOMES
+// ---------------------------------------------------------
+// Everyone carrying the same groups[roundId] label is in the same four. You can
+// score for anyone in your own group; everyone else's card is readable but not
+// editable. With no group you can still score your own card.
+
+function groupIdFor(playerId, roundId) {
+  const doc = S.players[playerId];
+  const g = doc && doc.groups ? doc.groups[roundId] : null;
+  return g || null;
+}
+
+function groupMembers(roundId, groupId) {
+  if (!groupId) return [];
+  return PLAYERS.filter(p => groupIdFor(p.id, roundId) === groupId).map(p => p.id);
+}
+
+function myGroupId(roundId) { return S.me ? groupIdFor(S.me, roundId) : null; }
+
+function myFour(roundId) {
+  const gid = myGroupId(roundId);
+  return gid ? groupMembers(roundId, gid) : (S.me ? [S.me] : []);
+}
+
+// Every distinct group already formed for this round.
+function allGroups(roundId) {
+  const seen = new Map();
+  PLAYERS.forEach(p => {
+    const g = groupIdFor(p.id, roundId);
+    if (!g) return;
+    if (!seen.has(g)) seen.set(g, []);
+    seen.get(g).push(p.id);
+  });
+  return [...seen.entries()].map(([id, members]) => ({ id, members }));
+}
+
+function canEdit(playerId, roundId) {
+  if (isLocked(roundId)) return Live.isAdmin();
+  if (Live.isAdmin()) return true;
+  if (playerId === S.me) return true;
+  const gid = myGroupId(roundId);
+  return !!gid && groupIdFor(playerId, roundId) === gid;
+}
+
+// ---------------------------------------------------------
 // TAB 1 — MY CARD
 // ---------------------------------------------------------
 function renderCard() {
@@ -179,65 +231,241 @@ function renderCard() {
 
   if (!S.me) {
     pane.innerHTML = `<div class="banner"><strong>Pick a name to start scoring</strong>
-      Tap &ldquo;Pick player&rdquo; up top and choose whose card to open. You can enter scores for anybody.</div>`;
+      Tap &ldquo;Pick player&rdquo; up top and choose who you are.</div>`;
     return;
   }
 
   if (round.scramble) { renderScrambleCard(pane, round, course); return; }
 
-  const player = playerById(S.me);
-  const tee = teeFor(S.me, round.id);
-  const scores = (scoresFor(round.id)[S.me]) || {};
-  const r = playerRound(player, round, scores, tee);
-  const locked = isLocked(round.id);
+  // Someone else's card, opened from the leaderboard.
+  if (S.viewing && S.viewing !== S.me && !myFour(round.id).includes(S.viewing)) {
+    renderOtherCard(pane, round, course, S.viewing);
+    return;
+  }
 
-  const teeButtons = Object.entries(course.tees).map(([key, t]) => {
-    const ch = courseHandicap(player.index, course, key);
-    return `<button class="tee-btn ${key === tee ? 'on' : ''}" data-tee="${key}" ${locked ? 'disabled' : ''}>
-      ${t.name} <span class="muted">· ${t.yards}y · ${ch} strokes</span>
-    </button>`;
+  if (!myGroupId(round.id)) { renderGroupPicker(pane, round); return; }
+  if (S.cardMode === 'full') { renderFourCard(pane, round, course); return; }
+  renderHoleView(pane, round, course);
+}
+
+/* ---------- pick your four ---------- */
+function renderGroupPicker(pane, round) {
+  const taken = {};
+  allGroups(round.id).forEach(g =>
+    g.members.forEach(id => { taken[id] = g.members.filter(m => m !== id).map(m => playerById(m).short); }));
+
+  const others = PLAYERS.filter(p => p.id !== S.me);
+  const me = playerById(S.me);
+
+  pane.innerHTML = `
+    <div class="gp-head">
+      <h2>Who&rsquo;s in your group?</h2>
+      <p class="muted">Pick the guys you&rsquo;re walking with. Any of you can enter scores
+      for the whole group, and everyone else&rsquo;s card stays readable but locked.</p>
+    </div>
+
+    <div class="gp-me">
+      <span class="gp-av">${initials(me.name)}</span>
+      <span><strong>${me.name}</strong><small>You &middot; plays off ${courseHandicap(me.index, COURSES[round.course], teeFor(S.me, round.id))}</small></span>
+    </div>
+
+    <p class="gp-label">Add up to three</p>
+    <div class="gp-grid">
+      ${others.map(p => {
+        const withWho = taken[p.id];
+        const on = S.pickGroup.includes(p.id);
+        return `<button class="gp-pick ${on ? 'on' : ''}" data-gpick="${p.id}" ${withWho ? 'disabled' : ''}>
+          <span class="gp-av sm">${initials(p.name)}</span>
+          <span><strong>${p.short}</strong><small>${withWho ? 'with ' + withWho.join(', ') : 'index ' + p.index}</small></span>
+        </button>`;
+      }).join('')}
+    </div>
+
+    ${allGroups(round.id).length ? `
+      <p class="gp-label">Already out there</p>
+      <div class="gp-joins">
+        ${allGroups(round.id).map(g => `
+          <div class="gp-join">
+            <span>${g.members.map(m => playerById(m).short).join(' &middot; ')}</span>
+            <button class="btn btn-sm btn-quiet" data-gjoin="${g.id}">Join</button>
+          </div>`).join('')}
+      </div>` : ''}
+
+    <button class="btn btn-primary gp-go" id="gp-start" ${S.pickGroup.length ? '' : 'disabled'}>
+      ${S.pickGroup.length ? `Start with ${S.pickGroup.length + 1}` : 'Pick at least one'}
+    </button>
+    <p class="pane-note">Groups are per round &mdash; tomorrow can be a different four.</p>`;
+
+  pane.querySelectorAll('[data-gpick]').forEach(b => b.addEventListener('click', () => {
+    const id = b.dataset.gpick;
+    if (S.pickGroup.includes(id)) S.pickGroup = S.pickGroup.filter(x => x !== id);
+    else if (S.pickGroup.length < 3) S.pickGroup.push(id);
+    render();
+  }));
+
+  pane.querySelectorAll('[data-gjoin]').forEach(b => b.addEventListener('click', async () => {
+    try { await Live.joinGroup(S.me, round.id, b.dataset.gjoin); S.pickGroup = []; }
+    catch (e) { banner('warn', 'Could not join', e.message); }
+  }));
+
+  const go = $('gp-start');
+  if (go) go.addEventListener('click', async () => {
+    const gid = `g-${S.me}`;
+    try { await Live.setGroup(round.id, [S.me, ...S.pickGroup], gid); S.pickGroup = []; }
+    catch (e) { banner('warn', 'Could not save the group', e.message); }
+  });
+}
+
+/* ---------- one hole, four players ---------- */
+function renderHoleView(pane, round, course) {
+  const h = Math.min(Math.max(S.hole, 1), course.holes);
+  const par = course.pars[h - 1];
+  const four = myFour(round.id);
+  const locked = isLocked(round.id);
+  const teeInfo = course.tees[teeFor(S.me, round.id)];
+  const yards = teeInfo && teeInfo.holeYards ? teeInfo.holeYards[h - 1] : null;
+
+  const rows = four.map(id => {
+    const p = playerById(id);
+    const r = playerRound(p, round, (scoresFor(round.id)[id]) || {}, teeFor(id, round.id));
+    const hole = r.holes[h - 1];
+    const st = hole.pops;
+    const editable = canEdit(id, round.id);
+    return `<div class="fs-row">
+      <span class="fs-av">${initials(p.name)}</span>
+      <span class="fs-mid">
+        <strong>${p.name}</strong>
+        <small>plays off ${r.courseHandicap} &middot; thru ${r.holesPlayed}${
+          r.holesPlayed ? ' &middot; ' + fmtNet(r.toPar) : ''}</small>
+        ${st > 0
+          ? `<span class="fs-chip"><span class="fs-dots">${'<span></span>'.repeat(st)}</span>${st} stroke${st > 1 ? 's' : ''} here</span>`
+          : `<span class="fs-nostroke">No stroke here</span>`}
+      </span>
+      <span class="fs-boxwrap">
+        <button class="fs-box ${hole.gross == null ? 'empty' : ''} ${st > 0 ? 'gs' : ''}"
+                data-hscore="${id}" ${editable && !locked ? '' : 'disabled'}
+                aria-label="${p.name}, hole ${h}">${hole.gross == null ? '&ndash;' : hole.gross}</button>
+        ${st > 0 ? `<span class="fs-corner">${'<span></span>'.repeat(st)}</span>` : ''}
+      </span>
+    </div>`;
   }).join('');
 
   pane.innerHTML = `
-    <div class="tee-row">
-      <span class="tee-label">Your tee</span>
-      ${teeButtons}
-      <span class="tee-hcp">Playing off <strong>${r.courseHandicap}</strong></span>
+    <div class="fs-groupbar">
+      <span>${four.map(id => playerById(id).short).join(' &middot; ')}</span>
+      <button class="btn btn-sm btn-quiet" id="gp-change">Change</button>
     </div>
-
-    ${r.sub ? `<div class="banner"><strong>${r.sub.subName} is playing this round for ${player.name}</strong>
-      The card is played off ${r.sub.subName.split(' ')[0]}'s index of ${r.sub.index} &mdash; ${player.name} plays off ${player.index} the rest of the week.
-      Everything it earns still counts for ${player.name}: his team, his individual total and his skins.</div>` : ''}
 
     ${locked ? '<div class="banner warn"><strong>This round is final</strong>Scores are locked. Ask Farnia if something needs fixing.</div>' : ''}
 
-    <div class="totals-strip">
-      <div class="total-tile"><div class="t-label">Thru</div><div class="t-value">${r.holesPlayed}</div></div>
-      <div class="total-tile"><div class="t-label">Gross</div><div class="t-value">${r.holesPlayed ? r.grossTotal : '—'}</div></div>
-      <div class="total-tile"><div class="t-label">To Par</div><div class="t-value">${r.holesPlayed ? fmtNet(r.toPar) : '—'}</div></div>
-      <div class="total-tile"><div class="t-label">Net</div><div class="t-value">${r.holesPlayed ? r.netTotal : '—'}</div></div>
+    <div class="fs-holebar">
+      <button class="arrow" id="fs-prev" ${h <= 1 ? 'disabled' : ''} aria-label="Previous hole">&lsaquo;</button>
+      <span class="fs-holemid">
+        <strong>Hole ${h}</strong>
+        <small>Par ${par}${yards ? ' &middot; ' + yards + 'y' : ''} &middot; SI ${course.hcp[h - 1]}</small>
+      </span>
+      <button class="arrow" id="fs-next" ${h >= course.holes ? 'disabled' : ''} aria-label="Next hole">&rsaquo;</button>
     </div>
 
-    ${scorecardHTML(r, course, locked)}
+    <div class="fs-pips">
+      ${Array.from({ length: course.holes }, (_, i) => {
+        const done = four.every(id => ((scoresFor(round.id)[id]) || {})[i + 1] != null);
+        return `<span class="fs-pip ${i + 1 === h ? 'now' : (done ? 'done' : '')}"></span>`;
+      }).join('')}
+    </div>
 
-    <p class="pane-note">A dot on a hole means you get a stroke there.
-    Tap any box to enter your score. Maximum is a gross triple bogey —
-    type higher and it saves the max.</p>
-  `;
+    <div class="fs-rows">${rows}</div>
 
-  pane.querySelectorAll('.tee-btn').forEach(b => {
-    b.addEventListener('click', async () => {
-      await Live.setTee(S.me, round.id, b.dataset.tee);
-    });
+    <div class="fs-foot">
+      <button class="btn btn-sm btn-quiet" id="fs-full">Full scorecard &rarr;</button>
+      <button class="btn btn-sm btn-light" id="fs-board">View leaderboard</button>
+    </div>`;
+
+  $('fs-prev').addEventListener('click', () => { S.hole = h - 1; render(); });
+  $('fs-next').addEventListener('click', () => { S.hole = h + 1; render(); });
+  $('fs-full').addEventListener('click', () => { S.cardMode = 'full'; render(); });
+  $('fs-board').addEventListener('click', () => { S.tab = 'board'; S.viewing = null; render(); });
+  $('gp-change').addEventListener('click', async () => {
+    try { await Live.leaveGroup(S.me, round.id); S.pickGroup = []; }
+    catch (e) { banner('warn', 'Could not leave the group', e.message); }
   });
-
-  if (!locked) {
-    pane.querySelectorAll('.score-cell').forEach(cell => {
-      cell.addEventListener('click', () => openKeypad(Number(cell.dataset.hole)));
-    });
-  }
+  pane.querySelectorAll('[data-hscore]').forEach(b =>
+    b.addEventListener('click', () => openKeypad(h, false, b.dataset.hscore)));
 }
 
+/* ---------- the foursome's full card ---------- */
+function renderFourCard(pane, round, course) {
+  const four = myFour(round.id);
+  const locked = isLocked(round.id);
+  const rounds = four.map(id => ({
+    id, p: playerById(id),
+    r: playerRound(playerById(id), round, (scoresFor(round.id)[id]) || {}, teeFor(id, round.id))
+  }));
+  const n = course.holes;
+
+  const cell = (row, i) => {
+    const hole = row.r.holes[i];
+    const edit = canEdit(row.id, round.id) && !locked;
+    return `<td class="fc-cell ${hole.pops > 0 ? 'gs' : ''}">
+      ${hole.pops > 0 ? `<i class="fc-dots">${'<b></b>'.repeat(hole.pops)}</i>` : ''}
+      <button class="fc-v" data-fscore="${row.id}" data-fhole="${i + 1}" ${edit ? '' : 'disabled'}>${
+        hole.gross == null ? '&middot;' : hole.gross}</button>
+    </td>`;
+  };
+  const sum = (row, a, b) => {
+    let t = 0, any = false;
+    for (let i = a; i < b; i++) { const g = row.r.holes[i].gross; if (g != null) { t += g; any = true; } }
+    return any ? t : '&middot;';
+  };
+
+  pane.innerHTML = `
+    <div class="fs-groupbar">
+      <span>${four.map(id => playerById(id).short).join(' &middot; ')}</span>
+      <button class="btn btn-sm btn-quiet" id="fs-hole">&larr; Hole ${S.hole}</button>
+    </div>
+    <div class="fc-scroll">
+      <table class="fc">
+        <thead>
+          <tr><th class="fc-nm">Hole</th>
+            ${Array.from({ length: 9 }, (_, i) => `<th>${i + 1}</th>`).join('')}
+            <th class="fc-tot">Out</th>
+            ${n > 9 ? Array.from({ length: n - 9 }, (_, i) => `<th>${i + 10}</th>`).join('') + '<th class="fc-tot">In</th>' : ''}
+            <th class="fc-tot">Tot</th></tr>
+          <tr><th class="fc-nm">Par</th>
+            ${course.pars.slice(0, 9).map(p => `<th>${p}</th>`).join('')}
+            <th class="fc-tot">${course.pars.slice(0, 9).reduce((a, b) => a + b, 0)}</th>
+            ${n > 9 ? course.pars.slice(9).map(p => `<th>${p}</th>`).join('') + `<th class="fc-tot">${course.pars.slice(9).reduce((a, b) => a + b, 0)}</th>` : ''}
+            <th class="fc-tot">${course.par}</th></tr>
+          <tr class="fc-si"><th class="fc-nm">Stroke index</th>
+            ${course.hcp.slice(0, 9).map(v => `<th>${v}</th>`).join('')}
+            <th class="fc-tot"></th>
+            ${n > 9 ? course.hcp.slice(9).map(v => `<th>${v}</th>`).join('') + '<th class="fc-tot"></th>' : ''}
+            <th class="fc-tot"></th></tr>
+        </thead>
+        <tbody>
+          ${rounds.map(row => `<tr>
+            <td class="fc-nm">${row.p.short}</td>
+            ${Array.from({ length: 9 }, (_, i) => cell(row, i)).join('')}
+            <td class="fc-tot">${sum(row, 0, 9)}</td>
+            ${n > 9 ? Array.from({ length: n - 9 }, (_, i) => cell(row, i + 9)).join('') + `<td class="fc-tot">${sum(row, 9, n)}</td>` : ''}
+            <td class="fc-tot">${sum(row, 0, n)}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+    <div class="fs-foot">
+      <button class="btn btn-sm btn-light" id="fc-board">View leaderboard</button>
+    </div>
+    <p class="pane-note">Dots mark the holes a player gets a stroke. Tap any box in your
+    group to change it.</p>`;
+
+  $('fs-hole').addEventListener('click', () => { S.cardMode = 'hole'; render(); });
+  $('fc-board').addEventListener('click', () => { S.tab = 'board'; S.viewing = null; render(); });
+  pane.querySelectorAll('[data-fscore]').forEach(b =>
+    b.addEventListener('click', () => openKeypad(Number(b.dataset.fhole), false, b.dataset.fscore)));
+}
+
+/* ---------- shared scorecard table (read-only or tappable) ---------- */
 function scorecardHTML(r, course, locked) {
   const n = course.holes;
   const half = n === 18 ? 9 : n;
@@ -312,7 +540,40 @@ function parClassFor(strokes, par) {
   return 'score-over bogey-plus';
 }
 
-// ---------- scramble card ----------
+/* ---------- somebody else's card, read only ---------- */
+function renderOtherCard(pane, round, course, playerId) {
+  const p = playerById(playerId);
+  const r = playerRound(p, round, (scoresFor(round.id)[playerId]) || {}, teeFor(playerId, round.id));
+  const gid = groupIdFor(playerId, round.id);
+  const with_ = gid ? groupMembers(round.id, gid).filter(m => m !== playerId).map(m => playerById(m).short) : [];
+
+  pane.innerHTML = `
+    <div class="fs-groupbar">
+      <span>${p.name}&rsquo;s card &middot; read only</span>
+      <button class="btn btn-sm btn-quiet" id="oc-back">&larr; My card</button>
+    </div>
+
+    <div class="totals-strip">
+      <div class="total-tile"><div class="t-label">Thru</div><div class="t-value">${r.holesPlayed || '—'}</div></div>
+      <div class="total-tile"><div class="t-label">Gross</div><div class="t-value">${r.holesPlayed ? r.grossTotal : '—'}</div></div>
+      <div class="total-tile"><div class="t-label">Hcp</div><div class="t-value">${r.courseHandicap}</div></div>
+      <div class="total-tile"><div class="t-label">Net</div><div class="t-value">${r.holesPlayed ? r.netTotal : '—'}</div></div>
+    </div>
+
+    ${scorecardHTML(r, course, true)}
+
+    <p class="pane-note">${with_.length
+      ? `Playing with ${with_.join(', ')}. Only his group can change these.`
+      : `${p.short} hasn&rsquo;t joined a group yet. Only he can change these.`}</p>
+
+    <div class="fs-foot">
+      <button class="btn btn-sm btn-light" id="oc-board">&larr; Back to leaderboard</button>
+    </div>`;
+
+  $('oc-back').addEventListener('click', () => { S.viewing = null; render(); });
+  $('oc-board').addEventListener('click', () => { S.tab = 'board'; S.viewing = null; render(); });
+}
+
 function renderScrambleCard(pane, round, course) {
   const me = playerById(S.me);
   const team = teamById(me.team);
@@ -403,7 +664,7 @@ function renderBoard() {
             <table class="liv-table">
               <thead><tr><th></th><th>Player</th><th class="num">Gross</th><th class="num">Hcp</th><th class="num">Thru</th><th class="num">Net</th></tr></thead>
               <tbody>${rows.map(r => `
-                <tr class="${r.player.id === S.me ? 'is-me' : ''}">
+                <tr class="${r.player.id === S.me ? 'is-me' : ''} liv-clickable" data-openplayer="${r.player.id}">
                   <td class="liv-pos">${r.tied ? 'T' : ''}${r.position}</td>
                   <td class="liv-who">${avatarHTML(r.player, 'liv-avatar')}
                     <span class="liv-namecol"><span class="n">${r.player.name}</span>
@@ -506,6 +767,16 @@ function renderBoard() {
   }
 
   pane.innerHTML = `<div class="liv-board">${boardToggles(round)}${body}</div>`;
+
+  // Any name on the board opens that man's card. Yours and your group's are
+  // editable; everyone else's is there to read.
+  pane.querySelectorAll('[data-openplayer]').forEach(row =>
+    row.addEventListener('click', () => {
+      S.viewing = row.dataset.openplayer;
+      S.cardMode = 'hole';
+      S.tab = 'card';
+      render();
+    }));
 
   pane.querySelectorAll('[data-side]').forEach(b =>
     b.addEventListener('click', () => { S.boardSide = b.dataset.side; render(); }));
@@ -831,26 +1102,35 @@ document.addEventListener('keydown', e => {
 // KEYPAD
 // ---------------------------------------------------------
 let keypadSave = null;
+let keypadPlayer = null;
 let keypadHole = null;
 let keypadIsScramble = false;
 
-function openKeypad(hole, scramble) {
+function openKeypad(hole, scramble, playerId) {
   keypadHole = hole;
   keypadIsScramble = !!scramble;
+  // Whose card is being written. Defaults to you, but anyone in your foursome
+  // can be the target — that is the whole point of grouping.
+  const target = playerId || S.me;
+  keypadPlayer = target;
 
   const round = currentRound();
   const course = COURSES[round.course];
   const par = course.pars[hole - 1];
-  const tee = teeFor(S.me, round.id);
+  const tee = teeFor(target, round.id);
   const teeInfo = course.tees[tee];
 
   let pops = 0;
   if (!scramble) {
-    const player = playerById(S.me);
-    pops = strokesByHole(courseHandicap(player.index, course, tee), course)[hole - 1];
+    // Straight off playerRound so substitutions and pinned handicaps are
+    // honoured — recomputing from the raw index here would quietly disagree.
+    const rr = playerRound(playerById(target), round, (scoresFor(round.id)[target]) || {}, tee);
+    pops = rr.holes[hole - 1].pops;
   }
 
-  $('keypad-eyebrow').textContent = scramble ? 'Team scramble' : `${teeInfo.name} tee`;
+  $('keypad-eyebrow').textContent = scramble
+    ? 'Team scramble'
+    : (target === S.me ? `${teeInfo.name} tee` : `${playerById(target).name} · ${teeInfo.name} tee`);
   $('keypad-title').textContent = `Hole ${hole}`;
   const holeYards = teeInfo.holeYards ? teeInfo.holeYards[hole - 1] : null;
   $('keypad-sub').textContent =
@@ -864,11 +1144,11 @@ function openKeypad(hole, scramble) {
   const max = maxGrossForHole(par);
   const current = scramble
     ? ((S.teamScores[round.id] || {})[playerById(S.me).team] || {})[hole]
-    : ((scoresFor(round.id)[S.me]) || {})[hole];
+    : ((scoresFor(round.id)[target]) || {})[hole];
 
   // Once a hole has been in for more than the self-edit window, only an
   // admin can change it. Say so plainly instead of letting the save fail.
-  const meta = scramble ? null : (((S.scoreMeta[round.id] || {})[S.me] || {})[hole]);
+  const meta = scramble ? null : (((S.scoreMeta[round.id] || {})[target] || {})[hole]);
   const secondsLeft = meta ? Live.selfEditSecondsLeft(meta) : Live.SELF_EDIT_MINUTES * 60;
   const lockedToMe = !scramble && current !== undefined && secondsLeft === 0 && !Live.isAdmin();
 
@@ -918,12 +1198,12 @@ function openKeypad(hole, scramble) {
           roundId: round.id, teamId: playerById(S.me).team, hole, strokes: val
         });
       } else {
-        await Live.submitScore({ roundId: round.id, playerId: S.me, hole, strokes: val });
+        await Live.submitScore({ roundId: round.id, playerId: target, hole, strokes: val });
       }
       // Walk straight on to the next hole. Going hole to hole is the whole job
       // out there; closing the sheet after every score meant hunting for the
       // next cell on a phone. The last hole still closes.
-      if (hole < course.holes) openKeypad(hole + 1, scramble);
+      if (hole < course.holes) openKeypad(hole + 1, scramble, target);
       else $('keypad-sheet').hidden = true;
     } catch (e) {
       $('keypad-note').textContent = 'Could not save: ' + e.message;
@@ -937,6 +1217,11 @@ function openKeypad(hole, scramble) {
 
   setKeypadNav(hole, course.holes);
   $('keypad-sheet').hidden = false;
+
+  // Keep the card behind the keypad on the same hole the keypad is showing —
+  // arrows, auto-advance after a save, or opening straight from a box — so
+  // closing the sheet never drops you back where you started.
+  if (!scramble) S.hole = hole;
 }
 
 function setKeypadNav(hole, holeCount) {
@@ -948,10 +1233,10 @@ function stepHole(delta) {
   const course = COURSES[currentRound().course];
   const next = keypadHole + delta;
   if (next < 1 || next > course.holes) return;
-  openKeypad(next, keypadIsScramble);
+  openKeypad(next, keypadIsScramble, keypadPlayer);
 }
 
-$('keypad-close').addEventListener('click', () => { $('keypad-sheet').hidden = true; });
+$('keypad-close').addEventListener('click', () => { $('keypad-sheet').hidden = true; render(); });
 $('keypad-entry').addEventListener('input', e => {
   $('keypad-save').disabled = !(Number(e.target.value) >= 1);
 });
