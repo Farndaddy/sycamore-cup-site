@@ -230,6 +230,20 @@ footer.site-footer .wrap { display: flex; justify-content: space-between; flex-w
 .gallery .g-wide { grid-column: span 2; grid-row: span 2; }
 .gallery .g-tall { grid-row: span 2; }
 @media (max-width: 900px) { .gallery { grid-template-columns: repeat(2, 1fr); } .gallery .g-wide { grid-column: span 2; } }
+
+/* Masonry variant: natural aspect ratios, no cropping, hero across the top.
+   `column-span: all` is what lets one figure break out of the column flow. */
+.gallery--masonry { display: block; columns: 3; column-gap: 16px; }
+.gallery--masonry figure { break-inside: avoid; margin: 0 0 16px; height: auto; }
+.gallery--masonry img { height: auto; display: block; }
+.gallery--masonry .g-hero { column-span: all; margin-bottom: 16px; }
+.gallery--masonry .g-hero img { max-height: 540px; object-fit: cover; object-position: 50% 38%; }
+@media (max-width: 900px) { .gallery--masonry { columns: 2; } }
+@media (max-width: 560px) {
+  .gallery--masonry { columns: 1; }
+  .gallery--masonry figure { height: auto; }
+  .gallery--masonry .g-hero img { max-height: 320px; }
+}
 @media (max-width: 560px) { .gallery { grid-template-columns: 1fr; } .gallery .g-wide, .gallery .g-tall { grid-column: span 1; grid-row: span 1; } .gallery figure { height: 240px; } }
 
 /* ---------- Team block ---------- */

@@ -1,11 +1,23 @@
 const YEAR_PHOTOS = {
   2023: {
     hero: '../assets/photos/2023-cover-tree-sunset.jpg',
+    layout: 'masonry',
     gallery: [
-      { src: '../assets/photos/2023-sunset-course.jpg', caption: 'Crooked Tooth, Orange County National', wide: true },
-      { src: '../assets/photos/2023-trophy-handoff.jpg', caption: '2022 champion hands off the cup' },
-      { src: '../assets/photos/2022-crew-group.jpg', caption: 'The 2022 crew' },
-      { src: '../assets/photos/2023-evermore-links-group.jpg', caption: 'Evermore Links, group shot' },
+      { src: '../assets/photos/2023-crew-full-lineup.jpg',    caption: 'The 2023 Sycamore Cup Classic crew', hero: true },
+      { src: '../assets/photos/2023-stairs-celebration.jpg',  caption: 'House stairs, full send' },
+      { src: '../assets/photos/2023-fairway-eight.jpg',       caption: 'Morning eight on the fairway' },
+      { src: '../assets/photos/2023-duo-maroon.jpg',          caption: 'Matching kits at golden hour' },
+      { src: '../assets/photos/2023-bunker-bw.jpg',           caption: 'Sand save attempt' },
+      { src: '../assets/photos/2023-house-bar.jpg',           caption: 'The bar and the table' },
+      { src: '../assets/photos/2023-tee-duo-floral.jpg',      caption: 'Off the first tee' },
+      { src: '../assets/photos/2023-cash-cart-bw.jpg',        caption: 'Payday at the cart' },
+      { src: '../assets/photos/2023-house-living.jpg',        caption: 'The great room' },
+      { src: '../assets/photos/2023-bunker-belly-bw.jpg',     caption: 'Full commitment out of the bunker' },
+      { src: '../assets/photos/2023-gorilla-kitchen.jpg',     caption: 'Kitchen mischief' },
+      { src: '../assets/photos/2023-house-lounge.jpg',        caption: 'The sports lounge' },
+      { src: '../assets/photos/2023-stone-wall-bw.jpg',       caption: 'Unplayable lie, stone wall edition' },
+      { src: '../assets/photos/2023-late-night-couch.jpg',    caption: 'Late night, house rules' },
+      { src: '../assets/photos/2023-house-theater.jpg',       caption: 'The theater' }
     ]
   },
   2024: {
@@ -60,12 +72,18 @@ function renderYearPage(yearNum) {
     // Gallery
     const galleryEl = document.getElementById('year-gallery');
     if (photos && galleryEl) {
-      galleryEl.innerHTML = photos.gallery.map(g => `
-        <figure class="${g.wide ? 'g-wide' : ''}">
-          <img src="${g.src}" alt="${g.caption}">
+      // Masonry years keep every photo at its natural shape — nothing is cropped —
+      // with any photo flagged `hero` spanning the full width above the columns.
+      const masonry = photos.layout === 'masonry';
+      galleryEl.classList.toggle('gallery--masonry', masonry);
+      galleryEl.innerHTML = photos.gallery.map(g => {
+        const cls = masonry ? (g.hero ? 'g-hero' : '') : (g.wide ? 'g-wide' : '');
+        return `
+        <figure class="${cls}">
+          <img src="${g.src}" alt="${g.caption}" loading="lazy">
           <figcaption>${g.caption}</figcaption>
-        </figure>
-      `).join('');
+        </figure>`;
+      }).join('');
     }
 
     const teamsEl = document.getElementById('year-teams');
