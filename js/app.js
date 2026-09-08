@@ -42,7 +42,7 @@ function renderFooter() {
   el.innerHTML = `
     <div class="wrap">
       <span>Sycamore Cup Classic — est. 2021</span>
-      <span class="muted">Built by the guys, for the guy.</span>
+      <span class="muted">Built for the guys, by the guy.</span>
     </div>`;
 }
 
