@@ -12,7 +12,7 @@
 // reformats them relative to par, LIV-style, instead of raw net
 // strokes.
 import { COURSES, PLAYERS, ROUNDS } from './tournament-2026.js';
-import { individualStandings, teamEventStandings, playerRound, scrambleTeamScore } from './scoring-engine.js';
+import { individualStandings, teamEventStandings, playerRound, scrambleTeamScore, fmtToPar, teamDayToPar as engineTeamDayToPar } from './scoring-engine.js';
 import * as Live from './live.js';
 
 const mount = document.getElementById('liv-board');
@@ -103,13 +103,9 @@ window.handleAvatarError2 = function (img) {
 
 // ---------- relative-to-par formatting ----------
 // -4, E, +3 — same convention as the "To Par" tile on the My Card tab.
-function fmtToPar(n) { return n > 0 ? `+${n}` : (n === 0 ? 'E' : String(n)); }
 
 // Net-to-par for one played round: sum of (net - par) over holes actually
 // played so far. Works mid-round too, e.g. "-1 thru 5".
-function netToPar(playerRoundResult) {
-  return playerRoundResult.holes.reduce((s, h) => h.net !== null ? s + (h.net - h.par) : s, 0);
-}
 
 function render(S) {
   const status = statusInfo(S);
@@ -149,12 +145,12 @@ function playersTable(S) {
       if (!rr) return `<td class="num"><span class="liv-round dash">—</span></td>`;
       const course = COURSES[rr.round.course];
       const thru = rr.complete ? '' : `<span class="thru">thru ${rr.holesPlayed}/${course.holes}</span>`;
-      return `<td class="num"><span class="liv-round">${fmtToPar(netToPar(rr))}${thru}</span></td>`;
+      return `<td class="num"><span class="liv-round">${fmtToPar(rr.netToPar)}${thru}</span></td>`;
     }).join('');
 
     // All four rounds count (RULES.individualBestOf = 4), so countingRounds
     // is every complete round — total is provisional until all four are in.
-    const totalToPar = r.countingRounds.reduce((s, rr) => s + netToPar(rr), 0);
+    const totalToPar = r.countingRounds.reduce((s, rr) => s + rr.netToPar, 0);
 
     return `
       <tr>
@@ -189,29 +185,6 @@ function playersTable(S) {
 // A team's day total is every member's net-to-par for that day's stroke
 // round, plus (Thursday/Friday) the scramble nine's net-to-par folded in —
 // exactly what teamDayTotals sums in raw strokes, just reformatted.
-function teamDayToPar(teamId, dayNum, S, teeMap) {
-  const dayRounds = ROUNDS.filter(r => r.dayNum === dayNum);
-  let toPar = 0, played = false;
-
-  dayRounds.forEach(round => {
-    if (round.scramble) {
-      const s = scrambleTeamScore(teamId, round, S.teamScores[round.id] || {}, teeMap);
-      if (s.holesPlayed > 0) {
-        played = true;
-        const parPlayed = s.holes.filter(h => h.gross !== null).reduce((sum, h) => sum + h.par, 0);
-        toPar += s.net - parPlayed;
-      }
-    } else {
-      PLAYERS.filter(p => p.team === teamId).forEach(p => {
-        const holeScores = (S.scores[round.id] || {})[p.id] || {};
-        const rr = playerRound(p, round, holeScores, teeMap[p.id]);
-        if (rr.holesPlayed > 0) { played = true; toPar += netToPar(rr); }
-      });
-    }
-  });
-
-  return { toPar, played };
-}
 
 function teamsTable(S) {
   const teeMap = referenceTeeMap(S.players);
@@ -226,7 +199,7 @@ function teamsTable(S) {
   const body = rows.map(r => {
     let grandToPar = 0;
     const cells = [1, 2, 3, 4].map(d => {
-      const { toPar, played } = teamDayToPar(r.team.id, d, S, teeMap);
+      const { toPar, played } = engineTeamDayToPar(r.team.id, d, S.scores, S.teamScores, teeMap);
       if (!played) return `<td class="num"><span class="liv-round dash">—</span></td>`;
       grandToPar += toPar;
       return `<td class="num"><span class="liv-round">${fmtToPar(toPar)}</span></td>`;

@@ -480,8 +480,9 @@
   font-family: var(--font-mono); font-weight: 700; font-size: 13px; color: var(--ink-soft);
 }
 .liv-avatar img { width: 100%; height: 100%; object-fit: cover; }
-.liv-namecol .n { font-family: var(--font-display); font-weight: 600; font-size: 15px; color: var(--ink); }
-.liv-namecol .t { font-size: 11.5px; color: var(--ink-soft); margin-top: 1px; }
+.liv-namecol { display: block; min-width: 0; }
+.liv-namecol .n { display: block; font-family: var(--font-display); font-weight: 600; font-size: 15px; color: var(--ink); }
+.liv-namecol .t { display: block; font-size: 11.5px; color: var(--ink-soft); margin-top: 1px; }
 .liv-round { font-family: var(--font-mono); font-size: 14px; color: var(--ink); }
 .liv-round .thru { display: block; font-size: 10px; color: var(--ink-soft); font-family: var(--font-body); margin-top: 2px; }
 .liv-round.dropped { color: var(--ink-soft); text-decoration: line-through; opacity: .6; }
@@ -495,7 +496,12 @@
   .liv-who { gap: 10px; }
   .liv-avatar { width: 36px; height: 36px; }
   .liv-table th, .liv-table td { padding: 10px 6px; }
-  .liv-namecol .n { font-size: 13.5px; }
+  .liv-namecol { display: block; min-width: 0; }
+.liv-namecol .n { display: block; font-size: 13.5px; }
+  /* Phones lose the raw gross column — Thru and the to-par number are what matter
+     on the course, and five columns do not fit at 393px. */
+  .liv-table .hide-sm { display: none; }
+  .liv-tot { font-size: 17px; }
 }
 
 /* ---------- schedule ---------- */
@@ -511,3 +517,10 @@
 .sched-format { font-size: 12.5px; color: var(--ink-soft); margin-bottom: 8px; }
 .sched-times { display: flex; gap: 8px; flex-wrap: wrap; }
 .sched-time { font-family: var(--font-mono); font-size: 12.5px; background: var(--sand); border-radius: 20px; padding: 5px 12px; }
+
+/* A round being played by a stand-in. */
+.sub-flag {
+  display: block; margin-top: 2px; font-style: normal;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: .05em;
+  text-transform: uppercase; color: var(--clay);
+}

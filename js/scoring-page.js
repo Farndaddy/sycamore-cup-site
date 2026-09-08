@@ -9,7 +9,7 @@ import {
 import {
   courseHandicap, strokesByHole, capGross, maxGrossForHole, playerRound,
   individualLeaderboard, teamDayTotals, teamEventStandings,
-  skinsForRound, individualStandings, formatMoney
+  skinsForRound, individualStandings, formatMoney, fmtToPar, teamDayToPar
 } from './scoring-engine.js';
 
 import * as Live from './live.js';
@@ -28,8 +28,8 @@ const S = {
   me: null,          // whose card is on screen (anyone can score for anyone)
   roundId: ROUNDS[0].id,
   tab: 'card',
-  indivView: 'round',
-  teamView: 'day',
+  boardSide: 'individual',   // 'individual' | 'teams'
+  boardScope: 'round',       // 'round' | 'event'
   skinsView: 'net',  // 'net' | 'gross' — two separate skins games
   ready: false
 };
@@ -132,8 +132,7 @@ function render() {
   renderIdent();
   renderRoundMeta();
   if (S.tab === 'card')  renderCard();
-  if (S.tab === 'indiv') renderIndividual();
-  if (S.tab === 'teams') renderTeams();
+  if (S.tab === 'board') renderBoard();
   if (S.tab === 'skins') renderSkins();
   if (S.tab === 'money') renderMoney();
 }
@@ -188,6 +187,10 @@ function renderCard() {
       ${teeButtons}
       <span class="tee-hcp">Playing off <strong>${r.courseHandicap}</strong></span>
     </div>
+
+    ${r.sub ? `<div class="banner"><strong>${r.sub.subName} is playing this round for ${player.name}</strong>
+      The card is played off ${r.sub.subName.split(' ')[0]}'s index of ${r.sub.index} &mdash; ${player.name} plays off ${player.index} the rest of the week.
+      Everything it earns still counts for ${player.name}: his team, his individual total and his skins.</div>` : ''}
 
     ${locked ? '<div class="banner warn"><strong>This round is final</strong>Scores are locked. Ask Farnia if something needs fixing.</div>' : ''}
 
@@ -338,126 +341,158 @@ function renderScrambleCard(pane, round, course) {
 }
 
 // ---------------------------------------------------------
-// TAB 2 — INDIVIDUAL
+// TAB 2 — LEADERBOARD (individual + teams, one tab)
 // ---------------------------------------------------------
-function renderIndividual() {
-  const pane = $('pane-indiv');
-  const round = currentRound();
+// Same look as the spectator board on the 2026 page, and the same numbers:
+// scores read against par, and the ranking comes straight from the engine
+// functions the money uses. Nothing is ranked twice.
 
-  if (round.scramble) {
-    pane.innerHTML = `<div class="banner"><strong>The scramble has no individual scoring</strong>
-      It counts toward the team total only. Pick another round to see individual net.</div>`;
-    return;
-  }
-
-  const toggle = `
-    <div class="tee-row" style="margin-bottom:16px;">
-      <button class="tee-btn ${S.indivView === 'round' ? 'on' : ''}" data-view="round">This round</button>
-      <button class="tee-btn ${S.indivView === 'event' ? 'on' : ''}" data-view="event">All 4 Rounds</button>
+function boardToggles(round) {
+  const side = S.boardSide, scope = S.boardScope;
+  return `
+    <div class="liv-top">
+      <div class="liv-toggle">
+        <button class="${side === 'individual' ? 'on tp-players' : ''}" data-side="individual" type="button">Individual</button>
+        <button class="${side === 'teams' ? 'on tp-teams' : ''}" data-side="teams" type="button">Teams</button>
+      </div>
+      <div class="tee-row" style="margin:0;">
+        <button class="tee-btn ${scope === 'round' ? 'on' : ''}" data-scope="round" type="button">${round.day}</button>
+        <button class="tee-btn ${scope === 'event' ? 'on' : ''}" data-scope="event" type="button">All 4 rounds</button>
+      </div>
     </div>`;
-
-  if (S.indivView === 'round') {
-    const rows = individualLeaderboard(round, scoresFor(round.id), teeMap(round.id));
-    pane.innerHTML = toggle + (rows.length === 0
-      ? `<div class="banner"><strong>No scores yet</strong>This board fills in as the guys tap in holes.</div>`
-      : `<table class="lb">
-          <thead><tr><th class="pos"></th><th>Player</th><th class="num">Thru</th><th class="num">Gross</th><th class="num">Net</th></tr></thead>
-          <tbody>${rows.map(r => `
-            <tr class="${r.player.id === S.me ? 'is-me' : ''}">
-              <td class="pos">${r.tied ? 'T' : ''}${r.position}</td>
-              <td class="who">${teamDot(r.player.team)}${r.player.name}
-                <small>${r.team.name} · plays off ${r.courseHandicap}</small></td>
-              <td class="num thru">${r.holesPlayed}</td>
-              <td class="num">${r.grossTotal}</td>
-              <td class="num net">${r.netTotal}</td>
-            </tr>`).join('')}</tbody>
-        </table>
-        <p class="pane-note">Net counts only the holes played so far, so a player thru 9 will
-        show a lower number than someone thru 18. Watch the Thru column.</p>`);
-  } else {
-    const rows = individualStandings(S.scores, teeMap(round.id));
-    const anyProvisional = rows.some(r => r.provisional);
-    pane.innerHTML = toggle + (rows.length === 0
-      ? `<div class="banner"><strong>Nothing to rank yet</strong>This is the race for the $300.</div>`
-      : `<table class="lb">
-          <thead><tr><th class="pos"></th><th>Player</th><th class="num">Rounds</th><th class="num">Total</th></tr></thead>
-          <tbody>${rows.map(r => `
-            <tr class="${r.player.id === S.me ? 'is-me' : ''}">
-              <td class="pos">${r.tied ? 'T' : ''}${r.position}</td>
-              <td class="who">${teamDot(r.player.team)}${r.player.name}
-                <small>${r.countingRounds.map(c => c.netTotal).join(' + ') || 'no finished rounds'}${
-                  r.droppedRounds.length ? ` · dropped ${r.droppedRounds.map(d => d.netTotal).join(', ')}` : ''}</small></td>
-              <td class="num thru">${r.roundsComplete}/4</td>
-              <td class="num net">${r.roundsComplete ? r.total : '—'}</td>
-            </tr>`).join('')}</tbody>
-        </table>
-        ${anyProvisional ? `<p class="pane-note">Anyone with fewer than four finished rounds is
-        still provisional — all four rounds count, so the total is only final once the week is done.</p>` : ''}`);
-  }
-
-  pane.querySelectorAll('[data-view]').forEach(b =>
-    b.addEventListener('click', () => { S.indivView = b.dataset.view; render(); }));
 }
 
-// ---------------------------------------------------------
-// TAB 3 — TEAMS
-// ---------------------------------------------------------
-function renderTeams() {
-  const pane = $('pane-teams');
+function subNote(r) {
+  return r.sub ? `<em class="sub-flag">${r.sub.subName} playing &middot; off ${r.sub.index}</em>` : '';
+}
+
+function renderBoard() {
+  const pane = $('pane-board');
   const round = currentRound();
+  const teeM = teeMap(round.id);
+  let body = '';
 
-  const toggle = `
-    <div class="tee-row" style="margin-bottom:16px;">
-      <button class="tee-btn ${S.teamView === 'day' ? 'on' : ''}" data-tview="day">${round.day}</button>
-      <button class="tee-btn ${S.teamView === 'event' ? 'on' : ''}" data-tview="event">All four days</button>
-    </div>`;
+  // ---- INDIVIDUAL ----
+  if (S.boardSide === 'individual') {
+    if (S.boardScope === 'round') {
+      if (round.scramble) {
+        body = `<div class="banner"><strong>The scramble has no individual scoring</strong>
+          It counts toward the team total only. Switch to Teams, or pick another round.</div>`;
+      } else {
+        const rows = individualLeaderboard(round, scoresFor(round.id), teeM);
+        body = rows.length === 0
+          ? `<div class="banner"><strong>No scores yet</strong>This board fills in as the guys tap in holes.</div>`
+          : `<h3 class="liv-heading">${round.day}</h3>
+            <table class="liv-table">
+              <thead><tr><th></th><th>Player</th><th class="num">Thru</th><th class="num hide-sm">Gross</th><th class="num">Net</th></tr></thead>
+              <tbody>${rows.map(r => `
+                <tr class="${r.player.id === S.me ? 'is-me' : ''}">
+                  <td class="liv-pos">${r.tied ? 'T' : ''}${r.position}</td>
+                  <td class="liv-who">${avatarHTML(r.player, 'liv-avatar')}
+                    <span class="liv-namecol"><span class="n">${r.player.name}</span>
+                    <span class="t">${r.team.name} &middot; off ${r.courseHandicap}</span>${subNote(r)}</span></td>
+                  <td class="num"><span class="liv-round">${r.holesPlayed}</span></td>
+                  <td class="num hide-sm"><span class="liv-round">${r.grossTotal}</span></td>
+                  <td class="num"><span class="liv-tot ${r.netToPar < 0 ? 'under' : ''}">${fmtToPar(r.netToPar)}</span></td>
+                </tr>`).join('')}</tbody>
+            </table>
+            <p class="liv-note">Scores are net against par. Someone thru 9 has had half the holes
+            to move, so read the Thru column alongside the number.</p>`;
+      }
+    } else {
+      const rows = individualStandings(S.scores, teeM);
+      const strokeRounds = ROUNDS.filter(r => r.counts.individual);
+      body = rows.length === 0
+        ? `<div class="banner"><strong>Nothing to rank yet</strong>This is the race for the $300.</div>`
+        : `<h3 class="liv-heading">All Rounds</h3>
+          <table class="liv-table">
+            <thead><tr><th></th><th>Player</th>
+              ${strokeRounds.map((r, i) => `<th class="num">Rd ${i + 1}</th>`).join('')}
+              <th class="num">Tot</th></tr></thead>
+            <tbody>${rows.map(r => {
+              const byRound = {};
+              r.countingRounds.forEach(rr => { byRound[rr.roundId] = rr; });
+              const total = r.countingRounds.reduce((sum, rr) => sum + rr.netToPar, 0);
+              return `
+                <tr class="${r.player.id === S.me ? 'is-me' : ''}">
+                  <td class="liv-pos">${r.tied ? 'T' : ''}${r.position}</td>
+                  <td class="liv-who">${avatarHTML(r.player, 'liv-avatar')}
+                    <span class="liv-namecol"><span class="n">${r.player.name}</span>
+                    <span class="t">${teamById(r.player.team).name}</span></span></td>
+                  ${strokeRounds.map(sr => {
+                    const rr = byRound[sr.id];
+                    return `<td class="num"><span class="${rr ? 'liv-round' : 'liv-round dash'}">${
+                      rr ? fmtToPar(rr.netToPar) : '&mdash;'}</span></td>`;
+                  }).join('')}
+                  <td class="num"><span class="liv-tot ${total < 0 ? 'under' : ''}">${
+                    r.roundsComplete ? fmtToPar(total) : '&mdash;'}</span></td>
+                </tr>`;
+            }).join('')}</tbody>
+          </table>
+          <p class="liv-note">All four rounds count &mdash; no drops. Anyone with fewer than four
+          finished is still provisional.</p>`;
+    }
 
-  if (S.teamView === 'day') {
-    const rows = teamDayTotals(round.dayNum, S.scores, teeMap(round.id), S.teamScores);
-    pane.innerHTML = toggle + (rows.length === 0
-      ? `<div class="banner"><strong>No scores yet for ${round.day}</strong>All four scores count — no drops.</div>`
-      : rows.map((row, i) => `
-        <div class="team-card">
-          <div class="team-card-head">
-            <h3>${teamDot(row.team.id)}${row.team.name}</h3>
-            <div>
-              <div class="team-net">${row.net}</div>
-              <div class="muted" style="font-size:11px;text-align:right;">${i === 0 ? 'leading' : `+${row.net - rows[0].net}`}</div>
-            </div>
-          </div>
-          <div class="team-members">
-            ${row.members.map(m => `
-              <div class="team-member">
-                <span>${m.player.name}<span class="m-thru">thru ${m.holesPlayed}</span></span>
-                <span class="m-net">${m.holesPlayed ? m.net : '—'}</span>
-              </div>`).join('')}
-          </div>
-          ${row.scramble ? `
-            <div class="scramble-line">
-              <span>Scramble nine · gross ${row.scramble.gross} less ${row.scramble.allowance} allowance</span>
-              <span class="s-net">${row.scramble.net}</span>
-            </div>` : ''}
-        </div>`).join('') +
-        `<p class="pane-note">All four net scores count toward the daily total.
-        On Thursday and Friday the scramble nine folds in here too.</p>`);
+  // ---- TEAMS ----
   } else {
-    const rows = teamEventStandings(S.scores, teeMap(round.id), S.teamScores);
-    pane.innerHTML = toggle + (rows.length === 0
-      ? `<div class="banner"><strong>Nothing to rank yet</strong>This is the race for the $720.</div>`
-      : `<table class="lb">
-          <thead><tr><th class="pos"></th><th>Team</th><th class="num">Day 1</th><th class="num">Day 2</th><th class="num">Day 3</th><th class="num">Day 4</th><th class="num">Total</th></tr></thead>
-          <tbody>${rows.map(r => `
-            <tr>
-              <td class="pos">${r.tied ? 'T' : ''}${r.position}</td>
-              <td class="who">${teamDot(r.team.id)}${r.team.name}</td>
-              ${[1,2,3,4].map(d => `<td class="num">${r.byDay[d] !== undefined ? r.byDay[d] : '—'}</td>`).join('')}
-              <td class="num net">${r.net}</td>
-            </tr>`).join('')}</tbody>
-        </table>`);
+    if (S.boardScope === 'round') {
+      const rows = teamDayTotals(round.dayNum, S.scores, teeM, S.teamScores);
+      body = rows.length === 0
+        ? `<div class="banner"><strong>No team scores yet</strong>Team totals build as holes come in.</div>`
+        : `<h3 class="liv-heading tp-teams">${round.day}</h3>
+          <table class="liv-table">
+            <thead><tr><th></th><th>Team</th><th class="num hide-sm">Net</th><th class="num">To Par</th></tr></thead>
+            <tbody>${rows.map((r, i) => {
+              const { toPar, played } = teamDayToPar(r.team.id, round.dayNum, S.scores, S.teamScores, teeM);
+              return `
+                <tr>
+                  <td class="liv-pos">${i + 1}</td>
+                  <td class="liv-who"><span class="liv-namecol"><span class="n">${teamDot(r.team.id)}${r.team.name}</span></span></td>
+                  <td class="num hide-sm"><span class="liv-round">${r.net}</span></td>
+                  <td class="num"><span class="liv-tot ${toPar < 0 ? 'under' : ''}">${
+                    played ? fmtToPar(toPar) : '&mdash;'}</span></td>
+                </tr>`;
+            }).join('')}</tbody>
+          </table>
+          <p class="liv-note tp-teams">Every man's net counts toward the team, plus the scramble nine on
+          Thursday and Friday.</p>`;
+    } else {
+      const rows = teamEventStandings(S.scores, teeM, S.teamScores);
+      const days = [1, 2, 3, 4];
+      body = rows.length === 0
+        ? `<div class="banner"><strong>Nothing to rank yet</strong>This is the race for the Cup.</div>`
+        : `<h3 class="liv-heading tp-teams">All Four Days</h3>
+          <table class="liv-table">
+            <thead><tr><th></th><th>Team</th>
+              ${days.map(d => `<th class="num">D${d}</th>`).join('')}<th class="num">Tot</th></tr></thead>
+            <tbody>${rows.map((r, i) => {
+              let grand = 0, anyPlayed = false;
+              const cells = days.map(d => {
+                const { toPar, played } = teamDayToPar(r.team.id, d, S.scores, S.teamScores, teeM);
+                if (played) { grand += toPar; anyPlayed = true; }
+                return `<td class="num"><span class="${played ? 'liv-round' : 'liv-round dash'}">${
+                  played ? fmtToPar(toPar) : '&mdash;'}</span></td>`;
+              }).join('');
+              return `
+                <tr>
+                  <td class="liv-pos">${i + 1}</td>
+                  <td class="liv-who"><span class="liv-namecol"><span class="n">${teamDot(r.team.id)}${r.team.name}</span></span></td>
+                  ${cells}
+                  <td class="num"><span class="liv-tot ${grand < 0 ? 'under' : ''}">${
+                    anyPlayed ? fmtToPar(grand) : '&mdash;'}</span></td>
+                </tr>`;
+            }).join('')}</tbody>
+          </table>
+          <p class="liv-note tp-teams">Lowest total across the week takes the Cup and the $720.</p>`;
+    }
   }
 
-  pane.querySelectorAll('[data-tview]').forEach(b =>
-    b.addEventListener('click', () => { S.teamView = b.dataset.tview; render(); }));
+  pane.innerHTML = `<div class="liv-board">${boardToggles(round)}${body}</div>`;
+
+  pane.querySelectorAll('[data-side]').forEach(b =>
+    b.addEventListener('click', () => { S.boardSide = b.dataset.side; render(); }));
+  pane.querySelectorAll('[data-scope]').forEach(b =>
+    b.addEventListener('click', () => { S.boardScope = b.dataset.scope; render(); }));
 }
 
 // ---------------------------------------------------------

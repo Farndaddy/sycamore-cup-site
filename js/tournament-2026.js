@@ -245,6 +245,36 @@ export const PAYOUTS = [
 // ---------------------------------------------------------
 // RULES — the knobs, all in one place
 // ---------------------------------------------------------
+// =========================================================
+// SUBSTITUTIONS
+// =========================================================
+// Someone outside the roster plays a round in a rostered player's place.
+//
+// The score still BELONGS to the rostered player: it counts for his team, for
+// his individual tournament total and for his skins, exactly as if he had played
+// it. The only thing that changes is the index the round is played off — the
+// substitute's, not his. That is why this is a handicap override and not a new
+// player: every downstream total already routes to the rostered player, so
+// nothing else in the engine has to know a substitution happened.
+//
+// Day 1 2026: Gregg Suglia is playing for Bobby Vassallo at Southern Hills.
+// Gregg's 2026 card index is 5 (his last CMS-recorded index was 7 — the card is
+// the number Farnia confirmed). Bobby plays off 9, so the round is 4 tighter.
+export const SUBSTITUTIONS = [
+  {
+    roundId: '2026-wed-southern-hills',
+    playerId: 'rob-vassallo',
+    subId: 'gregg-suglia',
+    subName: 'Gregg Suglia',
+    index: 5
+  }
+];
+
+// The substitution in force for this player on this round, or null.
+export function substituteFor(playerId, roundId) {
+  return SUBSTITUTIONS.find(s => s.playerId === playerId && s.roundId === roundId) || null;
+}
+
 export const RULES = {
   // All four net scores count toward the daily team total. No drops.
   teamScoresCounted: 4,

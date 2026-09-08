@@ -5,7 +5,7 @@
 // run and checked on its own, which is the point: the money
 // depends on these numbers being right.
 
-import { COURSES, PLAYERS, TEAMS, ROUNDS, RULES, playerById, roundById } from './tournament-2026.js';
+import { COURSES, PLAYERS, TEAMS, ROUNDS, RULES, playerById, roundById, substituteFor } from './tournament-2026.js';
 
 // ---------------------------------------------------------
 // HANDICAPS
@@ -83,12 +83,19 @@ export function wasCapped(strokes, par) {
 export function playerRound(player, round, holeScores, teeKey) {
   const course = COURSES[round.course];
   const tee = teeKey || course.defaultTee;
-  const chcp = courseHandicap(player.index, course, tee);
+
+  // If someone is standing in for this player on this round, the round is played
+  // off the substitute's index. Everything else — team totals, the individual
+  // tournament, skins — still counts for the rostered player, because this is the
+  // only place the index is read.
+  const sub = substituteFor(player.id, round.id);
+  const playingIndex = sub ? sub.index : player.index;
+  const chcp = courseHandicap(playingIndex, course, tee);
   const pops = strokesByHole(chcp, course);
 
   const holes = [];
   let grossOut = 0, grossIn = 0, netOut = 0, netIn = 0;
-  let played = 0, toPar = 0;
+  let played = 0, toPar = 0, netToPar = 0;
 
   for (let i = 0; i < course.holes; i++) {
     const par = course.pars[i];
@@ -100,6 +107,7 @@ export function playerRound(player, round, holeScores, teeKey) {
     if (gross !== null) {
       played++;
       toPar += gross - par;
+      netToPar += net - par;
       if (i < 9) { grossOut += gross; netOut += net; }
       else { grossIn += gross; netIn += net; }
     }
@@ -121,7 +129,10 @@ export function playerRound(player, round, holeScores, teeKey) {
     netOut, netIn, netTotal: netOut + netIn,
     holesPlayed: played,
     complete: played === course.holes,
-    toPar
+    toPar,             // gross vs par
+    netToPar,          // net vs par — this is the one the money runs on
+    sub,               // null, or who is standing in for this player
+    playingIndex
   };
 }
 
@@ -424,4 +435,44 @@ export function splitPrize(amount, winners) {
 
 export function formatMoney(n) {
   return '$' + Number(n).toLocaleString('en-US', { minimumFractionDigits: n % 1 === 0 ? 0 : 2, maximumFractionDigits: 2 });
+}
+
+
+// ---------------------------------------------------------
+// TO-PAR HELPERS
+// ---------------------------------------------------------
+// Golf reads scores against par, not as raw totals. These live here rather than
+// in either UI so the spectator leaderboard and the scoring app show the same
+// number for the same card.
+
+export function fmtToPar(n) {
+  if (n === null || n === undefined) return '\u2014';
+  if (n === 0) return 'E';
+  return n > 0 ? `+${n}` : `${n}`;
+}
+
+// A team's net-to-par for one day. Stroke rounds add each member's net-to-par;
+// a scramble nine adds the team's own net against the par of the holes played.
+export function teamDayToPar(teamId, dayNum, scoresByRound, teamScoresByRound, teeMap) {
+  const dayRounds = ROUNDS.filter(r => r.dayNum === dayNum);
+  let toPar = 0, played = false;
+
+  dayRounds.forEach(round => {
+    if (round.scramble) {
+      const sc = scrambleTeamScore(teamId, round, (teamScoresByRound || {})[round.id] || {}, teeMap);
+      if (sc.holesPlayed > 0) {
+        played = true;
+        const parPlayed = sc.holes.filter(h => h.gross !== null).reduce((sum, h) => sum + h.par, 0);
+        toPar += sc.net - parPlayed;
+      }
+    } else {
+      PLAYERS.filter(p => p.team === teamId).forEach(p => {
+        const holeScores = ((scoresByRound || {})[round.id] || {})[p.id] || {};
+        const rr = playerRound(p, round, holeScores, (teeMap || {})[p.id]);
+        if (rr.holesPlayed > 0) { played = true; toPar += rr.netToPar; }
+      });
+    }
+  });
+
+  return { toPar, played };
 }
