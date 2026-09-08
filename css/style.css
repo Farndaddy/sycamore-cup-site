@@ -215,36 +215,53 @@ footer.site-footer .wrap { display: flex; justify-content: space-between; flex-w
   text-transform: uppercase; backdrop-filter: blur(4px);
 }
 
-/* ---------- Photo gallery (masonry-ish) ---------- */
-.gallery {
-  display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 160px; gap: 12px;
-}
-.gallery figure { margin: 0; overflow: hidden; border-radius: var(--radius); position: relative; }
-.gallery img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
-.gallery figure:hover img { transform: scale(1.05); }
+/* ---------- Photo gallery ----------
+ * MOBILE FIRST. Almost everyone views this site on a phone during the trip, so
+ * the base rules ARE the phone rules: one column, every photo at its own natural
+ * shape, nothing cropped. Wider screens opt in to more columns from there.
+ * A previous version clamped figures to a fixed height on phones, which clipped
+ * every photo — never reintroduce a fixed height on a gallery figure. */
+.gallery { display: grid; grid-template-columns: 1fr; gap: 14px; }
+.gallery figure { margin: 0; position: relative; border-radius: var(--radius); overflow: hidden; }
+.gallery img { width: 100%; height: auto; display: block; }
 .gallery figcaption {
   position: absolute; left: 0; right: 0; bottom: 0; padding: 10px 12px;
   font-size: 0.72rem; color: #fff; background: linear-gradient(0deg, rgba(0,0,0,0.55), rgba(0,0,0,0));
   letter-spacing: 0.02em;
 }
-.gallery .g-wide { grid-column: span 2; grid-row: span 2; }
-.gallery .g-tall { grid-row: span 2; }
-@media (max-width: 900px) { .gallery { grid-template-columns: repeat(2, 1fr); } .gallery .g-wide { grid-column: span 2; } }
 
-/* Masonry variant: natural aspect ratios, no cropping, hero across the top.
-   `column-span: all` is what lets one figure break out of the column flow. */
-.gallery--masonry { display: block; columns: 3; column-gap: 16px; }
-.gallery--masonry figure { break-inside: avoid; margin: 0 0 16px; height: auto; }
-.gallery--masonry img { height: auto; display: block; }
-.gallery--masonry .g-hero { column-span: all; margin-bottom: 16px; }
-.gallery--masonry .g-hero img { max-height: 540px; object-fit: cover; object-position: 50% 38%; }
-@media (max-width: 900px) { .gallery--masonry { columns: 2; } }
-@media (max-width: 560px) {
-  .gallery--masonry { columns: 1; }
-  .gallery--masonry figure { height: auto; }
-  .gallery--masonry .g-hero img { max-height: 320px; }
+@media (min-width: 561px) {
+  .gallery { grid-template-columns: repeat(2, 1fr); gap: 16px; }
 }
-@media (max-width: 560px) { .gallery { grid-template-columns: 1fr; } .gallery .g-wide, .gallery .g-tall { grid-column: span 1; grid-row: span 1; } .gallery figure { height: 240px; } }
+/* Only on a real desktop does the tiled layout, which does crop to fit, kick in. */
+@media (min-width: 901px) {
+  .gallery { grid-template-columns: repeat(4, 1fr); grid-auto-rows: 160px; gap: 12px; }
+  .gallery figure { height: 100%; }
+  .gallery img { height: 100%; object-fit: cover; transition: transform .5s ease; }
+  .gallery figure:hover img { transform: scale(1.05); }
+  .gallery .g-wide { grid-column: span 2; grid-row: span 2; }
+  .gallery .g-tall { grid-row: span 2; }
+}
+
+/* ---------- Masonry variant (every year page uses this) ----------
+ * Natural aspect ratios at every width, nothing cropped, ever. The hero breaks
+ * out of the column flow with `column-span: all`.
+ * The .gallery.gallery--masonry doubling is deliberate: it outranks the plain
+ * .gallery rules above no matter where these land in the file. */
+.gallery--masonry { display: block; columns: 1; column-gap: 14px; }
+.gallery.gallery--masonry figure { break-inside: avoid; height: auto; margin: 0 0 14px; }
+.gallery.gallery--masonry img { height: auto; object-fit: fill; }
+.gallery.gallery--masonry figure:hover img { transform: none; }
+.gallery.gallery--masonry .g-hero { column-span: all; }
+.gallery.gallery--masonry .g-hero img { max-height: none; }
+
+@media (min-width: 561px) {
+  .gallery--masonry { columns: 2; column-gap: 16px; }
+  .gallery.gallery--masonry figure { margin-bottom: 16px; }
+}
+@media (min-width: 901px) {
+  .gallery--masonry { columns: 3; }
+}
 
 /* ---------- Team block ---------- */
 .teams-grid { align-items: start; }
