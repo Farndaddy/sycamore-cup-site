@@ -502,10 +502,17 @@
   .liv-table th, .liv-table td { padding: 10px 6px; }
   .liv-namecol { display: block; min-width: 0; }
 .liv-namecol .n { display: block; font-size: 13.5px; }
-  /* Phones lose the raw gross column — Thru and the to-par number are what matter
-     on the course, and five columns do not fit at 393px. */
+  /* Six columns on a phone: the avatar is the thing to lose, not a number.
+     Farnia asked for Gross, Hcp, Thru and Net all visible on the day board. */
   .liv-table .hide-sm { display: none; }
-  .liv-tot { font-size: 17px; }
+  .liv-who .liv-avatar { display: none; }
+  .liv-table th, .liv-table td { padding: 10px 3px; font-size: 13px; }
+  .liv-table th { font-size: 9px; letter-spacing: .06em; }
+  .liv-pos { width: 22px; font-size: 12px; }
+  .liv-round { font-size: 12.5px; }
+  .liv-tot { font-size: 15px; }
+  .liv-namecol .n { font-size: 13px; }
+  .liv-namecol .t { font-size: 10.5px; }
 }
 
 /* ---------- schedule ---------- */

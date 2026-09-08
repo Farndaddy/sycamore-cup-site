@@ -387,15 +387,16 @@ function renderBoard() {
           ? `<div class="banner"><strong>No scores yet</strong>This board fills in as the guys tap in holes.</div>`
           : `<h3 class="liv-heading">${round.day}</h3>
             <table class="liv-table">
-              <thead><tr><th></th><th>Player</th><th class="num">Thru</th><th class="num hide-sm">Gross</th><th class="num">Net</th></tr></thead>
+              <thead><tr><th></th><th>Player</th><th class="num">Gross</th><th class="num">Hcp</th><th class="num">Thru</th><th class="num">Net</th></tr></thead>
               <tbody>${rows.map(r => `
                 <tr class="${r.player.id === S.me ? 'is-me' : ''}">
                   <td class="liv-pos">${r.tied ? 'T' : ''}${r.position}</td>
                   <td class="liv-who">${avatarHTML(r.player, 'liv-avatar')}
-                    <span class="liv-namecol"><span class="n">${r.player.name} <span class="hcp">[${r.courseHandicap}]</span></span>
+                    <span class="liv-namecol"><span class="n">${r.player.name}</span>
                     <span class="t">${r.team.name}</span>${subNote(r)}</span></td>
-                  <td class="num"><span class="liv-round">${r.holesPlayed}</span></td>
-                  <td class="num hide-sm"><span class="liv-round">${r.grossTotal}</span></td>
+                  <td class="num"><span class="liv-round">${r.grossTotal}</span></td>
+                  <td class="num"><span class="liv-round">${r.courseHandicap}</span></td>
+                  <td class="num"><span class="liv-round">${r.complete ? 'F' : r.holesPlayed}</span></td>
                   <td class="num"><span class="liv-tot ${r.netToPar < 0 ? 'under' : ''}">${fmtToPar(r.netToPar)}</span></td>
                 </tr>`).join('')}</tbody>
             </table>
