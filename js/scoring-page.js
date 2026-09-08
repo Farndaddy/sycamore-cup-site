@@ -739,8 +739,20 @@ $('pin-go').addEventListener('click', async () => {
   }
 });
 
+// The sign-in sheet is always dismissable — plenty of people just want to watch
+// the leaderboard and never claim a card. Previously it could only be closed by
+// tapping the backdrop AND only once you had already claimed one, which trapped
+// everybody else behind it.
+function closeSignin() { $('signin-sheet').hidden = true; }
+
+$('signin-close').addEventListener('click', closeSignin);
 $('signin-sheet').addEventListener('click', e => {
-  if (e.target === $('signin-sheet') && S.me) $('signin-sheet').hidden = true;
+  if (e.target === $('signin-sheet')) closeSignin();
+});
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  if (!$('signin-sheet').hidden) { closeSignin(); return; }
+  if (!$('keypad-sheet').hidden) $('keypad-sheet').hidden = true;
 });
 
 // ---------------------------------------------------------

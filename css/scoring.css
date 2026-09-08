@@ -315,7 +315,17 @@
   border-radius: 10px 10px 0 0; padding: 26px 22px calc(26px + env(safe-area-inset-bottom));
   max-height: 92vh; overflow-y: auto;
 }
-.sheet h2 { font-family: var(--font-display); font-weight: 500; font-size: 22px; margin: 0 0 5px; }
+.sheet { position: relative; }
+.sheet-close {
+  position: absolute; top: 14px; right: 14px; z-index: 2;
+  width: 36px; height: 36px; border-radius: 50%; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--line-strong); background: var(--paper);
+  color: var(--ink-soft); font-size: 22px; line-height: 1;
+}
+.sheet-close:hover { color: var(--ink); border-color: var(--ink-soft); }
+.sheet-close:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+.sheet h2 { font-family: var(--font-display); font-weight: 500; font-size: 22px; margin: 0 0 5px; padding-right: 44px; }
 .sheet .muted { font-size: 13.5px; margin: 0 0 18px; }
 .sheet-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 18px; }
 
