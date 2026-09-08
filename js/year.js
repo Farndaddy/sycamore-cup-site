@@ -147,10 +147,10 @@ function renderYearPage(yearNum) {
     // 2025 has a match schedule instead of fun facts
     const scheduleEl = document.getElementById('year-schedule');
     const ctaEl = document.getElementById('year-cta');
+    // No live-leaderboard or score-entry buttons on past years — those trips are
+    // over, and the live tools only apply to the current Cup.
+    if (ctaEl) ctaEl.remove();
     if (y.schedule && scheduleEl) {
-      if (ctaEl) ctaEl.innerHTML = `
-        <a class="btn btn-primary" href="../leaderboard.html">Live Leaderboard →</a>
-        <a class="btn btn-light" href="../score-entry.html">Enter Scores</a>`;
       scheduleEl.style.display = '';
       scheduleEl.innerHTML = `
         <div class="section-head"><div><span class="eyebrow">Round By Round</span><h2>Daily Matchups</h2></div></div>
