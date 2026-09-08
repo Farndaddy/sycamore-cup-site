@@ -387,21 +387,20 @@ async function saveEditedCard() {
   {
     say(null, 'Saving…');
     const inputs = document.querySelectorAll('#edit-area input[data-hole]');
-    let saved = 0, capped = 0;
+    let saved = 0;
     try {
       for (const inp of inputs) {
         const hole = Number(inp.dataset.hole);
         const raw = inp.value.trim();
         if (raw === '') continue;
         const par = course.pars[hole - 1];
-        const val = capGross(Number(raw), par);
-        if (Number(raw) > val) capped++;
+        const val = Number(raw);
         if (existing[hole] === val) continue;
         await Live.submitScore({ roundId, playerId, hole, strokes: val, viaAdmin: true });
         saved++;
       }
       say(null, `Saved ${saved} hole${saved === 1 ? '' : 's'}.` +
-        (capped ? ` ${capped} capped to triple bogey.` : ''));
+        '');
     } catch (e) { say(null, e.message, true); }
   }
 }

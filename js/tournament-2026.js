@@ -290,8 +290,10 @@ export const RULES = {
   // the net and the gross game.
   skinsCarryover: true,
 
-  // Gross triple bogey is the most anyone can card. Enforced at entry.
-  maxOverPar: 3,
+  // NO MAXIMUM. Farnia, 2026-09-08: "someone cards a 10, they card a 10 for
+  // everything. Every stroke counts." Set this to a number again and the cap
+  // comes back everywhere at once — entry, net, team totals and both skins games.
+  maxOverPar: null,
 
   // Ties split the money. Swap to 'countback' for a card playoff
   // (back 9, then 6, then 3, then 18th) — the engine supports both.

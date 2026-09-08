@@ -379,6 +379,27 @@
 .keypad-pops .kp-text {
   font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--brass);
 }
+.kp-entryrow { display: flex; gap: 9px; align-items: stretch; margin-bottom: 12px; }
+.kp-entry {
+  flex: 1; min-width: 0; height: 58px; border-radius: 10px; text-align: center;
+  border: 1.5px solid var(--forest); background: var(--paper); color: var(--ink);
+  font-family: var(--font-mono); font-size: 27px; font-weight: 600;
+}
+.kp-entry:focus { outline: 2px solid var(--brass); outline-offset: 2px; }
+.kp-entry::-webkit-outer-spin-button, .kp-entry::-webkit-inner-spin-button {
+  -webkit-appearance: none; margin: 0;
+}
+.kp-entry[type=number] { -moz-appearance: textfield; }
+.kp-save {
+  flex: 0 0 auto; width: 94px; border-radius: 10px; cursor: pointer;
+  border: 1px solid var(--forest); background: var(--forest); color: #fff;
+  font-family: var(--font-body); font-size: 14px; font-weight: 600;
+}
+.kp-save:disabled { opacity: .35; cursor: default; }
+.kp-quick-l {
+  font-family: var(--font-mono); font-size: 9.5px; letter-spacing: .11em;
+  text-transform: uppercase; color: var(--ink-soft); margin: 0 0 7px;
+}
 .keypad-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
 .key {
   padding: 17px 0; font-family: var(--font-mono); font-size: 20px; font-weight: 600;

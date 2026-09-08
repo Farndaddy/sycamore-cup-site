@@ -830,6 +830,7 @@ document.addEventListener('keydown', e => {
 // ---------------------------------------------------------
 // KEYPAD
 // ---------------------------------------------------------
+let keypadSave = null;
 let keypadHole = null;
 let keypadIsScramble = false;
 
@@ -872,6 +873,8 @@ function openKeypad(hole, scramble) {
   const lockedToMe = !scramble && current !== undefined && secondsLeft === 0 && !Live.isAdmin();
 
   if (lockedToMe) {
+    document.querySelector('.kp-entryrow').hidden = true;
+    document.querySelector('.kp-quick-l').hidden = true;
     $('keypad-grid').innerHTML =
       `<div style="grid-column:1/-1;text-align:center;padding:22px 8px;">
          <div style="font-family:var(--font-mono);font-size:34px;font-weight:600;">${current}</div>
@@ -885,37 +888,51 @@ function openKeypad(hole, scramble) {
     return;
   }
 
+  // No maximum any more, so the buttons are a shortcut rather than the whole
+  // range: 1 through triple bogey covers nearly every tap, and anything worse
+  // gets typed into the box.
+  const quickTo = par + 3;
   const keys = [];
-  for (let v = 1; v <= max; v++) {
-    keys.push(`<button class="key ${v === current ? 'on' : ''} ${v === max ? 'max' : ''}" data-val="${v}">${v}</button>`);
+  for (let v = 1; v <= quickTo; v++) {
+    keys.push(`<button class="key ${v === current ? 'on' : ''}" data-val="${v}">${v}</button>`);
   }
   $('keypad-grid').innerHTML = keys.join('');
+
+  const entry = $('keypad-entry');
+  const saveBtn = $('keypad-save');
+  document.querySelector('.kp-entryrow').hidden = false;
+  document.querySelector('.kp-quick-l').hidden = false;
+  entry.value = current === undefined ? '' : current;
+  saveBtn.disabled = !(Number(entry.value) >= 1);
 
   $('keypad-note').hidden = false;
   $('keypad-note').textContent = current !== undefined && !Live.isAdmin()
     ? `${secondsLeft}s left to change this yourself. After that only Farnia can.`
-    : `${max} is the most you can card here — gross triple bogey.`;
+    : 'Tap a number or type any score — there is no maximum.';
+
+  async function saveHole(val) {
+    if (!(val >= 1)) return;
+    try {
+      if (scramble) {
+        await Live.submitTeamScore({
+          roundId: round.id, teamId: playerById(S.me).team, hole, strokes: val
+        });
+      } else {
+        await Live.submitScore({ roundId: round.id, playerId: S.me, hole, strokes: val });
+      }
+      // Walk straight on to the next hole. Going hole to hole is the whole job
+      // out there; closing the sheet after every score meant hunting for the
+      // next cell on a phone. The last hole still closes.
+      if (hole < course.holes) openKeypad(hole + 1, scramble);
+      else $('keypad-sheet').hidden = true;
+    } catch (e) {
+      $('keypad-note').textContent = 'Could not save: ' + e.message;
+    }
+  }
+  keypadSave = saveHole;
 
   $('keypad-grid').querySelectorAll('.key').forEach(k => {
-    k.addEventListener('click', async () => {
-      const val = Number(k.dataset.val);
-      try {
-        if (scramble) {
-          await Live.submitTeamScore({
-            roundId: round.id, teamId: playerById(S.me).team, hole, strokes: val
-          });
-        } else {
-          await Live.submitScore({ roundId: round.id, playerId: S.me, hole, strokes: val });
-        }
-        // Walk straight on to the next hole. Going hole to hole is the whole job
-        // out there; closing the sheet after every score meant hunting for the
-        // next cell on a phone. The last hole still closes.
-        if (hole < course.holes) openKeypad(hole + 1, scramble);
-        else $('keypad-sheet').hidden = true;
-      } catch (e) {
-        $('keypad-note').textContent = 'Could not save: ' + e.message;
-      }
-    });
+    k.addEventListener('click', () => saveHole(Number(k.dataset.val)));
   });
 
   setKeypadNav(hole, course.holes);
@@ -935,11 +952,23 @@ function stepHole(delta) {
 }
 
 $('keypad-close').addEventListener('click', () => { $('keypad-sheet').hidden = true; });
+$('keypad-entry').addEventListener('input', e => {
+  $('keypad-save').disabled = !(Number(e.target.value) >= 1);
+});
+$('keypad-save').addEventListener('click', () => {
+  if (keypadSave) keypadSave(Number($('keypad-entry').value));
+});
+$('keypad-entry').addEventListener('keydown', e => {
+  if (e.key === 'Enter') { e.preventDefault(); if (keypadSave) keypadSave(Number(e.target.value)); }
+});
+
 $('keypad-prev').addEventListener('click', () => stepHole(-1));
 $('keypad-next').addEventListener('click', () => stepHole(1));
 
 document.addEventListener('keydown', e => {
   if ($('keypad-sheet').hidden) return;
+  // Left/right inside the score box move the cursor, not the hole.
+  if (e.target === $('keypad-entry')) return;
   if (e.key === 'ArrowLeft') stepHole(-1);
   if (e.key === 'ArrowRight') stepHole(1);
 });

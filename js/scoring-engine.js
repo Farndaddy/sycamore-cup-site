@@ -74,22 +74,26 @@ export function strokesByHole(courseHcp, course) {
 // ---------------------------------------------------------
 // THE CAP
 // ---------------------------------------------------------
-// Gross triple bogey is the most anyone can card: 6 on a par 3,
-// 7 on a par 4, 8 on a par 5. Enforced when a score is entered,
-// not quietly applied afterwards, so nobody is surprised later.
+// There is NO maximum score. What a man cards is what counts, on his own card
+// and in every total that pays: team net, both skins games, the individual race.
+// RULES.maxOverPar is null; put a number back and the cap returns everywhere
+// through these three functions, which is the only place it was ever applied.
 export function maxGrossForHole(par) {
-  return par + RULES.maxOverPar;
+  return RULES.maxOverPar === null || RULES.maxOverPar === undefined
+    ? null
+    : par + RULES.maxOverPar;
 }
 
 export function capGross(strokes, par) {
   if (strokes === null || strokes === undefined) return null;
   const max = maxGrossForHole(par);
-  return Math.min(Number(strokes), max);
+  return max === null ? Number(strokes) : Math.min(Number(strokes), max);
 }
 
 export function wasCapped(strokes, par) {
   if (strokes === null || strokes === undefined) return false;
-  return Number(strokes) > maxGrossForHole(par);
+  const max = maxGrossForHole(par);
+  return max === null ? false : Number(strokes) > max;
 }
 
 // ---------------------------------------------------------
