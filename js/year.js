@@ -43,7 +43,7 @@ const YEAR_PHOTOS = {
     ]
   },
   2025: {
-    hero: '../assets/photos/2025-cover-team-lineup.jpg',
+    hero: '../assets/photos/2025-turning-stone-aerial.jpg',
     layout: 'masonry',
     gallery: [
       { src: '../assets/photos/2025-belt-celebration.jpg', caption: 'Championship belt, earned', hero: true },
