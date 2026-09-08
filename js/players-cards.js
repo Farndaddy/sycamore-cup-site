@@ -96,6 +96,11 @@ function cardHTML(data, player) {
   const careerHTML = isRookie
     ? `<p class="cb-rookie">First Sycamore Cup &mdash; ${CURRENT_YEAR}${field ? `, with the ${esc(field.team)}` : ''}.</p>`
     : `<div class="cb-career">
+         <div class="cb-row cb-colhead">
+           <span class="cb-yr">Year</span>
+           <span class="cb-team">Team</span>
+           <span class="cb-idx">HCP</span>
+         </div>
          ${rows.map(r => `
            <div class="cb-row${r.won ? ' won' : ''}${r.upcoming ? ' upcoming' : ''}">
              <span class="cb-yr">${r.year}</span>
@@ -293,15 +298,4 @@ loadData().then(data => {
     applyView();
   });
 
-  const notes = (data.meta && data.meta.dataNotes) || [];
-  const notesEl = document.getElementById('data-notes');
-  if (notes.length) {
-    notesEl.innerHTML = `
-      <h3 class="mt-0">Data Notes</h3>
-      <ul style="color:var(--ink-soft); padding-left:20px; margin-bottom:0;">
-        ${notes.map(n => `<li style="margin-bottom:8px;">${n}</li>`).join('')}
-      </ul>`;
-  } else {
-    notesEl.style.display = 'none';
-  }
 });

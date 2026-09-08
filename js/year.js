@@ -21,11 +21,25 @@ const YEAR_PHOTOS = {
     ]
   },
   2024: {
-    hero: '../assets/photos/2024-cover-stairs-group.jpg',
+    hero: '../assets/photos/2024-crew-sunset-lineup.jpg',
+    layout: 'masonry',
     gallery: [
-      { src: '../assets/photos/2023-crew-lineup-orange-sky.jpg', caption: '2023 Sycamore Cup Classic members', wide: true },
-      { src: '../assets/photos/2022-trophy-photo.jpg', caption: 'Cup champions, handing it down' },
-      { src: '../assets/photos/2024-cover-stairs-group.jpg', caption: 'The 2024 crew' },
+      { src: '../assets/photos/2024-crew-sunset-lineup.jpg',   caption: 'The 2024 crew', hero: true },
+      { src: '../assets/photos/2024-stairs-group.jpg',         caption: 'House stairs' },
+      { src: '../assets/photos/2024-green-clouds.jpg',         caption: 'Late light on the green' },
+      { src: '../assets/photos/2024-vultures-oaks.jpg',        caption: 'Under the oaks, with an audience' },
+      { src: '../assets/photos/2024-shuttle-selfie.jpg',       caption: 'Shuttle to the first tee' },
+      { src: '../assets/photos/2024-clubhouse.jpg',            caption: 'Clubhouse' },
+      { src: '../assets/photos/2024-green-celebration.jpg',    caption: 'Putt drops' },
+      { src: '../assets/photos/2024-bar-lean-back.jpg',        caption: 'Post-round posture' },
+      { src: '../assets/photos/2024-house-pool.jpg',           caption: 'The pool deck' },
+      { src: '../assets/photos/2024-peace-signs.jpg',          caption: 'Peace and quiet' },
+      { src: '../assets/photos/2024-cart-staging.jpg',         caption: 'Carts staged and ready' },
+      { src: '../assets/photos/2024-house-gameroom.jpg',       caption: 'The game room' },
+      { src: '../assets/photos/2024-house-avengers-hall.jpg',  caption: 'The hallway' },
+      { src: '../assets/photos/2024-house-vw-lounge.jpg',      caption: 'The VW lounge' },
+      { src: '../assets/photos/2024-house-dining.jpg',         caption: 'The dining room' },
+      { src: '../assets/photos/2024-house-arcade.jpg',         caption: 'The arcade' }
     ]
   },
   2025: {
