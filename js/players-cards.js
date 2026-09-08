@@ -8,6 +8,28 @@ import { PLAYERS as ROSTER_2026, TEAMS as TEAMS_2026 } from './tournament-2026.j
 
 const CURRENT_YEAR = 2026;
 
+// Fun facts were asked in different years with different question sets, but the
+// year they came from carries no meaning here — every answer a guy has ever given
+// is shown as one combined list, in this order.
+const FACT_ORDER = [
+  'golfer', 'golfClub', 'distanceShot', 'course',
+  'sportsTeam', 'athlete', 'jersey',
+  'comedian', 'actress', 'star', 'album',
+  'warMovie', 'sportsMovie', 'comedyMovie',
+  'dish', 'chip', 'candy'
+];
+
+function allFacts(data, playerId) {
+  const ff = (data.funFactsByPlayer || {})[playerId];
+  if (!ff) return [];
+  const seen = new Set();
+  const out = [];
+  FACT_ORDER.forEach(k => { if (ff[k]) { out.push([k, ff[k]]); seen.add(k); } });
+  // Anything the CMS adds later that isn't in FACT_ORDER still shows, at the end.
+  Object.keys(ff).forEach(k => { if (!seen.has(k) && ff[k]) out.push([k, ff[k]]); });
+  return out;
+}
+
 // data/sycamore-data.json only carries played Cups (2023-2025). The 2026 field
 // lives in tournament-2026.js, so fold it in here rather than leaving the
 // current roster invisible on this page.
@@ -58,12 +80,9 @@ function cardHTML(data, player) {
   const cups = played.length;
   const wins = played.filter(r => r.won).length;
 
-  // Fun facts were collected in different years for different guys, so take the
-  // most recent entry that actually has any rather than blanking on an empty one.
-  const withFacts = [...played].reverse().find(r => r.funFacts && Object.keys(r.funFacts).length);
-  const named = [...played].reverse().find(r => r.displayName) || withFacts;
+  const named = [...played].reverse().find(r => r.displayName);
   const titled = [...played].reverse().find(r => r.titles);
-  const facts = withFacts ? Object.entries(withFacts.funFacts).filter(([, v]) => v) : [];
+  const facts = allFacts(data, player.id);
 
   const field = FIELD_2026.get(player.id);
   const currentIndex = field ? field.index : null;
@@ -83,8 +102,10 @@ function cardHTML(data, player) {
   const factsHTML = facts.length
     ? `<dl class="cb-facts">
          ${facts.map(([k, v]) => `
-           <dt>${esc(k.replace(/([A-Z])/g, ' $1').trim())}</dt>
-           <dd>${esc(v)}</dd>`).join('')}
+           <div class="cb-fact">
+             <dt>${esc(k.replace(/([A-Z])/g, ' $1').trim())}</dt>
+             <dd>${esc(v)}</dd>
+           </div>`).join('')}
        </dl>`
     : `<p class="cb-empty">No fun facts on file yet &mdash; he&rsquo;s keeping it close to the vest.</p>`;
 

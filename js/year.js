@@ -81,7 +81,6 @@ function renderYearPage(yearNum) {
         return `
         <figure class="${cls}">
           <img src="${g.src}" alt="${g.caption}" loading="lazy">
-          <figcaption>${g.caption}</figcaption>
         </figure>`;
       }).join('');
     }
