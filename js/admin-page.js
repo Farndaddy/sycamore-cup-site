@@ -3,7 +3,7 @@
 // =========================================================
 // Everything Farnia needs when something goes sideways on the course.
 
-import { COURSES, PLAYERS, TEAMS, ROUNDS, playerById, teamById } from './tournament-2026.js';
+import { COURSES, PLAYERS, TEAMS, ROUNDS, playerById, teamById, substituteFor } from './tournament-2026.js';
 import { courseHandicap, capGross } from './scoring-engine.js';
 import * as Live from './live.js';
 
@@ -414,13 +414,19 @@ function renderTeeArea() {
   document.getElementById('tee-area').innerHTML = PLAYERS.map(p => {
     const doc = S.players[p.id];
     const chosen = (doc && doc.tees && doc.tees[roundId]) || course.defaultTee;
-    const calc = courseHandicap(p.index, course, chosen);
+    // A stand-in plays this round off HIS index, so the calculated number shown
+    // here has to match what the engine actually uses — otherwise the panel
+    // reports one handicap while the scoring runs on another.
+    const sub = substituteFor(p.id, roundId);
+    const playingIndex = sub ? sub.index : p.index;
+    const calc = courseHandicap(playingIndex, course, chosen);
     const raw = doc && doc.hcp ? doc.hcp[roundId] : null;
     const pinned = (raw === null || raw === undefined || raw === '') ? null : Number(raw);
     return `<div class="admin-row">
       <div class="r-main">
-        <strong>${p.name}</strong>
-        <small>index ${p.index} &middot; ${course.tees[chosen].name} tee &middot; calculated ${calc}${
+        <strong>${p.name}${sub ? ` <span class="sub-badge">${sub.subName} playing</span>` : ''}</strong>
+        <small>${sub ? `${sub.subName}&rsquo;s index ${sub.index}` : `index ${p.index}`} &middot; ${
+          course.tees[chosen].name} tee &middot; calculated ${calc}${
           pinned !== null ? ` &middot; <span class="hcp-pinned">pinned to ${pinned}</span>` : ''}</small>
       </div>
       <div class="admin-actions">
