@@ -214,7 +214,7 @@ function renderPanel() {
     </div>
 
     <div class="admin-sec">
-      <h2>Tees</h2>
+      <h2>Tees &amp; Playing Handicaps</h2>
       <p class="sec-note">Players set their own tee, but you can override it — useful for the guy
       who never gets around to it.</p>
       <div class="admin-actions" style="margin-bottom:14px;">
@@ -280,6 +280,16 @@ function wirePanel() {
       return;
     }
 
+    if (t.dataset.hcpReset) {
+      const roundId = document.getElementById('tee-round').value;
+      try {
+        await Live.adminSetHandicap(t.dataset.hcpReset, roundId, null);
+        say(null, `${playerById(t.dataset.hcpReset).name} is back on the calculated handicap.`);
+        renderTeeArea();
+      } catch (err) { say(null, err.message, true); }
+      return;
+    }
+
     if (t.dataset.release) {
       const id = t.dataset.release;
       t.disabled = true;
@@ -330,6 +340,19 @@ function wirePanel() {
 
   document.addEventListener('change', (e) => {
     if (e.target.id === 'tee-round') renderTeeArea();
+  });
+
+  // Pin a playing handicap for one player on the selected round.
+  document.addEventListener('change', async (e) => {
+    const box = e.target.closest && e.target.closest('[data-hcp-set]');
+    if (!box) return;
+    const roundId = document.getElementById('tee-round').value;
+    const playerId = box.dataset.hcpSet;
+    try {
+      await Live.adminSetHandicap(playerId, roundId, box.value);
+      say(null, `${playerById(playerId).name} pinned to ${box.value} for this round. Every total recalculates.`);
+      renderTeeArea();
+    } catch (err) { say(null, err.message, true); }
   });
 }
 
@@ -391,15 +414,25 @@ function renderTeeArea() {
   document.getElementById('tee-area').innerHTML = PLAYERS.map(p => {
     const doc = S.players[p.id];
     const chosen = (doc && doc.tees && doc.tees[roundId]) || course.defaultTee;
+    const calc = courseHandicap(p.index, course, chosen);
+    const raw = doc && doc.hcp ? doc.hcp[roundId] : null;
+    const pinned = (raw === null || raw === undefined || raw === '') ? null : Number(raw);
     return `<div class="admin-row">
       <div class="r-main">
         <strong>${p.name}</strong>
-        <small>plays off ${courseHandicap(p.index, course, chosen)} from ${course.tees[chosen].name}</small>
+        <small>index ${p.index} &middot; ${course.tees[chosen].name} tee &middot; calculated ${calc}${
+          pinned !== null ? ` &middot; <span class="hcp-pinned">pinned to ${pinned}</span>` : ''}</small>
       </div>
       <div class="admin-actions">
         ${Object.entries(course.tees).map(([key, t]) =>
           `<button class="tee-btn ${key === chosen ? 'on' : ''}" data-tee-set="${p.id}" data-tee-key="${key}">${t.name}</button>`
         ).join('')}
+        <label class="hcp-field">HCP
+          <input type="number" inputmode="numeric" min="-10" max="54" step="1"
+                 data-hcp-set="${p.id}" value="${pinned !== null ? pinned : calc}"
+                 class="${pinned !== null ? 'is-pinned' : ''}">
+        </label>
+        <button class="btn btn-sm btn-quiet" data-hcp-reset="${p.id}" ${pinned === null ? 'disabled' : ''}>Reset</button>
       </div>
     </div>`;
   }).join('');

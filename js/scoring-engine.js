@@ -11,6 +11,24 @@ import { COURSES, PLAYERS, TEAMS, ROUNDS, RULES, playerById, roundById, substitu
 // HANDICAPS
 // ---------------------------------------------------------
 
+// Playing-handicap overrides, set from the admin panel and keyed
+// `${roundId}__${playerId}`. The computed course handicap is correct USGA maths,
+// but it works off whole-number indexes, and a real GHIN index has a decimal —
+// 16 gives 20 at Southern Hills blue while a true 15.6 gives 19. Rather than
+// guess, an admin can pin the number for any player on any round.
+//
+// This is a module-level registry rather than another argument because
+// playerRound() is called from a dozen places; threading a map through every one
+// of them the week of the trip is how you break the money.
+let HCP_OVERRIDES = {};
+
+export function setHandicapOverrides(map) { HCP_OVERRIDES = map || {}; }
+
+export function handicapOverride(playerId, roundId) {
+  const v = HCP_OVERRIDES[`${roundId}__${playerId}`];
+  return (v === undefined || v === null || v === '') ? null : Number(v);
+}
+
 // Course Handicap = Index x (Slope / 113) + (Rating - Par)
 //
 // The (Rating - Par) term is what makes scores comparable when players
@@ -90,7 +108,10 @@ export function playerRound(player, round, holeScores, teeKey) {
   // only place the index is read.
   const sub = substituteFor(player.id, round.id);
   const playingIndex = sub ? sub.index : player.index;
-  const chcp = courseHandicap(playingIndex, course, tee);
+
+  // An admin-pinned playing handicap wins over the calculated one.
+  const pinned = handicapOverride(player.id, round.id);
+  const chcp = pinned !== null ? pinned : courseHandicap(playingIndex, course, tee);
   const pops = strokesByHole(chcp, course);
 
   const holes = [];
@@ -132,7 +153,8 @@ export function playerRound(player, round, holeScores, teeKey) {
     toPar,             // gross vs par
     netToPar,          // net vs par — this is the one the money runs on
     sub,               // null, or who is standing in for this player
-    playingIndex
+    playingIndex,
+    hcpPinned: pinned !== null
   };
 }
 

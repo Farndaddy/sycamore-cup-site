@@ -59,6 +59,18 @@
   .admin-status { font-size: 13px; color: var(--forest); margin-top: 12px; min-height: 18px; }
   .admin-status.err { color: var(--clay); }
   .gate { text-align: center; padding: 70px 20px; }
+  .hcp-field {
+    display: inline-flex; align-items: center; gap: 6px; margin-left: 8px;
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em;
+    text-transform: uppercase; color: var(--ink-soft);
+  }
+  .hcp-field input {
+    width: 62px; padding: 7px 8px; text-align: center;
+    font-family: var(--font-mono); font-size: 14px;
+    border: 1px solid var(--line-strong); border-radius: 3px; background: var(--paper);
+  }
+  .hcp-field input.is-pinned { border-color: var(--clay); color: var(--clay); font-weight: 600; }
+  .hcp-pinned { color: var(--clay); font-weight: 600; }
   .gate h1 { font-family: var(--font-display); font-weight: 500; }
   .admin-flash {
     position: sticky; top: 0; z-index: 20;

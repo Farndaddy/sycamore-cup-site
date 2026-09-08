@@ -363,3 +363,10 @@ export async function listAdmins() {
 export async function adminSetTee(playerId, roundId, teeKey) {
   await updateDoc(doc(db, 'players', playerId), { [`tees.${roundId}`]: teeKey });
 }
+
+// Pin a playing handicap for one player on one round, or pass null to go back to
+// the calculated one. Stored beside the tees on the player doc.
+export async function adminSetHandicap(playerId, roundId, value) {
+  const v = (value === null || value === undefined || value === '') ? null : Number(value);
+  await updateDoc(doc(db, 'players', playerId), { [`hcp.${roundId}`]: v });
+}

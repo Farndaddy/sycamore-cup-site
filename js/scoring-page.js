@@ -9,7 +9,8 @@ import {
 import {
   courseHandicap, strokesByHole, capGross, maxGrossForHole, playerRound,
   individualLeaderboard, teamDayTotals, teamEventStandings,
-  skinsForRound, individualStandings, formatMoney, fmtToPar, teamDayToPar
+  skinsForRound, individualStandings, formatMoney, fmtToPar, teamDayToPar,
+  setHandicapOverrides
 } from './scoring-engine.js';
 
 import * as Live from './live.js';
@@ -58,7 +59,7 @@ const $ = id => document.getElementById(id);
     return;
   }
 
-  Live.watchPlayers(p => { S.players = p; render(); });
+  Live.watchPlayers(p => { S.players = p; pushHandicapOverrides(); render(); });
   Live.watchAllScores((s, m) => { S.scores = s; S.scoreMeta = m; render(); });
   Live.watchTeamScores(t => { S.teamScores = t; render(); });
   Live.watchRounds(r => { S.rounds = r; render(); });
@@ -119,6 +120,19 @@ function teeMap(roundId) {
   const out = {};
   PLAYERS.forEach(p => out[p.id] = teeFor(p.id, roundId));
   return out;
+}
+
+// Admin-pinned playing handicaps live on the player docs as hcp[roundId].
+// Hand them to the engine whenever the docs change, so every calculation —
+// leaderboard, teams, skins, money — picks them up from one place.
+function pushHandicapOverrides() {
+  const map = {};
+  Object.entries(S.players || {}).forEach(([playerId, docData]) => {
+    Object.entries((docData && docData.hcp) || {}).forEach(([roundId, v]) => {
+      if (v !== null && v !== undefined && v !== '') map[`${roundId}__${playerId}`] = Number(v);
+    });
+  });
+  setHandicapOverrides(map);
 }
 
 function scoresFor(roundId) { return S.scores[roundId] || {}; }

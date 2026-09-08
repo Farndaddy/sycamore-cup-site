@@ -12,7 +12,7 @@
 // reformats them relative to par, LIV-style, instead of raw net
 // strokes.
 import { COURSES, PLAYERS, ROUNDS } from './tournament-2026.js';
-import { individualStandings, teamEventStandings, playerRound, scrambleTeamScore, fmtToPar, teamDayToPar as engineTeamDayToPar } from './scoring-engine.js';
+import { individualStandings, teamEventStandings, playerRound, scrambleTeamScore, fmtToPar, teamDayToPar as engineTeamDayToPar, setHandicapOverrides } from './scoring-engine.js';
 import * as Live from './live.js';
 
 const mount = document.getElementById('liv-board');
@@ -32,7 +32,7 @@ async function boot() {
 
   const S = { scores: {}, teamScores: {}, players: {}, rounds: {}, view: 'players' };
 
-  Live.watchPlayers(p => { S.players = p; render(S); });
+  Live.watchPlayers(p => { S.players = p; pushHandicapOverrides(p); render(S); });
   Live.watchAllScores(s => { S.scores = s; render(S); });
   Live.watchTeamScores(t => { S.teamScores = t; render(S); });
   Live.watchRounds(r => { S.rounds = r; render(S); });
@@ -48,6 +48,18 @@ function banner(title, body) {
 // event-total functions take one flat map applied to every round (the
 // same simplification scoring.html itself uses). We use each player's
 // most recent tee pick as that one reference.
+// Admin-pinned playing handicaps ride on the player docs. The spectator board
+// has to honour them or it would show different numbers from the scoring app.
+function pushHandicapOverrides(players) {
+  const map = {};
+  Object.entries(players || {}).forEach(([playerId, docData]) => {
+    Object.entries((docData && docData.hcp) || {}).forEach(([roundId, v]) => {
+      if (v !== null && v !== undefined && v !== '') map[`${roundId}__${playerId}`] = Number(v);
+    });
+  });
+  setHandicapOverrides(map);
+}
+
 function referenceTeeMap(players) {
   const lastRound = ROUNDS[ROUNDS.length - 1];
   const out = {};
