@@ -52,7 +52,7 @@ Note that choosing the shorter tee at Evermore costs 3 strokes. Tee choice has r
 
 **Skins:** net skins, individual, carryover on ties, **all 4 days** including Saturday. 18-hole rounds only — no skins on the scramble nines.
 
-**Individual Champion:** lowest net total across the **best 3 of 4** rounds. One blow-up doesn't end your week.
+**Individual Champion:** lowest net total across **all four rounds** — every round counts, no drops.
 
 ## 4. Payouts — updated
 
@@ -113,7 +113,7 @@ This is enforced at entry, not just in the math — type a 9 on a par 4 and the 
 
 **Tab 1 — My Card.** Enter your own gross score hole by hole. Dots on the holes where you get a stroke, so you can see your pops before you tee off. Triple-bogey cap enforced as you type. Running gross and net at the bottom.
 
-**Tab 2 — Individual.** Live net leaderboard for the day, plus thru-hole. Toggle to the best-3-of-4 running total for the $300.
+**Tab 2 — Individual.** Live net leaderboard for the day, plus thru-hole. Toggle to the all-four-rounds running total for the $300.
 
 **Tab 3 — Teams.** Live daily team net (all 4 counting, scramble folded in on Thu/Fri) and the season-long race for the $720.
 

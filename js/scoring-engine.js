@@ -342,7 +342,7 @@ export function skinsForRound(round, scoresByPlayer, teeByPlayer, pot) {
 }
 
 // ---------------------------------------------------------
-// INDIVIDUAL CHAMPIONSHIP — best 3 of 4
+// INDIVIDUAL CHAMPIONSHIP — all four rounds count
 // ---------------------------------------------------------
 export function individualStandings(allScores, teeByPlayer) {
   const rounds = ROUNDS.filter(r => r.counts.individual);
@@ -354,6 +354,8 @@ export function individualStandings(allScores, teeByPlayer) {
     }).filter(r => r.holesPlayed > 0);
 
     const complete = played.filter(r => r.complete);
+    // individualBestOf is currently set to all 4 rounds (no drops), but this
+    // stays generic in case that ever changes back to a best-N-of-4 format.
     const counting = [...complete].sort((a, b) => a.netTotal - b.netTotal)
       .slice(0, RULES.individualBestOf);
 
@@ -368,8 +370,8 @@ export function individualStandings(allScores, teeByPlayer) {
       droppedRounds: dropped,
       roundsComplete: complete.length,
       total,
-      // Until a player has 3 finished rounds this is a running number,
-      // not a final one. The page should say so rather than imply a result.
+      // Until a player has all four rounds finished this is a running
+      // number, not a final one. The page should say so rather than imply a result.
       provisional: complete.length < RULES.individualBestOf
     };
   }).filter(r => r.rounds.length > 0);

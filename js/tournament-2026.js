@@ -201,7 +201,7 @@ export const ROUNDS = [
 //   day-individual - lowest individual net that day (place 1 or 2)
 //   day-skins      - the day's net skins pot
 //   event-team     - lowest team net across all four days
-//   event-individual - best 3 of 4 rounds, by place
+//   event-individual - all four rounds combined, by place
 
 export const PAYOUTS = [
   { id: 'd1-team',   label: 'Day 1 Team Low Net',        amount: 200, perPerson: 50,  scope: 'day-team',       dayNum: 1 },
@@ -240,8 +240,8 @@ export const RULES = {
   // All four net scores count toward the daily team total. No drops.
   teamScoresCounted: 4,
 
-  // Individual champion is decided on the best 3 of 4 rounds.
-  individualBestOf: 3,
+  // All four rounds count toward the individual championship — no drops.
+  individualBestOf: 4,
   individualRounds: 4,
 
   // 4-man scramble allowance: 20% of the four combined course handicaps.

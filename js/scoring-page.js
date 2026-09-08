@@ -358,7 +358,7 @@ function renderIndividual() {
   const toggle = `
     <div class="tee-row" style="margin-bottom:16px;">
       <button class="tee-btn ${S.indivView === 'round' ? 'on' : ''}" data-view="round">This round</button>
-      <button class="tee-btn ${S.indivView === 'event' ? 'on' : ''}" data-view="event">Best 3 of 4</button>
+      <button class="tee-btn ${S.indivView === 'event' ? 'on' : ''}" data-view="event">All 4 Rounds</button>
     </div>`;
 
   if (S.indivView === 'round') {
@@ -385,7 +385,7 @@ function renderIndividual() {
     pane.innerHTML = toggle + (rows.length === 0
       ? `<div class="banner"><strong>Nothing to rank yet</strong>This is the race for the $300.</div>`
       : `<table class="lb">
-          <thead><tr><th class="pos"></th><th>Player</th><th class="num">Rounds</th><th class="num">Best 3</th></tr></thead>
+          <thead><tr><th class="pos"></th><th>Player</th><th class="num">Rounds</th><th class="num">Total</th></tr></thead>
           <tbody>${rows.map(r => `
             <tr class="${r.player.id === S.me ? 'is-me' : ''}">
               <td class="pos">${r.tied ? 'T' : ''}${r.position}</td>
@@ -396,8 +396,8 @@ function renderIndividual() {
               <td class="num net">${r.roundsComplete ? r.total : '—'}</td>
             </tr>`).join('')}</tbody>
         </table>
-        ${anyProvisional ? `<p class="pane-note">Anyone with fewer than three finished rounds is
-        still provisional — their total will drop once they have a worst round to throw out.</p>` : ''}`);
+        ${anyProvisional ? `<p class="pane-note">Anyone with fewer than four finished rounds is
+        still provisional — all four rounds count, so the total is only final once the week is done.</p>` : ''}`);
   }
 
   pane.querySelectorAll('[data-view]').forEach(b =>

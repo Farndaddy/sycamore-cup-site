@@ -13,7 +13,7 @@
 | File | What it does |
 |---|---|
 | `js/tournament-2026.js` | Every fixed fact: four courses with pars, stroke indexes and tee ratings; the twelve players; the six rounds; the payout table; the rules. **Change team names here.** |
-| `js/scoring-engine.js` | All the math. Pure functions, no network — course handicaps, stroke allocation, the triple-bogey cap, team totals, skins with carryover, best 3 of 4. |
+| `js/scoring-engine.js` | All the math. Pure functions, no network — course handicaps, stroke allocation, the triple-bogey cap, team totals, skins with carryover, the all-four-rounds individual total. |
 | `js/live.js` | Everything that talks to Firebase. Anonymous sign-in, App Check, card claiming, score writes, live subscriptions. |
 | `js/scoring-page.js` | The scoring microsite. |
 | `js/admin-page.js` | The admin panel. |
@@ -42,8 +42,8 @@ Nobody can claim a card until this runs.
 - **Individual low net** — 1st and 2nd each day. Ties pool both prizes and split them.
 - **Skins** — net, carryover on ties, all four 18-hole days. Skins still carrying at the
   end of a round are not paid; the pot divides across the skins actually won.
-- **Individual Champion** — best 3 of 4. Shows as provisional until a player has three
-  finished rounds.
+- **Individual Champion** — all four rounds count, no drops. Shows as provisional until
+  a player has all four rounds finished.
 - **Handicaps** — full course handicap, recomputed per player per tee per round.
 
 ## Three bugs caught during the build
