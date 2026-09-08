@@ -394,20 +394,42 @@
   font-family: var(--font-mono); font-size: 12.5px; color: var(--ink-soft);
   text-transform: uppercase; letter-spacing: .06em;
 }
-.roster-card {
-  background: var(--paper); border: 1px solid var(--line);
-  border-top: 4px solid var(--team-accent, var(--forest));
-  border-radius: var(--radius); padding: 22px 16px; text-align: center;
+.roster-cards {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
 }
-.roster-card .profile-avatar, .roster-card .avatar-photo {
-  width: 76px; height: 76px; border-radius: 50%; overflow: hidden;
-  margin: 0 auto 14px; background: var(--sand);
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--font-mono); font-weight: 700; color: var(--ink-soft);
+.tcard {
+  display: block; aspect-ratio: 4 / 5; border-radius: 12px; overflow: hidden;
+  background: var(--sand); box-shadow: 0 2px 10px rgba(0,0,0,.10);
+  outline: 3px solid transparent; outline-offset: -3px;
+  transition: transform .18s ease, box-shadow .18s ease, outline-color .18s ease;
 }
-.roster-card .avatar-photo img { width: 100%; height: 100%; object-fit: cover; }
-.roster-card .rc-name { font-family: var(--font-display); font-weight: 600; font-size: 1.05rem; margin-bottom: 4px; }
-.roster-card .rc-index { font-family: var(--font-mono); font-size: 12px; color: var(--ink-soft); }
+.tcard:hover, .tcard:focus-visible {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 28px rgba(0,0,0,.22);
+  outline-color: var(--team-accent, var(--brass));
+}
+.tcard img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.tcard-fb {
+  width: 100%; height: 100%; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 8px; padding: 18px;
+  text-align: center; background: #12301D;
+  border: 3px solid rgba(201,162,39,.55);
+}
+.tcard-fb-name { font-family: var(--font-display); font-size: 1.1rem; color: #F0E6C9; line-height: 1.25; }
+.tcard-fb-hcp {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em;
+  color: #12301D; background: #C9A227; padding: 3px 9px; border-radius: 3px;
+}
+.tcard-fb-note {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: .07em;
+  text-transform: uppercase; color: rgba(240,230,201,.55);
+}
+@media (max-width: 860px) {
+  .roster-cards { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+}
+@media (max-width: 420px) {
+  .roster-cards { gap: 12px; }
+}
 
 /* ---------- LIV-style live leaderboard ---------- */
 .liv-board {

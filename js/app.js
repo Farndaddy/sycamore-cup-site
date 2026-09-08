@@ -92,3 +92,17 @@ function handleAvatarError(img) {
 function fmtIndex(v) {
   return (v === null || v === undefined) ? '—' : v;
 }
+
+// ---------- Trading-card fallback ----------
+// assets/players/<id>.png are full "Sycamore Topps" card illustrations. If one is
+// missing, draw a card-shaped placeholder in the same green/gold livery.
+function tcardFallback(img, name, index) {
+  const box = img.parentElement;
+  if (!box) return;
+  box.classList.add('tcard-missing');
+  box.innerHTML = `<div class="tcard-fb">
+      <span class="tcard-fb-name">${name}</span>
+      <span class="tcard-fb-hcp">HCP ${index}</span>
+      <span class="tcard-fb-note">card coming soon</span>
+    </div>`;
+}

@@ -24,9 +24,9 @@
   --under-par: #1E3A2F;
   --even-par: #6B6558;
 
-  --font-display: 'Fraunces', Georgia, serif;
-  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --font-display: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, monospace;
 
   --radius: 2px;
   --shadow-card: 0 1px 3px rgba(32,30,26,0.05), 0 10px 30px rgba(32,30,26,0.06);

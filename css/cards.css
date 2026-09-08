@@ -1,0 +1,143 @@
+/* ---------- Players page: flip cards ---------- *
+ * The card FRONT is the Sycamore Topps artwork whole (4:5, never cropped square,
+ * never overlaid — the illustration already carries name, nickname and HCP).
+ * The card BACK echoes that livery: deep green field, gold rules, cream text.   */
+
+:root {
+  --card-green: #12301D;
+  --card-green-2: #0C2214;
+  --card-gold: #C9A227;
+  --card-cream: #F0E6C9;
+}
+
+/* ---- filters ---- */
+.card-filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 30px; }
+.cfilter {
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: .06em;
+  text-transform: uppercase; cursor: pointer;
+  padding: 9px 16px; border-radius: 999px;
+  border: 1px solid var(--line-strong); background: var(--paper); color: var(--ink-soft);
+  transition: background .16s ease, color .16s ease, border-color .16s ease;
+}
+.cfilter:hover { border-color: var(--brass); color: var(--ink); }
+.cfilter.is-on { background: var(--forest); border-color: var(--forest); color: #fff; }
+
+/* ---- grid ---- */
+.card-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 34px; }
+@media (max-width: 560px) { .card-grid { grid-template-columns: 1fr; gap: 26px; } }
+
+/* ---- flip mechanics ---- */
+.flipcard { perspective: 1600px; }
+.flipcard-inner {
+  all: unset; box-sizing: border-box; cursor: pointer;
+  display: block; position: relative; width: 100%; aspect-ratio: 4 / 5;
+  transform-style: preserve-3d; transition: transform .6s cubic-bezier(.2,.7,.3,1);
+  border-radius: 14px;
+}
+.flipcard.flipped .flipcard-inner { transform: rotateY(180deg); }
+.flipcard-inner:focus-visible { outline: 3px solid var(--brass); outline-offset: 4px; }
+
+.face {
+  position: absolute; inset: 0; backface-visibility: hidden;
+  border-radius: 14px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,.16);
+}
+.face.front { background: var(--card-green-2); }
+.face.front img { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+.flip-hint {
+  position: absolute; left: 50%; bottom: 10px; transform: translateX(-50%);
+  font-family: var(--font-mono); font-size: 9.5px; letter-spacing: .12em;
+  text-transform: uppercase; color: rgba(240,230,201,.75);
+  background: rgba(0,0,0,.45); padding: 4px 10px; border-radius: 999px;
+  opacity: 0; transition: opacity .2s ease; pointer-events: none;
+}
+.flipcard-inner:hover .flip-hint, .flipcard-inner:focus-visible .flip-hint { opacity: 1; }
+
+.art-missing {
+  width: 100%; height: 100%; display: flex; flex-direction: column; gap: 10px;
+  align-items: center; justify-content: center; text-align: center; padding: 24px;
+  background: var(--card-green); border: 3px solid rgba(201,162,39,.5);
+}
+.art-missing span { font-family: var(--font-display); font-size: 1.3rem; color: var(--card-cream); }
+.art-missing em {
+  font-family: var(--font-mono); font-style: normal; font-size: 10px;
+  letter-spacing: .1em; text-transform: uppercase; color: rgba(240,230,201,.55);
+}
+
+/* ---- back ---- */
+.face.back {
+  transform: rotateY(180deg);
+  background: var(--card-green);
+  border: 3px solid rgba(201,162,39,.45);
+  color: var(--card-cream);
+  padding: 20px 22px; overflow-y: auto; text-align: left;
+  -webkit-overflow-scrolling: touch;
+}
+.face.back::-webkit-scrollbar { width: 6px; }
+.face.back::-webkit-scrollbar-thumb { background: rgba(201,162,39,.4); border-radius: 3px; }
+
+.cb-head {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+  padding-bottom: 12px; border-bottom: 1px solid rgba(201,162,39,.35);
+}
+.cb-head h3 {
+  margin: 0; font-family: var(--font-display); font-weight: 600;
+  font-size: 1.25rem; line-height: 1.2; color: #fff;
+}
+.cb-sub {
+  margin: 5px 0 0; font-family: var(--font-mono); font-size: 10.5px;
+  letter-spacing: .08em; text-transform: uppercase; color: rgba(240,230,201,.6);
+}
+.cb-hcp {
+  flex: none; font-family: var(--font-mono); font-size: 10.5px; font-weight: 600;
+  letter-spacing: .06em; color: var(--card-green);
+  background: var(--card-gold); padding: 4px 9px; border-radius: 3px;
+}
+.cb-titles {
+  margin: 12px 0 0; font-family: var(--font-display); font-style: italic;
+  font-size: .95rem; line-height: 1.4; color: var(--card-gold);
+}
+.cb-label {
+  margin: 18px 0 8px; font-family: var(--font-mono); font-size: 9.5px;
+  letter-spacing: .14em; text-transform: uppercase; color: rgba(201,162,39,.85);
+}
+
+/* career strip: fixed year column, flexible team, right-aligned index */
+.cb-career { display: flex; flex-direction: column; gap: 5px; }
+.cb-row {
+  display: grid; grid-template-columns: 38px 1fr auto; align-items: center; gap: 10px;
+  font-family: var(--font-mono); font-size: 11.5px;
+  padding-bottom: 5px; border-bottom: 1px solid rgba(240,230,201,.10);
+}
+.cb-yr { color: rgba(240,230,201,.55); }
+.cb-team {
+  display: flex; align-items: center; gap: 6px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font-family: var(--font-body); font-size: 12.5px; color: var(--card-cream);
+}
+.cb-idx { color: rgba(240,230,201,.55); }
+.cb-row.won .cb-team { color: var(--card-gold); font-weight: 600; }
+.trophy { width: 13px; height: 13px; flex: none; fill: var(--card-gold); }
+
+.cb-row.upcoming { border-bottom-style: dashed; }
+.cb-row.upcoming .cb-yr { color: var(--card-gold); }
+.cb-row.upcoming .cb-team, .cb-row.upcoming .cb-idx { color: rgba(240,230,201,.85); }
+
+.cb-rookie {
+  margin: 0; font-family: var(--font-display); font-style: italic;
+  font-size: .95rem; color: rgba(240,230,201,.8);
+}
+
+.cb-facts { margin: 0; }
+.cb-facts dt {
+  font-family: var(--font-mono); font-size: 9.5px; letter-spacing: .1em;
+  text-transform: uppercase; color: rgba(201,162,39,.75); margin-top: 11px;
+}
+.cb-facts dd {
+  margin: 3px 0 0; font-size: 13px; line-height: 1.45; color: var(--card-cream);
+}
+.cb-empty { margin: 0; font-size: 13px; color: rgba(240,230,201,.6); font-style: italic; }
+
+@media (prefers-reduced-motion: reduce) {
+  .flipcard-inner { transition: none; }
+}

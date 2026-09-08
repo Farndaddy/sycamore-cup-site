@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
 <title>2026 — Sycamore Cup Classic</title>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400..600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/style.css">
 <link rel="stylesheet" href="../css/scoring.css">
 </head>
@@ -75,13 +75,12 @@
           <h3>${team.name}</h3>
           <span class="combined-hcp">Combined Index ${combined}</span>
         </div>
-        <div class="grid grid-4">
+        <div class="roster-cards" style="--team-accent:var(--${team.accent});">
           ${roster.map(p => `
-            <div class="roster-card" style="--team-accent:var(--${team.accent});">
-              ${avatarHTML(p, 'profile-avatar')}
-              <div class="rc-name">${p.name}</div>
-              <div class="rc-index">Index ${p.index}</div>
-            </div>`).join('')}
+            <a class="tcard" href="../players/player.html?id=${p.id}" title="${p.name}">
+              <img src="../assets/players/${p.id}.png" alt="${p.name} trading card" loading="lazy"
+                   onerror="tcardFallback(this, '${p.name.replace(/'/g, "\\'")}', ${p.index})">
+            </a>`).join('')}
         </div>
       </div>`;
   }).join('');
