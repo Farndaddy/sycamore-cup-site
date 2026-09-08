@@ -38,6 +38,11 @@ const FIELD_2026 = new Map(ROSTER_2026.map(p => [
   { index: p.index, team: (TEAMS_2026.find(t => t.id === p.team) || {}).name || '' }
 ]));
 
+function lastName(full) {
+  const parts = String(full).trim().split(/\s+/);
+  return parts[parts.length - 1] || full;
+}
+
 function esc(s) {
   return String(s == null ? '' : s)
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -110,7 +115,13 @@ function cardHTML(data, player) {
     : `<p class="cb-empty">No fun facts on file yet &mdash; he&rsquo;s keeping it close to the vest.</p>`;
 
   return `
-    <div class="flipcard" data-id="${player.id}" data-cups="${cups}" data-active="${field ? '1' : '0'}">
+    <div class="flipcard" data-id="${player.id}"
+         data-active="${field ? '1' : '0'}"
+         data-cups="${cups}" data-wins="${wins}"
+         data-hcp="${currentIndex == null ? '' : currentIndex}"
+         data-first="${esc(player.name)}"
+         data-last="${esc(lastName(player.name))}"
+         data-search="${esc([player.name, named && named.displayName, titled && titled.titles].filter(Boolean).join(' ').toLowerCase())}">
       <button class="flipcard-inner" type="button" aria-label="Flip card for ${esc(player.name)}">
         <div class="face front">
           <img src="assets/players/${player.id}.png" alt="${esc(player.name)} trading card"
@@ -147,6 +158,40 @@ window.cardArtFallback = function cardArtFallback(img, name) {
 
 initShell('players');
 
+// Sorts operate on data- attributes so the cards are built once and only
+// reordered afterwards — that keeps each card's flip state and means no
+// listener is ever rebound. CSS grid honours `order`, so nothing moves in
+// the DOM either.
+const SORTS = {
+  default: {
+    label: '2026 Field First',
+    cmp: (a, b) =>
+      (b.active - a.active) || a.first.localeCompare(b.first)
+  },
+  handicap: {
+    label: 'Handicap (low to high)',
+    // Alumni carry no 2026 index, so they fall to the bottom rather than
+    // sorting as if they were scratch.
+    cmp: (a, b) =>
+      (a.hcp === null) - (b.hcp === null) ||
+      (a.hcp === null ? 0 : a.hcp - b.hcp) ||
+      a.first.localeCompare(b.first)
+  },
+  wins: {
+    label: 'Cups Won',
+    cmp: (a, b) =>
+      (b.wins - a.wins) || (b.cups - a.cups) || a.first.localeCompare(b.first)
+  },
+  first: {
+    label: 'First Name',
+    cmp: (a, b) => a.first.localeCompare(b.first)
+  },
+  last: {
+    label: 'Last Name',
+    cmp: (a, b) => a.last.localeCompare(b.last) || a.first.localeCompare(b.first)
+  }
+};
+
 loadData().then(data => {
   // The three 2026 rookies have never played a Cup, so they are absent from
   // sycamore-data.json entirely. Union the two sources so the field is complete.
@@ -155,24 +200,78 @@ loadData().then(data => {
     .filter(p => !known.has(p.id))
     .map(p => ({ id: p.id, name: p.name, yearsAttended: [], indexByYear: {} }));
 
-  const players = [...data.players, ...rookies].sort((a, b) => {
-    // 2026 roster first, then alumni, each alphabetical.
-    const aActive = FIELD_2026.has(a.id) ? 0 : 1;
-    const bActive = FIELD_2026.has(b.id) ? 0 : 1;
-    if (aActive !== bActive) return aActive - bActive;
-    return a.name.localeCompare(b.name);
-  });
+  const players = [...data.players, ...rookies]
+    .sort((a, b) => a.name.localeCompare(b.name));
 
-  document.getElementById('card-grid').innerHTML =
-    players.map(p => cardHTML(data, p)).join('');
+  const grid = document.getElementById('card-grid');
+  grid.innerHTML = players.map(p => cardHTML(data, p)).join('');
 
   const activeCount = players.filter(p => FIELD_2026.has(p.id)).length;
-  document.getElementById('card-filters').innerHTML = `
-    <button class="cfilter is-on" data-filter="all">All ${players.length}</button>
-    <button class="cfilter" data-filter="active">2026 Field (${activeCount})</button>
-    <button class="cfilter" data-filter="alumni">Alumni (${players.length - activeCount})</button>`;
 
-  // Delegated — the grid is rewritten wholesale, so never bind per-card.
+  document.getElementById('card-filters').innerHTML = `
+    <div class="cbar">
+      <div class="cchips">
+        <button class="cfilter is-on" data-filter="all">All ${players.length}</button>
+        <button class="cfilter" data-filter="active">2026 Field (${activeCount})</button>
+        <button class="cfilter" data-filter="alumni">Alumni (${players.length - activeCount})</button>
+      </div>
+      <div class="ctools">
+        <label class="csearch">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 2a8 8 0 1 1-4.9 14.3l-3.4 3.4-1.4-1.4 3.4-3.4A8 8 0 0 1 10 2zm0 2a6 6 0 1 0 0 12 6 6 0 0 0 0-12z"/></svg>
+          <input type="search" id="card-search" placeholder="Search players" aria-label="Search players">
+        </label>
+        <label class="csort">
+          <span>Sort</span>
+          <select id="card-sort" aria-label="Sort players">
+            ${Object.entries(SORTS).map(([k, v]) =>
+              `<option value="${k}">${v.label}</option>`).join('')}
+          </select>
+        </label>
+      </div>
+    </div>`;
+
+  const cards = [...grid.querySelectorAll('.flipcard')].map(el => ({
+    el,
+    active: el.dataset.active === '1' ? 1 : 0,
+    cups: Number(el.dataset.cups) || 0,
+    wins: Number(el.dataset.wins) || 0,
+    hcp: el.dataset.hcp === '' ? null : Number(el.dataset.hcp),
+    first: el.dataset.first || '',
+    last: el.dataset.last || '',
+    search: el.dataset.search || ''
+  }));
+
+  const empty = document.createElement('p');
+  empty.className = 'card-empty muted';
+  empty.hidden = true;
+  grid.after(empty);
+
+  const state = { filter: 'all', sort: 'default', q: '' };
+
+  function applyView() {
+    [...cards].sort(SORTS[state.sort].cmp)
+      .forEach((c, i) => { c.el.style.order = i; });
+
+    const q = state.q.trim().toLowerCase();
+    let shown = 0;
+    cards.forEach(c => {
+      const passFilter =
+        state.filter === 'all' ||
+        (state.filter === 'active' && c.active) ||
+        (state.filter === 'alumni' && !c.active);
+      const passSearch = !q || c.search.includes(q);
+      const show = passFilter && passSearch;
+      c.el.hidden = !show;
+      if (show) shown++;
+    });
+
+    empty.hidden = shown > 0;
+    if (!shown) empty.textContent = `No players match “${state.q.trim()}”.`;
+  }
+
+  applyView();
+
+  // Delegated throughout — nothing is ever bound per card.
   document.addEventListener('click', e => {
     const inner = e.target.closest('.flipcard-inner');
     if (inner) { inner.parentElement.classList.toggle('flipped'); return; }
@@ -180,12 +279,18 @@ loadData().then(data => {
     const btn = e.target.closest('.cfilter');
     if (!btn) return;
     document.querySelectorAll('.cfilter').forEach(b => b.classList.toggle('is-on', b === btn));
-    const f = btn.dataset.filter;
-    document.querySelectorAll('.flipcard').forEach(c => {
-      const active = c.dataset.active === '1';
-      c.hidden = !(f === 'all' || (f === 'active' && active) || (f === 'alumni' && !active));
-      c.classList.remove('flipped');
-    });
+    state.filter = btn.dataset.filter;
+    applyView();
+  });
+
+  document.getElementById('card-sort').addEventListener('change', e => {
+    state.sort = e.target.value;
+    applyView();
+  });
+
+  document.getElementById('card-search').addEventListener('input', e => {
+    state.q = e.target.value;
+    applyView();
   });
 
   const notes = (data.meta && data.meta.dataNotes) || [];

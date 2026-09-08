@@ -10,8 +10,51 @@
   --card-cream: #F0E6C9;
 }
 
-/* ---- filters ---- */
-.card-filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 30px; }
+/* ---- toolbar: filter chips left, search + sort right ---- */
+.card-filters { margin-bottom: 30px; }
+.cbar {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: 14px 18px; padding-bottom: 18px; border-bottom: 1px solid var(--line);
+}
+.cchips { display: flex; flex-wrap: wrap; gap: 10px; }
+.ctools { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+
+.csearch {
+  display: flex; align-items: center; gap: 8px;
+  border: 1px solid var(--line-strong); border-radius: 999px;
+  padding: 0 14px; height: 38px; background: var(--paper);
+  transition: border-color .16s ease;
+}
+.csearch:focus-within { border-color: var(--forest); }
+.csearch svg { width: 14px; height: 14px; flex: none; fill: var(--ink-soft); }
+.csearch input {
+  border: 0; outline: 0; background: none; width: 168px;
+  font-family: var(--font-body); font-size: 14px; color: var(--ink);
+}
+.csearch input::placeholder { color: var(--ink-soft); }
+.csearch input::-webkit-search-cancel-button { cursor: pointer; }
+
+.csort { display: flex; align-items: center; gap: 8px; }
+.csort span {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ink-soft);
+}
+.csort select {
+  height: 38px; padding: 0 12px; border-radius: 999px;
+  border: 1px solid var(--line-strong); background: var(--paper); color: var(--ink);
+  font-family: var(--font-body); font-size: 14px; cursor: pointer;
+}
+.csort select:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+
+.card-empty { margin: 40px 0 0; font-size: 15px; }
+.flipcard[hidden] { display: none; }
+
+@media (max-width: 620px) {
+  .cbar { justify-content: flex-start; }
+  .ctools { width: 100%; }
+  .csearch { flex: 1; }
+  .csearch input { width: 100%; }
+}
 .cfilter {
   font-family: var(--font-mono); font-size: 12px; letter-spacing: .06em;
   text-transform: uppercase; cursor: pointer;
