@@ -290,6 +290,9 @@
 .money-row .m-amount {
   font-family: var(--font-mono); font-size: 15px; font-weight: 600;
   font-variant-numeric: tabular-nums; white-space: nowrap;
+  /* Fixed column so every amount sits on the same right edge — otherwise a row
+     carrying a wider "$50 each" line underneath pushes its own number left. */
+  min-width: 96px; text-align: right; flex: 0 0 auto;
 }
 .money-row .m-per { font-size: 11px; color: var(--ink-soft); display: block; text-align: right; }
 .money-total {
@@ -482,6 +485,7 @@
 .liv-avatar img { width: 100%; height: 100%; object-fit: cover; }
 .liv-namecol { display: block; min-width: 0; }
 .liv-namecol .n { display: block; font-family: var(--font-display); font-weight: 600; font-size: 15px; color: var(--ink); }
+.liv-namecol .hcp { font-family: var(--font-mono); font-weight: 400; color: var(--ink-soft); font-size: .85em; }
 .liv-namecol .t { display: block; font-size: 11.5px; color: var(--ink-soft); margin-top: 1px; }
 .liv-round { font-family: var(--font-mono); font-size: 14px; color: var(--ink); }
 .liv-round .thru { display: block; font-size: 10px; color: var(--ink-soft); font-family: var(--font-body); margin-top: 2px; }
@@ -524,3 +528,6 @@
   font-family: var(--font-mono); font-size: 10px; letter-spacing: .05em;
   text-transform: uppercase; color: var(--clay);
 }
+
+/* Money filters: the second row can run to four chips, so let it wrap. */
+.money-chips { flex-wrap: wrap; }

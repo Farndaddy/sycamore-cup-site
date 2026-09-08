@@ -30,6 +30,9 @@ const S = {
   tab: 'card',
   boardSide: 'individual',   // 'individual' | 'teams'
   boardScope: 'round',       // 'round' | 'event'
+  moneyMode: 'day',          // 'day' | 'type' | 'overall'
+  moneyDay: 1,
+  moneyType: 'team',
   skinsView: 'net',  // 'net' | 'gross' — two separate skins games
   ready: false
 };
@@ -389,8 +392,8 @@ function renderBoard() {
                 <tr class="${r.player.id === S.me ? 'is-me' : ''}">
                   <td class="liv-pos">${r.tied ? 'T' : ''}${r.position}</td>
                   <td class="liv-who">${avatarHTML(r.player, 'liv-avatar')}
-                    <span class="liv-namecol"><span class="n">${r.player.name}</span>
-                    <span class="t">${r.team.name} &middot; off ${r.courseHandicap}</span>${subNote(r)}</span></td>
+                    <span class="liv-namecol"><span class="n">${r.player.name} <span class="hcp">[${r.courseHandicap}]</span></span>
+                    <span class="t">${r.team.name}</span>${subNote(r)}</span></td>
                   <td class="num"><span class="liv-round">${r.holesPlayed}</span></td>
                   <td class="num hide-sm"><span class="liv-round">${r.grossTotal}</span></td>
                   <td class="num"><span class="liv-tot ${r.netToPar < 0 ? 'under' : ''}">${fmtToPar(r.netToPar)}</span></td>
@@ -559,8 +562,12 @@ function renderSkins() {
     <p class="pane-note">${gross ? 'Gross skins — raw strokes, no handicap. Low gross' : 'Net skins — handicap applied. Low net'} alone on a hole takes it, plus anything carried.
     ${sk.unitsAwarded > 0 ? `Right now each skin is worth ${formatMoney(sk.perUnit)} —
     that moves as more skins are won.` : ''}
-    Skins still carrying when the round ends are not paid; the pot splits across the skins actually won.</p>
+    Skins still carrying when the round ends are not paid; the pot splits across the skins actually won.
+    Net and gross are separate games with separate pots.</p>
   `;
+
+  pane.querySelectorAll('[data-skinsview]').forEach(b =>
+    b.addEventListener('click', () => { S.skinsView = b.dataset.skinsview; render(); }));
 }
 
 // ---------------------------------------------------------
@@ -646,6 +653,20 @@ function eventIndividualAwards() {
   return out;
 }
 
+const MONEY_TYPES = [
+  { key: 'team',       label: 'Team',        scope: 'day-team' },
+  { key: 'individual', label: 'Individual',  scope: 'day-individual' },
+  { key: 'skins',      label: 'Net Skins',   scope: 'day-skins' },
+  { key: 'gross',      label: 'Gross Skins', scope: 'day-gross-skins' }
+];
+
+const DAY_TITLES = {
+  1: 'Wednesday · Southern Hills',
+  2: 'Thursday · Bay Hill',
+  3: 'Friday · Bay Hill',
+  4: 'Saturday · Evermore Cypress'
+};
+
 function renderMoney() {
   const pane = $('pane-money');
 
@@ -683,32 +704,60 @@ function renderMoney() {
     return null;
   };
 
-  const groups = [
-    { title: 'Wednesday · Southern Hills', ids: ['d1-team', 'd1-ind-1', 'd1-ind-2', 'd1-skins', 'd1-gskins'] },
-    { title: 'Thursday · Bay Hill',        ids: ['d2-team', 'd2-ind-1', 'd2-ind-2', 'd2-skins', 'd2-gskins'] },
-    { title: 'Friday · Bay Hill',          ids: ['d3-team', 'd3-ind-1', 'd3-ind-2', 'd3-skins', 'd3-gskins'] },
-    { title: 'Saturday · Evermore Cypress',ids: ['d4-team', 'd4-ind-1', 'd4-ind-2', 'd4-skins', 'd4-gskins'] },
-    { title: 'The whole week',             ids: ['team-champ', 'ind-1', 'ind-2', 'ind-3', 'ind-4'] }
-  ];
+  // One payout to one man needs no "each" line — that only means something when
+  // the money is being split.
+  const row = (p) => {
+    const lead = leadFor(p);
+    const split = p.perPerson && p.perPerson !== p.amount;
+    return `<div class="money-row">
+      <div class="m-label">${p.label}${lead ? `<div class="m-lead">${lead}</div>` : ''}</div>
+      <div class="m-amount">${formatMoney(p.amount)}${
+        split ? `<span class="m-per">${formatMoney(p.perPerson)} each</span>` : ''}</div>
+    </div>`;
+  };
 
-  pane.innerHTML = groups.map(g => `
-    <div class="money-group">
-      <h3>${g.title}</h3>
-      ${g.ids.map(id => {
-        const p = PAYOUTS.find(x => x.id === id);
-        if (!p) return '';
-        const lead = leadFor(p);
-        return `<div class="money-row">
-          <div class="m-label">${p.label}${lead ? `<div class="m-lead">${lead}</div>` : ''}</div>
-          <div class="m-amount">${formatMoney(p.amount)}
-            ${p.perPerson ? `<span class="m-per">${formatMoney(p.perPerson)} each</span>` : ''}
-          </div>
-        </div>`;
-      }).join('')}
-    </div>`).join('') + `
-    <div class="money-total"><span>Total on the line</span><span class="mt-amount">${formatMoney(EVENT.totalPot)}</span></div>
+  const group = (title, payouts) => payouts.length
+    ? `<div class="money-group"><h3>${title}</h3>${payouts.map(row).join('')}</div>` : '';
+
+  const dayPayouts = d => PAYOUTS.filter(p => p.dayNum === d);
+  const eventPayouts = () => PAYOUTS.filter(p => p.scope.startsWith('event-'));
+
+  let body = '';
+  let chips = '';
+
+  if (S.moneyMode === 'day') {
+    chips = [1, 2, 3, 4].map(d =>
+      `<button class="tee-btn ${S.moneyDay === d ? 'on' : ''}" data-mday="${d}" type="button">Day ${d}</button>`).join('');
+    body = group(DAY_TITLES[S.moneyDay], dayPayouts(S.moneyDay));
+
+  } else if (S.moneyMode === 'type') {
+    chips = MONEY_TYPES.map(t =>
+      `<button class="tee-btn ${S.moneyType === t.key ? 'on' : ''}" data-mtype="${t.key}" type="button">${t.label}</button>`).join('');
+    const t = MONEY_TYPES.find(x => x.key === S.moneyType);
+    body = [1, 2, 3, 4].map(d =>
+      group(DAY_TITLES[d], PAYOUTS.filter(p => p.scope === t.scope && p.dayNum === d))).join('');
+
+  } else {
+    body = group('2026 Sycamore Cup', eventPayouts());
+  }
+
+  pane.innerHTML = `
+    <div class="tee-row" style="margin-bottom:12px;">
+      <button class="tee-btn ${S.moneyMode === 'day' ? 'on' : ''}" data-mmode="day" type="button">By Day</button>
+      <button class="tee-btn ${S.moneyMode === 'type' ? 'on' : ''}" data-mmode="type" type="button">By Type</button>
+      <button class="tee-btn ${S.moneyMode === 'overall' ? 'on' : ''}" data-mmode="overall" type="button">Overall</button>
+    </div>
+    ${chips ? `<div class="tee-row money-chips" style="margin-bottom:18px;">${chips}</div>` : ''}
+    ${body || '<div class="banner"><strong>Nothing here</strong>No payouts match that filter.</div>'}
     <p class="pane-note" style="margin-top:14px;">Leaders shown are live and provisional —
     nothing is settled until a round is marked final. Ties split the money.</p>`;
+
+  pane.querySelectorAll('[data-mmode]').forEach(b =>
+    b.addEventListener('click', () => { S.moneyMode = b.dataset.mmode; render(); }));
+  pane.querySelectorAll('[data-mday]').forEach(b =>
+    b.addEventListener('click', () => { S.moneyDay = Number(b.dataset.mday); render(); }));
+  pane.querySelectorAll('[data-mtype]').forEach(b =>
+    b.addEventListener('click', () => { S.moneyType = b.dataset.mtype; render(); }));
 }
 
 // ---------------------------------------------------------
