@@ -10,7 +10,8 @@ import * as Live from './live.js';
 initShell('admin');
 
 const root = document.getElementById('admin-root');
-const S = { players: {}, scores: {}, rounds: {}, admins: {}, edited: [], log: [], editing: null };
+const S = { players: {}, scores: {}, rounds: {}, admins: {}, edited: [], log: [], editing: null,
+  voided: [], resetRound: ROUNDS[0].id, resetPlayer: '', confirmReset: null };
 
 (async function boot() {
   if (!Live.isConfigured()) {
@@ -26,7 +27,7 @@ const S = { players: {}, scores: {}, rounds: {}, admins: {}, edited: [], log: []
   }
 
   Live.watchPlayers(p => { S.players = p; render(); });
-  Live.watchAllScores(s => { S.scores = s; render(); });
+  Live.watchAllScores((s, m, v) => { S.scores = s; S.voided = v || []; render(); });
   Live.watchRounds(r => { S.rounds = r; render(); });
   Live.watchEditedScores(e => { S.edited = e; render(); });
   Live.watchScoreLog(l => { S.log = l; render(); }, 200);
@@ -198,7 +199,7 @@ function renderPanel() {
     <div class="admin-sec">
       <h2>Fix a scorecard</h2>
       <p class="sec-note">Pick a round and a player, then type over any hole. Blank leaves it unscored.
-      The triple-bogey cap still applies.</p>
+      There is no maximum score &mdash; whatever a man cards is what counts.</p>
       <div class="admin-actions" style="margin-bottom:14px;">
         <select class="admin-input" id="edit-round">
           ${ROUNDS.filter(r => !r.scramble).map(r =>
@@ -211,6 +212,53 @@ function renderPanel() {
       </div>
       <div id="edit-area"></div>
       <div class="admin-status" id="edit-status"></div>
+    </div>
+
+    <div class="admin-sec">
+      <h2>Reset &amp; restore scores</h2>
+      <p class="sec-note">Resetting does not delete anything &mdash; it takes scores off the board
+      and holds them here. Everything you reset can be put back exactly as it was, so if you clear
+      the wrong round you have not lost a single stroke.</p>
+
+      <div class="admin-actions" style="margin-bottom:14px;">
+        <select class="admin-input" id="reset-round">
+          ${ROUNDS.map(r => `<option value="${r.id}" ${r.id === S.resetRound ? 'selected' : ''}>${r.day} — ${COURSES[r.course].short}${r.scramble ? ' (Scramble)' : ''}</option>`).join('')}
+        </select>
+        <select class="admin-input" id="reset-player">
+          <option value="" ${S.resetPlayer === '' ? 'selected' : ''}>Everyone in this round</option>
+          ${PLAYERS.map(p => `<option value="${p.id}" ${p.id === S.resetPlayer ? 'selected' : ''}>${p.name}</option>`).join('')}
+        </select>
+      </div>
+
+      <div class="admin-row">
+        <div class="r-main">
+          <strong>${resetScopeLabel()}</strong>
+          <small>${resetScopeCount()} score${resetScopeCount() === 1 ? '' : 's'} on the board right now.</small>
+        </div>
+        <div class="admin-actions">
+          ${S.confirmReset === resetScopeKey()
+            ? `<button class="btn btn-sm btn-quiet" id="reset-cancel">Cancel</button>
+               <button class="btn btn-sm btn-danger" id="reset-go" ${resetScopeCount() === 0 ? 'disabled' : ''}>Yes, reset ${resetScopeCount()}</button>`
+            : `<button class="btn btn-sm btn-quiet" id="reset-ask" ${resetScopeCount() === 0 ? 'disabled' : ''}>Reset scores</button>`}
+        </div>
+      </div>
+
+      <p class="sec-note" style="margin-top:22px;">Anything you have reset</p>
+      ${resetBatches().length === 0
+        ? '<p class="muted" style="font-size:13.5px;">Nothing is reset. The board is showing every score that has been entered.</p>'
+        : resetBatches().map(b => {
+            const r = ROUNDS.find(x => x.id === b.roundId);
+            const when = b.at && b.at.toDate ? b.at.toDate().toLocaleString() : 'just now';
+            return `<div class="admin-row">
+              <div class="r-main">
+                <strong>${b.who} — ${r ? r.day + ' · ' + COURSES[r.course].short : b.roundId}</strong>
+                <small>${b.count} score${b.count === 1 ? '' : 's'} held · reset ${when}</small>
+              </div>
+              <div class="admin-actions">
+                <button class="btn btn-sm btn-primary" data-restore="${b.batch}">Restore</button>
+              </div>
+            </div>`;
+          }).join('')}
     </div>
 
     <div class="admin-sec">
@@ -248,6 +296,48 @@ function renderPanel() {
   renderTeeArea();
 }
 
+
+// ---------------------------------------------------------
+// RESET AND RESTORE
+// ---------------------------------------------------------
+// Scope is held in S rather than read off the selects, because a live database
+// update rebuilds the whole panel and would otherwise snap the dropdowns back
+// to their defaults mid-decision.
+
+function resetScopeKey() { return `${S.resetRound}::${S.resetPlayer || '*'}`; }
+
+function resetScopeLabel() {
+  const r = ROUNDS.find(x => x.id === S.resetRound);
+  const where_ = r ? `${r.day} · ${COURSES[r.course].short}` : S.resetRound;
+  return S.resetPlayer ? `${playerById(S.resetPlayer).name} — ${where_}` : `Everyone — ${where_}`;
+}
+
+function resetScopeCount() {
+  const byPlayer = S.scores[S.resetRound] || {};
+  if (S.resetPlayer) return Object.keys(byPlayer[S.resetPlayer] || {}).length;
+  return Object.values(byPlayer).reduce((n, holes) => n + Object.keys(holes).length, 0);
+}
+
+// The voided scores come back one document at a time; group them by the batch
+// that took them out so a reset can be put back as the single act it was.
+function resetBatches() {
+  const groups = {};
+  S.voided.forEach(v => {
+    const key = v.batch || 'unbatched';
+    if (!groups[key]) groups[key] = { batch: v.batch, roundId: v.roundId, players: new Set(), count: 0, at: v.voidedAt };
+    groups[key].players.add(v.playerId);
+    groups[key].count++;
+    if (v.voidedAt && (!groups[key].at || (v.voidedAt.seconds || 0) > (groups[key].at.seconds || 0))) {
+      groups[key].at = v.voidedAt;
+    }
+  });
+
+  return Object.values(groups).map(g => {
+    const names = [...g.players].map(id => { const p = playerById(id); return p ? p.short : id; });
+    return { ...g, who: names.length > 3 ? `${names.length} players` : names.join(', ') };
+  }).sort((a, b) => (b.at?.seconds || 0) - (a.at?.seconds || 0));
+}
+
 // ---------------------------------------------------------
 // WIRING
 // ---------------------------------------------------------
@@ -272,6 +362,40 @@ function wirePanel() {
   document.addEventListener('click', async (e) => {
     const t = e.target.closest('button, [data-tee-set]');
     if (!t) return;
+
+    if (t.id === 'reset-ask') {
+      if (resetScopeCount() === 0) return;
+      S.confirmReset = resetScopeKey(); renderPanel(); return;
+    }
+    if (t.id === 'reset-cancel') { S.confirmReset = null; renderPanel(); return; }
+
+    if (t.id === 'reset-go') {
+      const n = resetScopeCount();
+      if (n === 0) { S.confirmReset = null; renderPanel(); return; }
+      t.disabled = true;
+      say(null, `Resetting ${n} score${n === 1 ? '' : 's'}\u2026`);
+      try {
+        const res = await Live.resetScores({ roundId: S.resetRound, playerId: S.resetPlayer || undefined });
+        // Clear the confirm and redraw. The database snapshot that arrives from
+        // the write can land BEFORE this line, redrawing the panel while the
+        // confirm flag is still set — which leaves a dead "Yes, reset 0" on screen.
+        S.confirmReset = null;
+        renderPanel();
+        say(null, `${res.count} score${res.count === 1 ? '' : 's'} taken off the board. Nothing was deleted \u2014 hit Restore to put it all back.`);
+      } catch (err) { say(null, err.message, true); }
+      return;
+    }
+
+    if (t.dataset.restore) {
+      t.disabled = true;
+      say(null, 'Putting those scores back\u2026');
+      try {
+        const res = await Live.restoreBatch(t.dataset.restore);
+        renderPanel();
+        say(null, `${res.count} score${res.count === 1 ? '' : 's'} restored, exactly as they were entered.`);
+      } catch (err) { say(null, err.message, true); }
+      return;
+    }
 
     if (t.id === 'seed-btn') {
       say(null, 'Creating player records…');
@@ -340,6 +464,8 @@ function wirePanel() {
 
   document.addEventListener('change', (e) => {
     if (e.target.id === 'tee-round') renderTeeArea();
+    if (e.target.id === 'reset-round') { S.resetRound = e.target.value; S.confirmReset = null; renderPanel(); }
+    if (e.target.id === 'reset-player') { S.resetPlayer = e.target.value; S.confirmReset = null; renderPanel(); }
   });
 
   // Pin a playing handicap for one player on the selected round.

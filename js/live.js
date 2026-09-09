@@ -279,9 +279,23 @@ export function watchScoreLog(cb, max) {
 // metadata (what the self-edit window needs).
 export function watchAllScores(cb) {
   return onSnapshot(collection(db, 'scores'), snap => {
-    const byRound = {}, meta = {};
+    const byRound = {}, meta = {}, voided = [];
     snap.forEach(d => {
       const s = d.data();
+
+      // A reset score is still sitting right there in the database with its
+      // strokes intact — it is simply flagged as void. Filtering it out HERE,
+      // at the one place every screen reads scores from, is what makes reset
+      // and restore work everywhere at once: the scoring app, the admin panel
+      // and the leaderboard on the 2026 page all read through this function.
+      if (s.voided) {
+        voided.push({
+          id: d.id, roundId: s.roundId, playerId: s.playerId, hole: s.hole,
+          strokes: s.strokes, batch: s.voidBatch || null, voidedAt: s.voidedAt || null
+        });
+        return;
+      }
+
       if (!byRound[s.roundId]) { byRound[s.roundId] = {}; meta[s.roundId] = {}; }
       if (!byRound[s.roundId][s.playerId]) { byRound[s.roundId][s.playerId] = {}; meta[s.roundId][s.playerId] = {}; }
       byRound[s.roundId][s.playerId][s.hole] = s.strokes;
@@ -291,8 +305,80 @@ export function watchAllScores(cb) {
         editCount: s.editCount || 0
       };
     });
-    cb(byRound, meta);
+    cb(byRound, meta, voided);
   });
+}
+
+// ---------------------------------------------------------
+// RESET AND RESTORE
+// ---------------------------------------------------------
+// Nothing here deletes anything. The security rules forbid deleting a score,
+// and that is the right call — a deleted score cannot be put back. Resetting
+// flags a score as void and stamps it with the batch that voided it; the
+// strokes, the untouchable firstStrokes, and the whole edit history all stay
+// exactly where they were. Restoring that batch simply clears the flag, so
+// what comes back is the same number that went away, not a retyped guess.
+
+function newBatchId() {
+  return `r${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
+}
+
+// Reset a whole round, or one player's card in a round.
+// Returns { batch, count } — hold on to the batch id to restore it.
+export async function resetScores({ roundId, playerId }) {
+  const clauses = [where('roundId', '==', roundId)];
+  if (playerId) clauses.push(where('playerId', '==', playerId));
+  const snap = await getDocs(query(collection(db, 'scores'), ...clauses));
+
+  const batch = newBatchId();
+  const hit = [];
+  snap.forEach(d => { if (!d.data().voided) hit.push(d); });
+
+  for (const d of hit) {
+    await updateDoc(doc(db, 'scores', d.id), {
+      voided: true,
+      voidBatch: batch,
+      voidedAt: serverTimestamp(),
+      voidedBy: uid()
+    });
+    const v = d.data();
+    await addDoc(collection(db, 'scoreLog'), {
+      roundId: v.roundId, playerId: v.playerId, hole: Number(v.hole),
+      from: Number(v.strokes), to: Number(v.strokes),
+      original: Number(v.firstStrokes !== undefined ? v.firstStrokes : v.strokes),
+      action: 'reset', batch,
+      at: serverTimestamp(), by: uid(), viaAdmin: true
+    });
+  }
+
+  return { batch, count: hit.length };
+}
+
+// Put a reset batch back exactly as it was.
+export async function restoreBatch(batch) {
+  const snap = await getDocs(query(collection(db, 'scores'), where('voidBatch', '==', batch)));
+
+  let count = 0;
+  for (const d of snap.docs) {
+    const v = d.data();
+    if (!v.voided) continue;
+    await updateDoc(doc(db, 'scores', d.id), {
+      voided: false,
+      voidBatch: null,
+      restoredAt: serverTimestamp(),
+      restoredBy: uid()
+    });
+    await addDoc(collection(db, 'scoreLog'), {
+      roundId: v.roundId, playerId: v.playerId, hole: Number(v.hole),
+      from: Number(v.strokes), to: Number(v.strokes),
+      original: Number(v.firstStrokes !== undefined ? v.firstStrokes : v.strokes),
+      action: 'restore', batch,
+      at: serverTimestamp(), by: uid(), viaAdmin: true
+    });
+    count++;
+  }
+
+  return { batch, count };
 }
 
 // A player may fix his own hole for this long after first entering it.

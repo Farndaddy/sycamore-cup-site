@@ -10,6 +10,19 @@
 // is unchanged: scores can be created and updated but never deleted, and every
 // edit appends to scoreLog with the original score preserved.
 
+// WARNING (2026-09-09): this file is PARTIAL. The rules actually deployed also
+// cover players, rounds, teamScores, scoreLog and admins — collections the app
+// writes to every day. Do NOT paste this file over the live rules or you will
+// break score entry. Edit the deployed rules in the console instead.
+//
+// TWO THINGS TO CHECK in the console:
+//   1. `strokes < 20` below. The triple-bogey cap was removed from the app on
+//      2026-09-08 ("every stroke counts"), but this rule still refuses a 20 or
+//      higher. Change it to `< 30` if anyone could card that.
+//   2. Reset/restore (added 2026-09-09) works by UPDATING a score with a
+//      `voided` flag, never deleting it. The existing update rule already
+//      allows it — `allow delete: if false` stays exactly as it is, and should.
+
 rules_version = '2';
 
 service cloud.firestore {

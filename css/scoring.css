@@ -187,6 +187,17 @@
 .btn-quiet:hover { background: var(--sand); border-color: var(--forest); color: var(--forest); }
 .btn-quiet[disabled] { opacity: .38; cursor: not-allowed; }
 
+/* The one button on the site that takes scores off the board. It only ever
+   appears as the second half of a confirm, so it should not look like the
+   rest of the panel. */
+.btn-danger {
+  background: #8f2d21;
+  border-color: #8f2d21;
+  color: #fff;
+}
+.btn-danger:hover { background: #a33427; border-color: #a33427; color: #fff; }
+.btn-danger[disabled] { opacity: .5; cursor: not-allowed; }
+
 /* ---------- leaderboards ---------- */
 .lb { width: 100%; border-collapse: collapse; }
 .lb th {
