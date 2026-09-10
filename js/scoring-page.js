@@ -691,7 +691,7 @@ function boardToggles(round) {
       </div>
       <div class="tee-row" style="margin:0;">
         <button class="tee-btn ${scope === 'round' ? 'on' : ''}" data-scope="round" type="button">${round.day}</button>
-        <button class="tee-btn ${scope === 'event' ? 'on' : ''}" data-scope="event" type="button">All 4 rounds</button>
+        <button class="tee-btn ${scope === 'event' ? 'on' : ''}" data-scope="event" type="button">All ${countingDays().length} rounds</button>
       </div>
     </div>`;
 }

@@ -417,7 +417,7 @@ export function individualStandings(allScores, teeByPlayer) {
     }).filter(r => r.holesPlayed > 0);
 
     const complete = played.filter(r => r.complete);
-    // individualBestOf is currently set to all 4 rounds (no drops), but this
+    // individualBestOf is currently every counting round (no drops), but this
     // stays generic in case that ever changes back to a best-N-of-4 format.
     const counting = [...complete].sort((a, b) => a.netTotal - b.netTotal)
       .slice(0, RULES.individualBestOf);
