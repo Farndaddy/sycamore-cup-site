@@ -1239,6 +1239,8 @@ function openKeypad(hole, scramble, playerId) {
     ? `${secondsLeft}s left to change this yourself. After that only Farnia can.`
     : 'Tap a number or type any score — there is no maximum.';
 
+  const wasEmpty = current === undefined || current === null;
+
   async function saveHole(val) {
     if (!(val >= 1)) return;
     try {
@@ -1249,9 +1251,24 @@ function openKeypad(hole, scramble, playerId) {
       } else {
         await Live.submitScore({ roundId: round.id, playerId: target, hole, strokes: val });
       }
-      // Walk straight on to the next hole. Going hole to hole is the whole job
-      // out there; closing the sheet after every score meant hunting for the
-      // next cell on a phone. The last hole still closes.
+      // Where to go next. In a foursome the job is FOUR scores on one hole,
+      // not one man's whole round — so finish the hole across the group before
+      // moving on. Jumping to the next hole after the first man's score left
+      // the other three unentered and the card already on the wrong hole.
+      if (!scramble) {
+        const four = myFour(round.id);
+        const held = scoresFor(round.id);
+        const next = four.find(id =>
+          id !== target && ((held[id] || {})[hole] == null) && canEdit(id, round.id));
+
+        if (wasEmpty && next) { openKeypad(hole, false, next); return; }
+        if (wasEmpty && hole < course.holes) { openKeypad(hole + 1, false, four[0]); return; }
+        // A correction, or the last hole: close and let them see the card.
+        $('keypad-sheet').hidden = true;
+        render();
+        return;
+      }
+
       if (hole < course.holes) openKeypad(hole + 1, scramble, target);
       else $('keypad-sheet').hidden = true;
     } catch (e) {
