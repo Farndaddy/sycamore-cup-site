@@ -1,60 +1,144 @@
-// Paste this into Firebase Console > Firestore Database > Rules, then Publish.
-// This intentionally has NO login system (any of the guys can enter scores from
-// their phone with just the site URL) but blocks deleting data and caps how much
-// text can be written per field so a stray bot can't trash the database.
+// =========================================================
+// PASTE THIS WHOLE FILE INTO THE FIREBASE CONSOLE
+// Firebase console > Firestore Database > Rules > select all > paste > Publish
+// Then RELOAD the rules page and read it back — the console has published a
+// stale draft before. Do not trust the "unpublished changes" flag alone.
+// =========================================================
 //
-// 2026-09-08: the app's PIN / card-claim step was removed so anyone can enter a
-// score for anyone. THESE RULES DID NOT CHANGE and did not need to — they never
-// checked identity in the first place. The PIN was only ever a client-side
-// convention about whose card you were on, not security. What protects the data
-// is unchanged: scores can be created and updated but never deleted, and every
-// edit appends to scoreLog with the original score preserved.
-
-// WARNING (2026-09-09): this file is PARTIAL. The rules actually deployed also
-// cover players, rounds, teamScores, scoreLog and admins — collections the app
-// writes to every day. Do NOT paste this file over the live rules or you will
-// break score entry. Edit the deployed rules in the console instead.
+// 2026-09-11 — THIS FILE NOW MATCHES THE LIVE RULES IN FULL.
+// It used to be a partial copy covering only /scores and /courses, which is
+// why it carried a warning never to paste it. That warning no longer applies:
+// every collection the app writes is below.
 //
-// TWO THINGS TO CHECK in the console:
-//   1. `strokes < 20` below. The triple-bogey cap was removed from the app on
-//      2026-09-08 ("every stroke counts"), but this rule still refuses a 20 or
-//      higher. Change it to `< 30` if anyone could card that.
-//   2. THE SELF-EDIT WINDOW IS 20 MINUTES as of 2026-09-11, raised from 2.
-//      js/live.js SELF_EDIT_MINUTES must equal the rule. Find
-//      withinSelfEditWindow() in the deployed rules and make it read
-//      duration.value(20, 'm'). Publish the RULE FIRST, then the code — the
-//      other order lets the countdown invite an edit the database refuses.
-//   3. Reset/restore (added 2026-09-09) works by UPDATING a score with a
-//      `voided` flag, never deleting it. The existing update rule already
-//      allows it — `allow delete: if false` stays exactly as it is, and should.
+// WHAT CHANGED AND WHY, all in this one edit:
+//
+// 1. ownsCard() is GONE from the score rules. This is the bug that stopped
+//    scoring on Wednesday 2026-09-10. ownsCard() checked that the player's
+//    record carried the writer's browser id — a value that only the PIN /
+//    card-claiming flow ever set. PINs were retired on 2026-09-08 so that
+//    anyone could score for anyone; from that moment no player record carried
+//    an id, so EVERY non-admin score write was refused. Only the admin phone
+//    could write. Anyone signed in can now enter a score on an open round,
+//    which is what was actually decided.
+//
+// 2. The self-edit window is 20 minutes, up from 2. One phone entering four
+//    cards usually does not catch a wrong number until the next tee.
+//    THIS NUMBER MUST EQUAL SELF_EDIT_MINUTES IN js/live.js. Change one
+//    without the other and the app lies about how long you have.
+//
+// 3. A score may be up to 29, was up to 19. The triple-bogey cap came out of
+//    the app on 2026-09-08 ("every stroke counts") but not out of this rule,
+//    so a big number would have been refused.
+//
+// 4. A player record may be updated by anyone signed in, so one phone can set
+//    the whole foursome and fix a partner's tee. Creating a player is still
+//    admin only, so nobody can invent one.
+//
+// WHAT DID NOT CHANGE — this is what protects the money, and none of it ever
+// depended on knowing who is who:
+//   - the first value entered is frozen forever and cannot be rewritten,
+//     not by a player, not by an admin;
+//   - nothing can be deleted, ever (reset works by flagging, not deleting);
+//   - every change appends to scoreLog, which cannot be edited or removed;
+//   - only an admin can mark a round final, create players, or grant admin.
 
 rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    match /scores/{scoreId} {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    function roundOpen(roundId) {
+      return !exists(/databases/$(database)/documents/rounds/$(roundId))
+        || get(/databases/$(database)/documents/rounds/$(roundId)).data.get('locked', false) != true;
+    }
+
+    function sane() {
+      return request.resource.data.strokes is number
+        && request.resource.data.strokes > 0
+        && request.resource.data.strokes < 30
+        && request.resource.data.hole is number
+        && request.resource.data.hole > 0
+        && request.resource.data.hole <= 18;
+    }
+
+    // A man gets 20 minutes to fix a hole after it first goes in. After that
+    // only an admin can change it. MUST MATCH SELF_EDIT_MINUTES in js/live.js.
+    function withinSelfEditWindow() {
+      return resource.data.firstAt is timestamp
+        && request.time < resource.data.firstAt + duration.value(20, 'm');
+    }
+
+    // ---------- Players ----------
+    match /players/{playerId} {
       allow read: if true;
-      allow create, update: if
-        request.resource.data.strokes is number &&
-        request.resource.data.strokes > 0 &&
-        request.resource.data.strokes < 20 &&
-        request.resource.data.hole is number &&
-        request.resource.data.hole > 0 &&
-        request.resource.data.hole <= 18;
+      allow create: if isAdmin();
+      allow update: if signedIn();
       allow delete: if false;
     }
 
+    // ---------- Scores ----------
+    match /scores/{scoreId} {
+      allow read: if true;
+
+      allow create: if sane()
+        && request.resource.data.firstStrokes == request.resource.data.strokes
+        && ( isAdmin()
+             || ( signedIn() && roundOpen(request.resource.data.session) ) );
+
+      allow update: if sane()
+        && request.resource.data.firstStrokes == resource.data.firstStrokes
+        && request.resource.data.firstAt == resource.data.firstAt
+        && ( isAdmin()
+             || ( signedIn()
+                  && roundOpen(request.resource.data.session)
+                  && withinSelfEditWindow() ) );
+
+      allow delete: if false;
+    }
+
+    // ---------- Change history: append only ----------
+    match /scoreLog/{entryId} {
+      allow read: if true;
+      allow create: if signedIn();
+      allow update, delete: if false;
+    }
+
+    // ---------- Team scramble ----------
+    match /teamScores/{scoreId} {
+      allow read: if true;
+      allow create, update: if
+        request.resource.data.strokes is number
+        && request.resource.data.strokes > 0
+        && request.resource.data.strokes < 30
+        && signedIn();
+      allow delete: if false;
+    }
+
+    // ---------- Courses / rounds / admins ----------
     match /courses/{courseId} {
       allow read: if true;
-      allow create, update: if request.resource.data.pars is list;
+      allow create, update: if isAdmin();
       allow delete: if false;
+    }
+
+    match /rounds/{roundId} {
+      allow read: if true;
+      allow create, update: if isAdmin();
+      allow delete: if false;
+    }
+
+    match /admins/{uid} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
     }
   }
 }
-
-// Later, if you want to restrict WRITES to just your group (not the whole internet),
-// the simplest upgrade is Firebase Anonymous Auth + a shared invite link, or a
-// single shared "trip password" checked in the app before allowing submitScore().
-// Ask Claude to add either of these when you're ready — the data model above
-// doesn't need to change.
