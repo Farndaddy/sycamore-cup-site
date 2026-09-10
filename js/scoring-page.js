@@ -394,7 +394,14 @@ function renderHoleView(pane, round, course) {
     <div class="fs-groupbar">
       <span>${myGroupId(round.id)
         ? four.map(id => playerById(id).short).join(' &middot; ')
-        : 'Just your card'}</span>
+        : (() => {
+            // With no group of your own, say whether there is one to join —
+            // otherwise the only way to find out is to open the picker and look.
+            const out = allGroups(round.id).length;
+            return out
+              ? `Just your card &middot; ${out} group${out > 1 ? 's' : ''} out there`
+              : 'Just your card';
+          })()}</span>
       <button class="btn btn-sm btn-quiet" id="gp-change">${myGroupId(round.id) ? 'Change' : 'Set your group'}</button>
     </div>
 
