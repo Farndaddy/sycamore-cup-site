@@ -39,6 +39,7 @@ const S = {
   cardMode: 'hole',  // 'hole' | 'full'
   viewing: null,     // another player's card, opened from the leaderboard
   pickGroup: [],     // in-progress foursome selection
+  showPicker: false, // the group picker is a DETOUR, never a gate — see renderCard
   ready: false
 };
 
@@ -243,7 +244,12 @@ function renderCard() {
     return;
   }
 
-  if (!myGroupId(round.id)) { renderGroupPicker(pane, round); return; }
+  // Groups are a convenience, NOT a requirement. This screen used to refuse to
+  // show a card until you had picked a foursome, which on day one meant nobody
+  // could enter a score at all if the group write failed. Now the picker only
+  // opens when you ask for it, and with no group myFour() is just you — which
+  // is exactly how the card worked before foursomes existed.
+  if (S.showPicker) { renderGroupPicker(pane, round); return; }
   if (S.cardMode === 'full') { renderFourCard(pane, round, course); return; }
   renderHoleView(pane, round, course);
 }
@@ -284,17 +290,27 @@ function renderGroupPicker(pane, round) {
     ${allGroups(round.id).length ? `
       <p class="gp-label">Already out there</p>
       <div class="gp-joins">
-        ${allGroups(round.id).map(g => `
-          <div class="gp-join">
-            <span>${g.members.map(m => playerById(m).short).join(' &middot; ')}</span>
-            <button class="btn btn-sm btn-quiet" data-gjoin="${g.id}">Join</button>
-          </div>`).join('')}
+        ${allGroups(round.id).map(g => {
+          const full = g.members.length >= 4;
+          return `<div class="gp-join">
+            <span>${g.members.map(m => playerById(m).short).join(' &middot; ')}${full ? ' <em>&middot; full</em>' : ''}</span>
+            <button class="btn btn-sm btn-quiet" data-gjoin="${g.id}" ${full ? 'disabled' : ''}>Join</button>
+          </div>`;
+        }).join('')}
       </div>` : ''}
 
     <button class="btn btn-primary gp-go" id="gp-start" ${S.pickGroup.length ? '' : 'disabled'}>
       ${S.pickGroup.length ? `Start with ${S.pickGroup.length + 1}` : 'Pick at least one'}
     </button>
-    <p class="pane-note">Groups are per round &mdash; tomorrow can be a different four.</p>`;
+    <button class="btn btn-quiet gp-go" id="gp-skip">Skip &mdash; just score my own card</button>
+    <p class="pane-note">Groups are per round &mdash; tomorrow can be a different four. You never
+    have to set one: skipping just gives you your own card, exactly as before.</p>`;
+
+  $('gp-skip').addEventListener('click', () => {
+    S.pickGroup = [];
+    S.showPicker = false;
+    render();
+  });
 
   pane.querySelectorAll('[data-gpick]').forEach(b => b.addEventListener('click', () => {
     const id = b.dataset.gpick;
@@ -304,15 +320,37 @@ function renderGroupPicker(pane, round) {
   }));
 
   pane.querySelectorAll('[data-gjoin]').forEach(b => b.addEventListener('click', async () => {
-    try { await Live.joinGroup(S.me, round.id, b.dataset.gjoin); S.pickGroup = []; }
-    catch (e) { banner('warn', 'Could not join', e.message); }
+    // Four to a group. Checked again here, not just on the button, because two
+    // guys can tap Join on the same three-man group within the same second.
+    if (groupMembers(round.id, b.dataset.gjoin).length >= 4) {
+      banner('warn', 'That group is full', 'Four is the limit — start your own group instead.');
+      return;
+    }
+    try {
+      await Live.joinGroup(S.me, round.id, b.dataset.gjoin);
+      S.pickGroup = []; S.showPicker = false; render();
+    } catch (e) {
+      banner('warn', 'Could not join that group', `${e.message} — your own card still works, tap Skip.`);
+    }
   }));
 
   const go = $('gp-start');
   if (go) go.addEventListener('click', async () => {
     const gid = `g-${S.me}`;
-    try { await Live.setGroup(round.id, [S.me, ...S.pickGroup], gid); S.pickGroup = []; }
-    catch (e) { banner('warn', 'Could not save the group', e.message); }
+    const res = await Live.setGroup(round.id, [S.me, ...S.pickGroup], gid);
+
+    // Setting a group means writing to the OTHER guys' player records, which
+    // the database may refuse. That must never cost you your own card, so we
+    // leave the picker either way and say plainly what did not stick.
+    S.pickGroup = [];
+    S.showPicker = false;
+    render();
+
+    if (res.failed.length) {
+      const names = res.failed.map(f => playerById(f.playerId).short).join(', ');
+      banner('warn', `Couldn't add ${names}`,
+        `${res.failed[0].message} — they can join from their own phones: Set your group, then Join.`);
+    }
   });
 }
 
@@ -352,8 +390,10 @@ function renderHoleView(pane, round, course) {
 
   pane.innerHTML = `
     <div class="fs-groupbar">
-      <span>${four.map(id => playerById(id).short).join(' &middot; ')}</span>
-      <button class="btn btn-sm btn-quiet" id="gp-change">Change</button>
+      <span>${myGroupId(round.id)
+        ? four.map(id => playerById(id).short).join(' &middot; ')
+        : 'Just your card'}</span>
+      <button class="btn btn-sm btn-quiet" id="gp-change">${myGroupId(round.id) ? 'Change' : 'Set your group'}</button>
     </div>
 
     ${locked ? '<div class="banner warn"><strong>This round is final</strong>Scores are locked. Ask Farnia if something needs fixing.</div>' : ''}
@@ -386,8 +426,15 @@ function renderHoleView(pane, round, course) {
   $('fs-full').addEventListener('click', () => { S.cardMode = 'full'; render(); });
   $('fs-board').addEventListener('click', () => { S.tab = 'board'; S.viewing = null; render(); });
   $('gp-change').addEventListener('click', async () => {
-    try { await Live.leaveGroup(S.me, round.id); S.pickGroup = []; }
-    catch (e) { banner('warn', 'Could not leave the group', e.message); }
+    // Open the picker FIRST, so this always does something visible even if the
+    // database write below is refused.
+    S.pickGroup = [];
+    S.showPicker = true;
+    render();
+    if (myGroupId(round.id)) {
+      try { await Live.leaveGroup(S.me, round.id); }
+      catch (e) { banner('warn', 'Could not leave the group', e.message); }
+    }
   });
   pane.querySelectorAll('[data-hscore]').forEach(b =>
     b.addEventListener('click', () => openKeypad(h, false, b.dataset.hscore)));

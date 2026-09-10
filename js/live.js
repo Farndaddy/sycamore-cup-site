@@ -156,22 +156,43 @@ export async function myPlayerId() {
 // Everyone carrying the same label for a round is in the same four. No new
 // collection, no new listener — watchPlayers already streams these docs, and
 // the write is the same shape as setTee, which is known to pass the rules.
+// setDoc with merge, NOT updateDoc: updateDoc throws "No document to update" if
+// the player record was never created, and on trip morning that failure was
+// indistinguishable from the picker simply not working. Merge writes the record
+// if it is missing and merges into the groups map if it is not. The uid is
+// restated because the rules require it on any player write (same as setTee).
 export async function joinGroup(playerId, roundId, groupId) {
-  await updateDoc(doc(db, 'players', playerId), {
-    [`groups.${roundId}`]: groupId,
+  await setDoc(doc(db, 'players', playerId), {
+    groups: { [roundId]: groupId },
     uid: uid()
-  });
+  }, { merge: true });
 }
 
 export async function leaveGroup(playerId, roundId) {
-  await updateDoc(doc(db, 'players', playerId), {
-    [`groups.${roundId}`]: null,
+  await setDoc(doc(db, 'players', playerId), {
+    groups: { [roundId]: null },
     uid: uid()
-  });
+  }, { merge: true });
 }
 
+// Writing a group touches OTHER players' records, which the rules may refuse.
+// Your own record goes first and each of the others is attempted separately, so
+// one refusal never takes the whole group down — and the caller is told exactly
+// which names did not stick instead of getting a bare throw.
 export async function setGroup(roundId, memberIds, groupId) {
-  for (const id of memberIds) await joinGroup(id, roundId, groupId);
+  const me = memberIds[0];
+  const rest = memberIds.slice(1);
+  const failed = [];
+
+  try { await joinGroup(me, roundId, groupId); }
+  catch (e) { failed.push({ playerId: me, message: e.message }); }
+
+  for (const id of rest) {
+    try { await joinGroup(id, roundId, groupId); }
+    catch (e) { failed.push({ playerId: id, message: e.message }); }
+  }
+
+  return { groupId, failed };
 }
 
 export async function setTee(playerId, roundId, teeKey) {
