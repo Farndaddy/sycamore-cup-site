@@ -286,12 +286,22 @@ export function scrambleTeamScore(teamId, round, holeScoresForTeam, teeByPlayer)
   };
 }
 
+// The days that actually count, read off ROUNDS rather than hard-coded. A round
+// marked practice has dayNum 0 and is never in this list, so dropping a day from
+// the tournament needs no change here.
+export function countingDays() {
+  return [...new Set(
+    ROUNDS.filter(r => !r.practice && (r.counts.team || r.counts.individual))
+          .map(r => r.dayNum)
+  )].sort((a, b) => a - b);
+}
+
 // Team standings across the whole event.
 export function teamEventStandings(allScores, teeByPlayer, teamScrambleScores) {
   const totals = {};
   TEAMS.forEach(t => totals[t.id] = { team: t, net: 0, gross: 0, holesPlayed: 0, byDay: {} });
 
-  [1, 2, 3, 4].forEach(dayNum => {
+  countingDays().forEach(dayNum => {
     teamDayTotals(dayNum, allScores, teeByPlayer, teamScrambleScores).forEach(row => {
       const acc = totals[row.team.id];
       acc.net += row.net;
@@ -388,7 +398,7 @@ export function skinsForRound(round, scoresByPlayer, teeByPlayer, pot, mode = 'n
 }
 
 // ---------------------------------------------------------
-// INDIVIDUAL CHAMPIONSHIP — all four rounds count
+// INDIVIDUAL CHAMPIONSHIP — every counting round counts
 // ---------------------------------------------------------
 export function individualStandings(allScores, teeByPlayer) {
   const rounds = ROUNDS.filter(r => r.counts.individual);
@@ -416,7 +426,7 @@ export function individualStandings(allScores, teeByPlayer) {
       droppedRounds: dropped,
       roundsComplete: complete.length,
       total,
-      // Until a player has all four rounds finished this is a running
+      // Until a player has every counting round finished this is a running
       // number, not a final one. The page should say so rather than imply a result.
       provisional: complete.length < RULES.individualBestOf
     };

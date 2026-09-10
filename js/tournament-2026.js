@@ -147,23 +147,31 @@ export const PLAYERS = [
 // The scramble counts toward team only.
 
 export const ROUNDS = [
+  // 2026-09-10: scoring could not be entered on Wednesday, so the guys called it
+  // a practice round. It counts for NOTHING — no team total, no individual
+  // total, no skins, no money — and it is filtered out of the scoring round
+  // picker and the leaderboard so nobody taps into it by mistake. It stays here
+  // rather than being deleted so the schedule still shows the trip as it
+  // happened, and so any strokes already in the database keep a round to
+  // belong to. Wednesday's $505 was rolled into the three days that count.
   {
     id: '2026-wed-southern-hills',
-    day: 'Wednesday', dayNum: 1, label: 'Day 1',
-    course: 'southern-hills', holes: 18, format: 'Individual stroke play',
-    counts: { individual: true, team: true, skins: true },
+    day: 'Wednesday', dayNum: 0, label: 'Practice Round',
+    course: 'southern-hills', holes: 18, format: 'Practice round — nothing counts',
+    practice: true,
+    counts: { individual: false, team: false, skins: false },
     teeTimes: null
   },
   {
     id: '2026-thu-bay-hill',
-    day: 'Thursday', dayNum: 2, label: 'Day 2',
+    day: 'Thursday', dayNum: 1, label: 'Day 1',
     course: 'bay-hill', holes: 18, format: 'Individual stroke play',
     counts: { individual: true, team: true, skins: true },
     teeTimes: ['10:40 AM', '10:50 AM', '11:00 AM']
   },
   {
     id: '2026-thu-charger-scramble',
-    day: 'Thursday', dayNum: 2, label: 'Day 2 Scramble',
+    day: 'Thursday', dayNum: 1, label: 'Day 1 Scramble',
     course: 'bay-hill-charger', holes: 9, format: '4-man team scramble',
     scramble: true,
     counts: { individual: false, team: true, skins: false },
@@ -171,14 +179,14 @@ export const ROUNDS = [
   },
   {
     id: '2026-fri-bay-hill',
-    day: 'Friday', dayNum: 3, label: 'Day 3',
+    day: 'Friday', dayNum: 2, label: 'Day 2',
     course: 'bay-hill', holes: 18, format: 'Individual stroke play',
     counts: { individual: true, team: true, skins: true },
     teeTimes: ['9:40 AM', '9:50 AM', '10:00 AM']
   },
   {
     id: '2026-fri-charger-scramble',
-    day: 'Friday', dayNum: 3, label: 'Day 3 Scramble',
+    day: 'Friday', dayNum: 2, label: 'Day 2 Scramble',
     course: 'bay-hill-charger', holes: 9, format: '4-man team scramble',
     scramble: true,
     counts: { individual: false, team: true, skins: false },
@@ -186,7 +194,7 @@ export const ROUNDS = [
   },
   {
     id: '2026-sat-evermore',
-    day: 'Saturday', dayNum: 4, label: 'Day 4',
+    day: 'Saturday', dayNum: 3, label: 'Day 3',
     course: 'evermore-cypress', holes: 18, format: 'Individual stroke play',
     counts: { individual: true, team: true, skins: true },
     teeTimes: ['9:00 AM', '9:10 AM', '9:20 AM']
@@ -201,40 +209,43 @@ export const ROUNDS = [
 //   day-individual - lowest individual net that day (place 1 or 2)
 //   day-skins       - the day's net skins pot
 //   day-gross-skins - the day's gross skins pot (same holes, raw strokes)
-//   event-team     - lowest team net across all four days
-//   event-individual - all four rounds combined, by place
+//   event-team     - lowest team net across every counting day
+//   event-individual - every counting round combined, by place
 
 export const PAYOUTS = [
-  { id: 'd1-team',   label: 'Day 1 Team Low Net',        amount: 200, perPerson: 50,  scope: 'day-team',       dayNum: 1 },
-  { id: 'd1-ind-1',  label: 'Day 1 Individual Low Net',  amount: 75,  perPerson: 75,  scope: 'day-individual', dayNum: 1, place: 1 },
-  { id: 'd1-ind-2',  label: 'Day 1 Individual Low Net #2', amount: 50, perPerson: 50, scope: 'day-individual', dayNum: 1, place: 2 },
+  // 2026-09-10 — WEDNESDAY IS A PRACTICE ROUND. The $505 that had been riding on
+  // it was rolled into the three days that count, so the pot and the buy-in are
+  // untouched: still $3,515 and still $292.92 a man. What changed per day:
+  //   Team Low Net   $200 -> $260   ($65 a man)
+  //   Individual 1st  $75 -> $100
+  //   Individual 2nd  $50 ->  $70
+  //   Net Skins      $120 -> $160
+  //   Gross Skins     $60 ->  $80
+  // That redistributes $495 of it; the last $10 went onto the team championship
+  // ($720 -> $730) so every number stays whole and the total still balances.
+  // Day 1 is now THURSDAY. There is no dayNum 1 round on Wednesday any more.
 
-  { id: 'd2-team',   label: 'Day 2 Team Low Net',        amount: 200, perPerson: 50,  scope: 'day-team',       dayNum: 2 },
-  { id: 'd2-ind-1',  label: 'Day 2 Individual Low Net',  amount: 75,  perPerson: 75,  scope: 'day-individual', dayNum: 2, place: 1 },
-  { id: 'd2-ind-2',  label: 'Day 2 Individual Low Net #2', amount: 50, perPerson: 50, scope: 'day-individual', dayNum: 2, place: 2 },
+  { id: 'd1-team',   label: 'Day 1 Team Low Net',          amount: 260, perPerson: 65,  scope: 'day-team',       dayNum: 1 },
+  { id: 'd1-ind-1',  label: 'Day 1 Individual Low Net',    amount: 100, perPerson: 100, scope: 'day-individual', dayNum: 1, place: 1 },
+  { id: 'd1-ind-2',  label: 'Day 1 Individual Low Net #2', amount: 70,  perPerson: 70,  scope: 'day-individual', dayNum: 1, place: 2 },
 
-  { id: 'd3-team',   label: 'Day 3 Team Low Net',        amount: 200, perPerson: 50,  scope: 'day-team',       dayNum: 3 },
-  { id: 'd3-ind-1',  label: 'Day 3 Individual Low Net',  amount: 75,  perPerson: 75,  scope: 'day-individual', dayNum: 3, place: 1 },
-  { id: 'd3-ind-2',  label: 'Day 3 Individual Low Net #2', amount: 50, perPerson: 50, scope: 'day-individual', dayNum: 3, place: 2 },
+  { id: 'd2-team',   label: 'Day 2 Team Low Net',          amount: 260, perPerson: 65,  scope: 'day-team',       dayNum: 2 },
+  { id: 'd2-ind-1',  label: 'Day 2 Individual Low Net',    amount: 100, perPerson: 100, scope: 'day-individual', dayNum: 2, place: 1 },
+  { id: 'd2-ind-2',  label: 'Day 2 Individual Low Net #2', amount: 70,  perPerson: 70,  scope: 'day-individual', dayNum: 2, place: 2 },
 
-  { id: 'd4-team',   label: 'Day 4 Team Low Net',        amount: 200, perPerson: 50,  scope: 'day-team',       dayNum: 4 },
-  { id: 'd4-ind-1',  label: 'Day 4 Individual Low Net',  amount: 75,  perPerson: 75,  scope: 'day-individual', dayNum: 4, place: 1 },
-  { id: 'd4-ind-2',  label: 'Day 4 Individual Low Net #2', amount: 50, perPerson: 50, scope: 'day-individual', dayNum: 4, place: 2 },
+  { id: 'd3-team',   label: 'Day 3 Team Low Net',          amount: 260, perPerson: 65,  scope: 'day-team',       dayNum: 3 },
+  { id: 'd3-ind-1',  label: 'Day 3 Individual Low Net',    amount: 100, perPerson: 100, scope: 'day-individual', dayNum: 3, place: 1 },
+  { id: 'd3-ind-2',  label: 'Day 3 Individual Low Net #2', amount: 70,  perPerson: 70,  scope: 'day-individual', dayNum: 3, place: 2 },
 
-  { id: 'd1-skins',  label: 'Day 1 Skins', amount: 120, scope: 'day-skins', dayNum: 1 },
-  { id: 'd2-skins',  label: 'Day 2 Skins', amount: 120, scope: 'day-skins', dayNum: 2 },
-  { id: 'd3-skins',  label: 'Day 3 Skins', amount: 120, scope: 'day-skins', dayNum: 3 },
-  { id: 'd4-skins',  label: 'Day 4 Skins', amount: 120, scope: 'day-skins', dayNum: 4 },
+  { id: 'd1-skins',  label: 'Day 1 Skins', amount: 160, scope: 'day-skins', dayNum: 1 },
+  { id: 'd2-skins',  label: 'Day 2 Skins', amount: 160, scope: 'day-skins', dayNum: 2 },
+  { id: 'd3-skins',  label: 'Day 3 Skins', amount: 160, scope: 'day-skins', dayNum: 3 },
 
-  // Gross skins — a second, separate skins game on the same holes, decided on raw
-  // strokes instead of net. Added 2026-09-08 at Farnia's call: $60 a day on top of
-  // the $120 net pot, so the buy-in goes from $272.92 to $292.92 a man.
-  { id: 'd1-gskins', label: 'Day 1 Gross Skins', amount: 60, scope: 'day-gross-skins', dayNum: 1 },
-  { id: 'd2-gskins', label: 'Day 2 Gross Skins', amount: 60, scope: 'day-gross-skins', dayNum: 2 },
-  { id: 'd3-gskins', label: 'Day 3 Gross Skins', amount: 60, scope: 'day-gross-skins', dayNum: 3 },
-  { id: 'd4-gskins', label: 'Day 4 Gross Skins', amount: 60, scope: 'day-gross-skins', dayNum: 4 },
+  { id: 'd1-gskins', label: 'Day 1 Gross Skins', amount: 80, scope: 'day-gross-skins', dayNum: 1 },
+  { id: 'd2-gskins', label: 'Day 2 Gross Skins', amount: 80, scope: 'day-gross-skins', dayNum: 2 },
+  { id: 'd3-gskins', label: 'Day 3 Gross Skins', amount: 80, scope: 'day-gross-skins', dayNum: 3 },
 
-  { id: 'team-champ', label: 'Overall Team Champion', amount: 720, perPerson: 180, scope: 'event-team' },
+  { id: 'team-champ', label: 'Overall Team Champion', amount: 730, perPerson: 182.50, scope: 'event-team' },
 
   { id: 'ind-1', label: 'Individual Champion',  amount: 300, perPerson: 300, scope: 'event-individual', place: 1 },
   { id: 'ind-2', label: 'Individual Runner-Up', amount: 225, perPerson: 225, scope: 'event-individual', place: 2 },
@@ -279,9 +290,10 @@ export const RULES = {
   // All four net scores count toward the daily team total. No drops.
   teamScoresCounted: 4,
 
-  // All four rounds count toward the individual championship — no drops.
-  individualBestOf: 4,
-  individualRounds: 4,
+  // All THREE counting rounds go toward the individual championship — no drops.
+  // Wednesday became a practice round on 2026-09-10 and counts for nothing.
+  individualBestOf: 3,
+  individualRounds: 3,
 
   // 4-man scramble allowance: 20% of the four combined course handicaps.
   scrambleAllowancePct: 0.20,

@@ -10,7 +10,7 @@ import {
   courseHandicap, strokesByHole, capGross, maxGrossForHole, playerRound,
   individualLeaderboard, teamDayTotals, teamEventStandings,
   skinsForRound, individualStandings, formatMoney, fmtToPar, teamDayToPar,
-  setHandicapOverrides
+  setHandicapOverrides, countingDays
 } from './scoring-engine.js';
 
 import * as Live from './live.js';
@@ -27,7 +27,7 @@ const S = {
   players: {},       // firestore player docs
   rounds: {},        // firestore round docs (locked flags)
   me: null,          // whose card is on screen (anyone can score for anyone)
-  roundId: ROUNDS[0].id,
+  roundId: (ROUNDS.find(r => !r.practice) || ROUNDS[0]).id,
   tab: 'card',
   boardSide: 'individual',   // 'individual' | 'teams'
   boardScope: 'round',       // 'round' | 'event'
@@ -86,7 +86,9 @@ function banner(kind, title, body) {
 // ---------------------------------------------------------
 function buildRoundSelect() {
   const sel = $('round-select');
-  sel.innerHTML = ROUNDS.map(r => {
+  // A practice round is not on this list at all — nothing about it counts, so
+  // there is no reason for anyone to be able to tap into it and enter a score.
+  sel.innerHTML = ROUNDS.filter(r => !r.practice).map(r => {
     const c = COURSES[r.course];
     return `<option value="${r.id}">${r.day} — ${c.short}${r.scramble ? ' (Scramble)' : ''}</option>`;
   }).join('');
@@ -755,8 +757,8 @@ function renderBoard() {
                 </tr>`;
             }).join('')}</tbody>
           </table>
-          <p class="liv-note">All four rounds count &mdash; no drops. Anyone with fewer than four
-          finished is still provisional.</p>`;
+          <p class="liv-note">Every round counts &mdash; no drops. Anyone with fewer than
+          ${countingDays().length} finished is still provisional.</p>`;
     }
 
   // ---- TEAMS ----
@@ -784,10 +786,10 @@ function renderBoard() {
           Thursday and Friday.</p>`;
     } else {
       const rows = teamEventStandings(S.scores, teeM, S.teamScores);
-      const days = [1, 2, 3, 4];
+      const days = countingDays();
       body = rows.length === 0
         ? `<div class="banner"><strong>Nothing to rank yet</strong>This is the race for the Cup.</div>`
-        : `<h3 class="liv-heading tp-teams">All Four Days</h3>
+        : `<h3 class="liv-heading tp-teams">All ${days.length} Days</h3>
           <table class="liv-table">
             <thead><tr><th></th><th>Team</th>
               ${days.map(d => `<th class="num">D${d}</th>`).join('')}<th class="num">Tot</th></tr></thead>
@@ -993,12 +995,12 @@ const MONEY_TYPES = [
   { key: 'gross',      label: 'Gross Skins', scope: 'day-gross-skins' }
 ];
 
-const DAY_TITLES = {
-  1: 'Wednesday · Southern Hills',
-  2: 'Thursday · Bay Hill',
-  3: 'Friday · Bay Hill',
-  4: 'Saturday · Evermore Cypress'
-};
+// Built from ROUNDS, so a day added, dropped or renumbered never leaves this
+// list saying something the schedule does not.
+const DAY_TITLES = Object.fromEntries(countingDays().map(d => {
+  const r = ROUNDS.find(x => x.dayNum === d && !x.scramble);
+  return [d, `${r.day} \u00b7 ${COURSES[r.course].short}`];
+}));
 
 function renderMoney() {
   const pane = $('pane-money');
@@ -1059,7 +1061,7 @@ function renderMoney() {
   let chips = '';
 
   if (S.moneyMode === 'day') {
-    chips = [1, 2, 3, 4].map(d =>
+    chips = countingDays().map(d =>
       `<button class="tee-btn ${S.moneyDay === d ? 'on' : ''}" data-mday="${d}" type="button">Day ${d}</button>`).join('');
     body = group(DAY_TITLES[S.moneyDay], dayPayouts(S.moneyDay));
 
@@ -1067,7 +1069,7 @@ function renderMoney() {
     chips = MONEY_TYPES.map(t =>
       `<button class="tee-btn ${S.moneyType === t.key ? 'on' : ''}" data-mtype="${t.key}" type="button">${t.label}</button>`).join('');
     const t = MONEY_TYPES.find(x => x.key === S.moneyType);
-    body = [1, 2, 3, 4].map(d =>
+    body = countingDays().map(d =>
       group(DAY_TITLES[d], PAYOUTS.filter(p => p.scope === t.scope && p.dayNum === d))).join('');
 
   } else {

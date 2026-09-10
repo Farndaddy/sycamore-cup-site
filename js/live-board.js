@@ -7,12 +7,12 @@
 // is all the security rules require to read.
 //
 // Individual and team totals here are the same official numbers the
-// Individual/Teams/Money tabs use (all four rounds count, no drops —
+// Individual/Teams/Money tabs use (every counting round, no drops —
 // see RULES.individualBestOf in tournament-2026.js) — this view just
 // reformats them relative to par, LIV-style, instead of raw net
 // strokes.
 import { COURSES, PLAYERS, ROUNDS } from './tournament-2026.js';
-import { individualStandings, teamEventStandings, playerRound, scrambleTeamScore, fmtToPar, teamDayToPar as engineTeamDayToPar, setHandicapOverrides } from './scoring-engine.js';
+import { individualStandings, teamEventStandings, playerRound, scrambleTeamScore, fmtToPar, teamDayToPar as engineTeamDayToPar, setHandicapOverrides, countingDays } from './scoring-engine.js';
 import * as Live from './live.js';
 
 const mount = document.getElementById('liv-board');
@@ -87,7 +87,7 @@ function statusInfo(S) {
   });
   if (current) return { title: `${current.day}'s round is underway`, sub: 'Scores update live as the guys tap them in.' };
   if (lastFinished) return { title: `${lastFinished.day}'s round has now finished`, sub: 'See the standings below.' };
-  return { title: 'Tee times are set', sub: 'The board fills in once Wednesday tees off.' };
+  return { title: 'Tee times are set', sub: 'The board fills in once Thursday tees off — Wednesday was a practice round.' };
 }
 
 function initials(name) { return name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase(); }
@@ -145,14 +145,15 @@ function playersTable(S) {
   const rows = individualStandings(S.scores, teeMap);
 
   if (!rows.length) {
-    return `<p class="liv-note">No individual scores yet — this fills in once Wednesday's round starts.</p>`;
+    return `<p class="liv-note">No individual scores yet — this fills in once Thursday's round starts.
+      Wednesday was a practice round and counts for nothing.</p>`;
   }
 
   const body = rows.map(r => {
     const byDay = {};
     r.rounds.forEach(rr => { byDay[rr.round.dayNum] = rr; });
 
-    const cells = [1, 2, 3, 4].map(d => {
+    const cells = countingDays().map(d => {
       const rr = byDay[d];
       if (!rr) return `<td class="num"><span class="liv-round dash">—</span></td>`;
       const course = COURSES[rr.round.course];
@@ -160,8 +161,9 @@ function playersTable(S) {
       return `<td class="num"><span class="liv-round">${fmtToPar(rr.netToPar)}${thru}</span></td>`;
     }).join('');
 
-    // All four rounds count (RULES.individualBestOf = 4), so countingRounds
-    // is every complete round — total is provisional until all four are in.
+    // Every counting round counts (RULES.individualBestOf matches the number of
+    // rounds), so countingRounds is every complete round — the total is
+    // provisional until they are all in.
     const totalToPar = r.countingRounds.reduce((s, rr) => s + rr.netToPar, 0);
 
     return `
@@ -185,13 +187,13 @@ function playersTable(S) {
     <table class="liv-table">
       <thead><tr>
         <th></th><th>Player</th>
-        <th class="num">Rd 1</th><th class="num">Rd 2</th><th class="num">Rd 3</th><th class="num">Rd 4</th>
+        ${countingDays().map(d => `<th class="num">Rd ${d}</th>`).join('')}
         <th class="num">Tot</th>
       </tr></thead>
       <tbody>${body}</tbody>
     </table>
-    <p class="liv-note">Net, relative to par. All four rounds count toward the total — no drops.
-    A player under four finished rounds is still provisional.</p>`;
+    <p class="liv-note">Net, relative to par. Every round counts toward the total — no drops.
+    A player short of ${countingDays().length} finished rounds is still provisional.</p>`;
 }
 
 // A team's day total is every member's net-to-par for that day's stroke
@@ -205,12 +207,12 @@ function teamsTable(S) {
   const rows = teamEventStandings(S.scores, teeMap, S.teamScores);
 
   if (!rows.length) {
-    return `<p class="liv-note">No team scores yet — this fills in once Wednesday's round starts.</p>`;
+    return `<p class="liv-note">No team scores yet — this fills in once Thursday's round starts.</p>`;
   }
 
   const body = rows.map(r => {
     let grandToPar = 0;
-    const cells = [1, 2, 3, 4].map(d => {
+    const cells = countingDays().map(d => {
       const { toPar, played } = engineTeamDayToPar(r.team.id, d, S.scores, S.teamScores, teeMap);
       if (!played) return `<td class="num"><span class="liv-round dash">—</span></td>`;
       grandToPar += toPar;
@@ -230,7 +232,7 @@ function teamsTable(S) {
     <table class="liv-table">
       <thead><tr>
         <th></th><th>Team</th>
-        <th class="num">Day 1</th><th class="num">Day 2</th><th class="num">Day 3</th><th class="num">Day 4</th>
+        ${countingDays().map(d => `<th class="num">Day ${d}</th>`).join('')}
         <th class="num">Tot</th>
       </tr></thead>
       <tbody>${body}</tbody>

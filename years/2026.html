@@ -19,7 +19,7 @@
   <div class="wrap">
     <p class="eyebrow">Southern Hills · Bay Hill · Evermore Cypress</p>
     <h1>2026 <em>Sycamore Cup</em></h1>
-    <p class="lead">Three teams, four rounds, one Cup. Team and individual scores update live as the guys tap them in on the course.</p>
+    <p class="lead">Three teams, three counting rounds, one Cup. Team and individual scores update live as the guys tap them in on the course.</p>
     <div class="hero-cta-row">
       <a class="btn btn-primary" href="../scoring.html">Enter Scores →</a>
       <a class="btn btn-light" href="../players.html">Player Directory</a>
@@ -96,14 +96,19 @@
     'evermore-cypress': 'Evermore Grand Cypress'
   };
 
-  const days = [1, 2, 3, 4].map(dayNum => ROUNDS.filter(r => r.dayNum === dayNum));
+  // Grouped by whatever days ROUNDS actually has, so dropping or renumbering a
+  // day cannot leave this reading Day 4 into an empty list. Wednesday became a
+  // practice round on 2026-09-10 — it stays on the schedule, marked, because it
+  // is still part of the trip; it just carries no day number and no money.
+  const dayNums = [...new Set(ROUNDS.map(r => r.dayNum))].sort((a, b) => a - b);
+  const days = dayNums.map(dayNum => ROUNDS.filter(r => r.dayNum === dayNum)).filter(g => g.length);
 
   document.getElementById('schedule').innerHTML = days.map(dayRounds => {
     const r0 = dayRounds[0];
     return `
       <div class="sched-day">
         <div class="sched-daynum">
-          <div class="dn">Day ${r0.dayNum}</div>
+          <div class="dn">${r0.practice ? 'Practice' : 'Day ' + r0.dayNum}</div>
           <div class="dd">${r0.day}</div>
         </div>
         <div class="sched-body">
