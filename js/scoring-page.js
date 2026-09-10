@@ -865,7 +865,10 @@ function renderSkins() {
     const cls = ['skin-hole', h.status, h.atStake > 1 ? 'carry-in' : ''].filter(Boolean).join(' ');
     let who = '—', val = '';
     if (h.status === 'won') { who = h.winner.short; val = `${word} ${h.low}${h.atStake > 1 ? ` · ${h.atStake} skins` : ''}`; }
-    else if (h.status === 'tied') { who = `${h.tiedCount} tied`; val = `${word} ${h.low} · carries`; }
+    else if (h.status === 'tied') {
+      who = `${h.tiedCount} tied`;
+      val = `${word} ${h.low}${RULES.skinsCarryover ? ' · carries' : ' · no skin'}`;
+    }
     else { who = '—'; val = 'not in'; }
     return `<div class="${cls}">
       <div class="sh-num">Hole ${h.hole}</div>
@@ -885,7 +888,7 @@ function renderSkins() {
       <button class="tee-btn ${gross ? 'on' : ''}" data-skinsview="gross" type="button">Gross Skins</button>
     </div>
 
-    ${sk.carrying > 0 ? `<div class="carry-note"><strong>${sk.carrying} skin${sk.carrying > 1 ? 's' : ''} carrying.</strong>
+    ${RULES.skinsCarryover && sk.carrying > 0 ? `<div class="carry-note"><strong>${sk.carrying} skin${sk.carrying > 1 ? 's' : ''} carrying.</strong>
       Next hole won outright takes ${sk.carrying + 1}.</div>` : ''}
 
     ${sk.winners.length ? `
@@ -897,14 +900,17 @@ function renderSkins() {
             <td class="num">${w.units}</td>
             <td class="num net">${formatMoney(w.amount)}</td>
           </tr>`).join('')}</tbody>
-      </table>` : `<div class="banner"><strong>No skins won yet</strong>Every hole is worth one skin. Tie it and it rolls forward.</div>`}
+      </table>` : `<div class="banner"><strong>No skins won yet</strong>Every hole is worth one skin, to whoever is alone on the low score. ${RULES.skinsCarryover ? 'Tie it and it rolls forward.' : 'Tie it and there is no skin on that hole.'}</div>`}
 
     <div class="skins-grid">${grid}</div>
 
-    <p class="pane-note">${gross ? 'Gross skins — raw strokes, no handicap. Low gross' : 'Net skins — handicap applied. Low net'} alone on a hole takes it, plus anything carried.
-    ${sk.unitsAwarded > 0 ? `Right now each skin is worth ${formatMoney(sk.perUnit)} —
-    that moves as more skins are won.` : ''}
-    Skins still carrying when the round ends are not paid; the pot splits across the skins actually won.
+    <p class="pane-note">${gross ? 'Gross skins — raw strokes, no handicap. Low gross' : 'Net skins — handicap applied. Low net'} alone on a hole takes it.
+    ${RULES.skinsCarryover
+      ? 'A tied hole rides forward to the next one. Skins still carrying at the end are not paid.'
+      : 'Tie a hole and there is no skin on it &mdash; nothing carries forward.'}
+    The pot divides by the skins actually won, and each man is paid for the ones he took.
+    ${sk.unitsAwarded > 0 ? `That is ${formatMoney(sk.perUnit)} a skin so far &mdash;
+    it moves as more are won.` : ''}
     Net and gross are separate games with separate pots.</p>
   `;
 

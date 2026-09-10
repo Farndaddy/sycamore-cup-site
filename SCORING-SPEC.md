@@ -50,7 +50,9 @@ Note that choosing the shorter tee at Evermore costs 3 strokes. Tee choice has r
 
 **Scramble:** the Thursday/Friday Charger 9 rolls into that day's team total. So Thursday's team score = four 18-hole nets + the scramble 9 net.
 
-**Skins:** net skins, individual, carryover on ties, **all 4 days** including Saturday. 18-hole rounds only — no skins on the scramble nines.
+**Skins:** net skins AND a separate gross skins pot, individual, **no carryover**, on each of the three counting days. 18-hole rounds only — no skins on the scramble nines.
+
+A skin goes to whoever is alone on the low score for a hole. A tie means no skin on that hole and nothing rides forward — the hole is simply gone. At the end the day's pot divides by the number of skins actually won, and each man is paid for the ones he took. So if 4 skins are won out of a $160 pot, each is worth $40, and a man with 2 takes $80. Set `RULES.skinsCarryover` back to true to restore the old rule everywhere at once.
 
 **Individual Champion:** lowest net total across **all four rounds** — every round counts, no drops.
 

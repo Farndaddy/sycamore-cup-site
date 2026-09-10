@@ -298,9 +298,16 @@ export const RULES = {
   // 4-man scramble allowance: 20% of the four combined course handicaps.
   scrambleAllowancePct: 0.20,
 
-  // Skins carry over to the next hole when a hole is tied — same rule for both
-  // the net and the gross game.
-  skinsCarryover: true,
+  // NO CARRYOVER. Farnia, 2026-09-11: "only a skin if one person gets the lowest
+  // score on that hole, if there are ties, nothing carries over, so every skin
+  // won counts and then you would just divide the skins by the total amount and
+  // then pay out on those based on how many skins they won."
+  //
+  // So: a tied hole produces no skin and rides forward to nothing. At the end
+  // the day's pot divides by the number of skins actually won, and each man is
+  // paid for the ones he took. Same rule for the net and the gross game.
+  // Setting this back to true restores the old carryover rule everywhere.
+  skinsCarryover: false,
 
   // NO MAXIMUM. Farnia, 2026-09-08: "someone cards a 10, they card a 10 for
   // everything. Every stroke counts." Set this to a number again and the cap

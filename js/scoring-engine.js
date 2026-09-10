@@ -318,13 +318,19 @@ export function teamEventStandings(allScores, teeByPlayer, teamScrambleScores) {
 // ---------------------------------------------------------
 // SKINS — net and gross
 // ---------------------------------------------------------
-// One skin unit per hole. The low score alone on a hole takes every unit
-// riding on it, including any carried over from tied holes. Units still
-// carrying at the end of the round are not awarded, so the pot divides
-// among the units that were actually won.
+// One skin per hole, to whoever is alone on the low score. A tie on a hole
+// means no skin on that hole — and, with RULES.skinsCarryover off (which is
+// how 2026 is played), nothing rides forward either: the tied hole is simply
+// gone. At the end the day's pot divides by the number of skins actually won
+// and each man is paid for the ones he took.
+//
+// With skinsCarryover ON the older rule applies instead: a tied hole's skin
+// rides to the next hole, so a man winning after two ties takes three. Both
+// behaviours live here; the flag in tournament-2026.js picks one.
+//
 // `mode` picks which number decides the hole: 'net' (handicap applied) or
 // 'gross' (raw strokes). Both games run off the same cards and the same
-// carryover rule; they are separate pots with separate winners.
+// rule; they are separate pots with separate winners.
 export function skinsForRound(round, scoresByPlayer, teeByPlayer, pot, mode = 'net') {
   const gross = mode === 'gross';
   const course = COURSES[round.course];
@@ -348,7 +354,8 @@ export function skinsForRound(round, scoresByPlayer, teeByPlayer, pot, mode = 'n
       }))
       .filter(e => e.net !== null);
 
-    const atStake = carry + 1;
+    // No carryover means every hole is worth exactly one skin, won or wasted.
+    const atStake = RULES.skinsCarryover ? carry + 1 : 1;
 
     // A hole nobody has finished yet is simply pending — no carry applied.
     if (entries.length === 0) {
@@ -373,7 +380,7 @@ export function skinsForRound(round, scoresByPlayer, teeByPlayer, pot, mode = 'n
         hole: i + 1, par: course.pars[i], status: 'tied',
         atStake, winner: null, low, entries, tiedCount: lowest.length
       });
-      carry = atStake;
+      carry = RULES.skinsCarryover ? atStake : 0;
     }
   }
 
