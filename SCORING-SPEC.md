@@ -93,7 +93,7 @@ Was $3,155 with 3 skins days. Add $120 for Saturday.
 
 **Ties: split the money.** For now. Farnia may add a card playoff later, so the tiebreak logic is built as a swappable rule rather than hardcoded — switching to back 9 / 6 / 3 / 18th is a one-line change when she wants it.
 
-**Score entry: open to everyone.** Anyone can enter or fix a score for anyone — the guys asked for this on 2026-09-08. A score still locks two minutes after it first goes in; after that only an admin can change it, and every change is logged with the original score preserved.
+**Score entry: open to everyone.** Anyone can enter or fix a score for anyone — the guys asked for this on 2026-09-08. A score still locks 20 minutes after it first goes in (raised from two on 2026-09-11, because one phone entering four cards often does not catch a mistake until the next tee); after that only an admin can change it, and every change is logged with the original score preserved.
 
 **Max score: gross triple bogey, hard-capped in the app.**
 

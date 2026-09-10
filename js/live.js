@@ -403,9 +403,24 @@ export async function restoreBatch(batch) {
 }
 
 // A player may fix his own hole for this long after first entering it.
-// After that only an admin can change it. Mirrors the security rule exactly —
-// the rule is what enforces it; this just keeps the UI honest about it.
-export const SELF_EDIT_MINUTES = 2;
+// After that only an admin can change it.
+//
+// THIS NUMBER MIRRORS THE SECURITY RULE — the rule is what enforces the window;
+// this only keeps the UI honest about it. The deployed rule reads:
+//
+//   function withinSelfEditWindow() {
+//     return resource.data.firstAt is timestamp
+//       && request.time < resource.data.firstAt + duration.value(20, 'm');
+//   }
+//
+// Change one without the other and the app lies: set higher here than in the
+// rule and the countdown invites an edit the database then refuses. Publish the
+// RULE FIRST, then ship the code — that order is only ever conservative.
+//
+// 2026-09-11: 2 -> 20 minutes at Farnia's call. Two minutes was written for a
+// man fixing his own hole on the spot; with one phone entering four cards a
+// mistake often is not spotted until the group reaches the next tee.
+export const SELF_EDIT_MINUTES = 20;
 
 export function selfEditSecondsLeft(metaForHole) {
   if (!metaForHole || !metaForHole.firstAt) return SELF_EDIT_MINUTES * 60;

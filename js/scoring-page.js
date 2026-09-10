@@ -1241,9 +1241,15 @@ function openKeypad(hole, scramble, playerId) {
   entry.value = current === undefined ? '' : current;
   saveBtn.disabled = !(Number(entry.value) >= 1);
 
+  // A raw seconds count made sense at a two-minute window; at twenty it reads as
+  // noise, so anything over a minute and a half is spoken in minutes.
+  const leftLabel = secondsLeft > 90
+    ? `${Math.ceil(secondsLeft / 60)} min`
+    : `${secondsLeft}s`;
+
   $('keypad-note').hidden = false;
   $('keypad-note').textContent = current !== undefined && !Live.isAdmin()
-    ? `${secondsLeft}s left to change this yourself. After that only Farnia can.`
+    ? `${leftLabel} left to change this yourself. After that only Farnia can.`
     : 'Tap a number or type any score — there is no maximum.';
 
   const wasEmpty = current === undefined || current === null;

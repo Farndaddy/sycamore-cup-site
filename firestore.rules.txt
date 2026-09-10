@@ -19,7 +19,12 @@
 //   1. `strokes < 20` below. The triple-bogey cap was removed from the app on
 //      2026-09-08 ("every stroke counts"), but this rule still refuses a 20 or
 //      higher. Change it to `< 30` if anyone could card that.
-//   2. Reset/restore (added 2026-09-09) works by UPDATING a score with a
+//   2. THE SELF-EDIT WINDOW IS 20 MINUTES as of 2026-09-11, raised from 2.
+//      js/live.js SELF_EDIT_MINUTES must equal the rule. Find
+//      withinSelfEditWindow() in the deployed rules and make it read
+//      duration.value(20, 'm'). Publish the RULE FIRST, then the code — the
+//      other order lets the countdown invite an edit the database refuses.
+//   3. Reset/restore (added 2026-09-09) works by UPDATING a score with a
 //      `voided` flag, never deleting it. The existing update rule already
 //      allows it — `allow delete: if false` stays exactly as it is, and should.
 
