@@ -1,0 +1,4128 @@
+{
+ "year": 2026,
+ "capRule": "Double par — a hole counts for at most twice its par",
+ "parTotal": 216,
+ "players": [
+  {
+   "id": "robert-stong",
+   "name": "Robert Stong",
+   "short": "Stong",
+   "team": "team-1",
+   "index": 12
+  },
+  {
+   "id": "scottie-collins",
+   "name": "Scottie Collins",
+   "short": "Scottie",
+   "team": "team-1",
+   "index": 3
+  },
+  {
+   "id": "auston-chen",
+   "name": "Auston Chen",
+   "short": "Auston",
+   "team": "team-1",
+   "index": 14
+  },
+  {
+   "id": "nigel-scott",
+   "name": "Nigel Scott",
+   "short": "Nigel",
+   "team": "team-1",
+   "index": 5
+  },
+  {
+   "id": "klayton-mcclosin",
+   "name": "Klayton McClosin",
+   "short": "Klaybear",
+   "team": "team-2",
+   "index": 8
+  },
+  {
+   "id": "rob-vassallo",
+   "name": "Rob Vassallo",
+   "short": "Bobby",
+   "team": "team-2",
+   "index": 9
+  },
+  {
+   "id": "justin-quinn",
+   "name": "Justin Quinn",
+   "short": "Justin",
+   "team": "team-2",
+   "index": 10
+  },
+  {
+   "id": "mike-grosh",
+   "name": "Mike Grosh",
+   "short": "Mikey",
+   "team": "team-2",
+   "index": 11
+  },
+  {
+   "id": "nick-fowler",
+   "name": "Nick Fowler",
+   "short": "Nickie",
+   "team": "team-3",
+   "index": 2
+  },
+  {
+   "id": "alex-kampmann",
+   "name": "Alex Kampmann",
+   "short": "Alex",
+   "team": "team-3",
+   "index": 3
+  },
+  {
+   "id": "anthony-gjonaj",
+   "name": "Anthony Gjonaj",
+   "short": "Anthony",
+   "team": "team-3",
+   "index": 13
+  },
+  {
+   "id": "farnia-ghavami",
+   "name": "Farnia Ghavami",
+   "short": "Farnia",
+   "team": "team-3",
+   "index": 16
+  }
+ ],
+ "teams": [
+  {
+   "id": "team-1",
+   "name": "Bison Boys",
+   "roster": [
+    "robert-stong",
+    "scottie-collins",
+    "auston-chen",
+    "nigel-scott"
+   ]
+  },
+  {
+   "id": "team-2",
+   "name": "Frombys",
+   "roster": [
+    "klayton-mcclosin",
+    "rob-vassallo",
+    "justin-quinn",
+    "mike-grosh"
+   ]
+  },
+  {
+   "id": "team-3",
+   "name": "Starz & Scrubz",
+   "roster": [
+    "nick-fowler",
+    "alex-kampmann",
+    "anthony-gjonaj",
+    "farnia-ghavami"
+   ]
+  }
+ ],
+ "rounds": [
+  {
+   "id": "2026-thu-bay-hill",
+   "day": "Thursday",
+   "label": "Day 1",
+   "course": "Bay Hill Club and Lodge — Challenger/Champion",
+   "short": "Bay Hill",
+   "par": 72,
+   "tee": "Yellow",
+   "rating": 71.5,
+   "slope": 133,
+   "pars": [
+    4,
+    3,
+    4,
+    5,
+    4,
+    5,
+    3,
+    4,
+    4,
+    4,
+    4,
+    5,
+    4,
+    3,
+    4,
+    5,
+    3,
+    4
+   ],
+   "si": [
+    9,
+    11,
+    5,
+    1,
+    15,
+    13,
+    17,
+    3,
+    7,
+    12,
+    4,
+    10,
+    14,
+    18,
+    6,
+    2,
+    16,
+    8
+   ],
+   "yards": null,
+   "cards": [
+    {
+     "id": "robert-stong",
+     "hcp": 14,
+     "carded": [
+      5,
+      4,
+      5,
+      7,
+      5,
+      8,
+      3,
+      4,
+      5,
+      5,
+      5,
+      7,
+      5,
+      4,
+      6,
+      6,
+      9,
+      4
+     ],
+     "counted": [
+      5,
+      4,
+      5,
+      7,
+      5,
+      8,
+      3,
+      4,
+      5,
+      5,
+      5,
+      7,
+      5,
+      4,
+      6,
+      6,
+      6,
+      4
+     ],
+     "pops": [
+      1,
+      1,
+      1,
+      1,
+      0,
+      1,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      1,
+      1,
+      0,
+      1
+     ],
+     "gross": 94,
+     "net": 80,
+     "toPar": 8,
+     "grossCarded": 97
+    },
+    {
+     "id": "scottie-collins",
+     "hcp": 3,
+     "carded": [
+      5,
+      3,
+      5,
+      5,
+      5,
+      4,
+      3,
+      5,
+      4,
+      4,
+      4,
+      5,
+      5,
+      3,
+      5,
+      5,
+      3,
+      4
+     ],
+     "counted": [
+      5,
+      3,
+      5,
+      5,
+      5,
+      4,
+      3,
+      5,
+      4,
+      4,
+      4,
+      5,
+      5,
+      3,
+      5,
+      5,
+      3,
+      4
+     ],
+     "pops": [
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0
+     ],
+     "gross": 77,
+     "net": 74,
+     "toPar": 2,
+     "grossCarded": 77
+    },
+    {
+     "id": "auston-chen",
+     "hcp": 16,
+     "carded": [
+      8,
+      6,
+      10,
+      5,
+      10,
+      8,
+      3,
+      4,
+      6,
+      5,
+      8,
+      5,
+      5,
+      4,
+      8,
+      5,
+      4,
+      6
+     ],
+     "counted": [
+      8,
+      6,
+      8,
+      5,
+      8,
+      8,
+      3,
+      4,
+      6,
+      5,
+      8,
+      5,
+      5,
+      4,
+      8,
+      5,
+      4,
+      6
+     ],
+     "pops": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      1,
+      1,
+      1,
+      1
+     ],
+     "gross": 106,
+     "net": 90,
+     "toPar": 18,
+     "grossCarded": 110
+    },
+    {
+     "id": "nigel-scott",
+     "hcp": 5,
+     "carded": [
+      5,
+      4,
+      7,
+      6,
+      4,
+      5,
+      3,
+      5,
+      5,
+      4,
+      4,
+      7,
+      4,
+      3,
+      4,
+      5,
+      5,
+      4
+     ],
+     "counted": [
+      5,
+      4,
+      7,
+      6,
+      4,
+      5,
+      3,
+      5,
+      5,
+      4,
+      4,
+      7,
+      4,
+      3,
+      4,
+      5,
+      5,
+      4
+     ],
+     "pops": [
+      0,
+      0,
+      1,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0
+     ],
+     "gross": 84,
+     "net": 79,
+     "toPar": 7,
+     "grossCarded": 84
+    },
+    {
+     "id": "klayton-mcclosin",
+     "hcp": 9,
+     "carded": [
+      5,
+      4,
+      5,
+      5,
+      4,
+      5,
+      4,
+      4,
+      5,
+      5,
+      5,
+      6,
+      7,
+      4,
+      5,
+      4,
+      4,
+      5
+     ],
+     "counted": [
+      5,
+      4,
+      5,
+      5,
+      4,
+      5,
+      4,
+      4,
+      5,
+      5,
+      5,
+      6,
+      7,
+      4,
+      5,
+      4,
+      4,
+      5
+     ],
+     "pops": [
+      1,
+      0,
+      1,
+      1,
+      0,
+      0,
+      0,
+      1,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      1,
+      0,
+      1
+     ],
+     "gross": 86,
+     "net": 77,
+     "toPar": 5,
+     "grossCarded": 86
+    },
+    {
+     "id": "rob-vassallo",
+     "hcp": 10,
+     "carded": [
+      6,
+      5,
+      5,
+      7,
+      4,
+      6,
+      4,
+      7,
+      5,
+      5,
+      4,
+      5,
+      5,
+      3,
+      5,
+      4,
+      5,
+      7
+     ],
+     "counted": [
+      6,
+      5,
+      5,
+      7,
+      4,
+      6,
+      4,
+      7,
+      5,
+      5,
+      4,
+      5,
+      5,
+      3,
+      5,
+      4,
+      5,
+      7
+     ],
+     "pops": [
+      1,
+      0,
+      1,
+      1,
+      0,
+      0,
+      0,
+      1,
+      1,
+      0,
+      1,
+      1,
+      0,
+      0,
+      1,
+      1,
+      0,
+      1
+     ],
+     "gross": 92,
+     "net": 82,
+     "toPar": 10,
+     "grossCarded": 92
+    },
+    {
+     "id": "justin-quinn",
+     "hcp": 11,
+     "carded": [
+      5,
+      5,
+      5,
+      6,
+      6,
+      5,
+      4,
+      4,
+      6,
+      5,
+      5,
+      8,
+      6,
+      3,
+      5,
+      5,
+      4,
+      6
+     ],
+     "counted": [
+      5,
+      5,
+      5,
+      6,
+      6,
+      5,
+      4,
+      4,
+      6,
+      5,
+      5,
+      8,
+      6,
+      3,
+      5,
+      5,
+      4,
+      6
+     ],
+     "pops": [
+      1,
+      1,
+      1,
+      1,
+      0,
+      0,
+      0,
+      1,
+      1,
+      0,
+      1,
+      1,
+      0,
+      0,
+      1,
+      1,
+      0,
+      1
+     ],
+     "gross": 93,
+     "net": 82,
+     "toPar": 10,
+     "grossCarded": 93
+    },
+    {
+     "id": "mike-grosh",
+     "hcp": 12,
+     "carded": [
+      5,
+      5,
+      5,
+      7,
+      4,
+      6,
+      4,
+      7,
+      5,
+      5,
+      4,
+      5,
+      5,
+      3,
+      5,
+      4,
+      5,
+      7
+     ],
+     "counted": [
+      5,
+      5,
+      5,
+      7,
+      4,
+      6,
+      4,
+      7,
+      5,
+      5,
+      4,
+      5,
+      5,
+      3,
+      5,
+      4,
+      5,
+      7
+     ],
+     "pops": [
+      1,
+      1,
+      1,
+      1,
+      0,
+      0,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      0,
+      1,
+      1,
+      0,
+      1
+     ],
+     "gross": 91,
+     "net": 79,
+     "toPar": 7,
+     "grossCarded": 91
+    },
+    {
+     "id": "nick-fowler",
+     "hcp": 2,
+     "carded": [
+      5,
+      3,
+      3,
+      5,
+      6,
+      5,
+      4,
+      4,
+      4,
+      4,
+      7,
+      6,
+      4,
+      3,
+      6,
+      5,
+      3,
+      6
+     ],
+     "counted": [
+      5,
+      3,
+      3,
+      5,
+      6,
+      5,
+      4,
+      4,
+      4,
+      4,
+      7,
+      6,
+      4,
+      3,
+      6,
+      5,
+      3,
+      6
+     ],
+     "pops": [
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0
+     ],
+     "gross": 83,
+     "net": 81,
+     "toPar": 9,
+     "grossCarded": 83
+    },
+    {
+     "id": "alex-kampmann",
+     "hcp": 3,
+     "carded": [
+      4,
+      3,
+      5,
+      5,
+      6,
+      5,
+      3,
+      6,
+      5,
+      4,
+      5,
+      5,
+      6,
+      4,
+      3,
+      5,
+      3,
+      4
+     ],
+     "counted": [
+      4,
+      3,
+      5,
+      5,
+      6,
+      5,
+      3,
+      6,
+      5,
+      4,
+      5,
+      5,
+      6,
+      4,
+      3,
+      5,
+      3,
+      4
+     ],
+     "pops": [
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0
+     ],
+     "gross": 81,
+     "net": 78,
+     "toPar": 6,
+     "grossCarded": 81
+    },
+    {
+     "id": "anthony-gjonaj",
+     "hcp": 15,
+     "carded": [
+      5,
+      3,
+      6,
+      7,
+      4,
+      6,
+      4,
+      5,
+      7,
+      7,
+      6,
+      5,
+      6,
+      5,
+      6,
+      5,
+      3,
+      3
+     ],
+     "counted": [
+      5,
+      3,
+      6,
+      7,
+      4,
+      6,
+      4,
+      5,
+      7,
+      7,
+      6,
+      5,
+      6,
+      5,
+      6,
+      5,
+      3,
+      3
+     ],
+     "pops": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      1,
+      1,
+      0,
+      1
+     ],
+     "gross": 93,
+     "net": 78,
+     "toPar": 6,
+     "grossCarded": 93
+    },
+    {
+     "id": "farnia-ghavami",
+     "hcp": 18,
+     "carded": [
+      7,
+      4,
+      5,
+      6,
+      8,
+      9,
+      4,
+      5,
+      9,
+      5,
+      11,
+      9,
+      8,
+      4,
+      8,
+      7,
+      4,
+      9
+     ],
+     "counted": [
+      7,
+      4,
+      5,
+      6,
+      8,
+      9,
+      4,
+      5,
+      8,
+      5,
+      8,
+      9,
+      8,
+      4,
+      8,
+      7,
+      4,
+      8
+     ],
+     "pops": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "gross": 117,
+     "net": 99,
+     "toPar": 27,
+     "grossCarded": 122
+    }
+   ]
+  },
+  {
+   "id": "2026-fri-bay-hill",
+   "day": "Friday",
+   "label": "Day 2",
+   "course": "Bay Hill Club and Lodge — Challenger/Champion",
+   "short": "Bay Hill",
+   "par": 72,
+   "tee": "Yellow",
+   "rating": 71.5,
+   "slope": 133,
+   "pars": [
+    4,
+    3,
+    4,
+    5,
+    4,
+    5,
+    3,
+    4,
+    4,
+    4,
+    4,
+    5,
+    4,
+    3,
+    4,
+    5,
+    3,
+    4
+   ],
+   "si": [
+    9,
+    11,
+    5,
+    1,
+    15,
+    13,
+    17,
+    3,
+    7,
+    12,
+    4,
+    10,
+    14,
+    18,
+    6,
+    2,
+    16,
+    8
+   ],
+   "yards": null,
+   "cards": [
+    {
+     "id": "robert-stong",
+     "hcp": 14,
+     "carded": [
+      7,
+      4,
+      4,
+      8,
+      5,
+      5,
+      4,
+      5,
+      4,
+      5,
+      5,
+      5,
+      5,
+      4,
+      5,
+      6,
+      7,
+      6
+     ],
+     "counted": [
+      7,
+      4,
+      4,
+      8,
+      5,
+      5,
+      4,
+      5,
+      4,
+      5,
+      5,
+      5,
+      5,
+      4,
+      5,
+      6,
+      6,
+      6
+     ],
+     "pops": [
+      1,
+      1,
+      1,
+      1,
+      0,
+      1,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      1,
+      1,
+      0,
+      1
+     ],
+     "gross": 93,
+     "net": 79,
+     "toPar": 7,
+     "grossCarded": 94
+    },
+    {
+     "id": "scottie-collins",
+     "hcp": 3,
+     "carded": [
+      4,
+      3,
+      4,
+      6,
+      5,
+      6,
+      3,
+      4,
+      6,
+      3,
+      5,
+      4,
+      4,
+      3,
+      5,
+      6,
+      3,
+      4
+     ],
+     "counted": [
+      4,
+      3,
+      4,
+      6,
+      5,
+      6,
+      3,
+      4,
+      6,
+      3,
+      5,
+      4,
+      4,
+      3,
+      5,
+      6,
+      3,
+      4
+     ],
+     "pops": [
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0
+     ],
+     "gross": 78,
+     "net": 75,
+     "toPar": 3,
+     "grossCarded": 78
+    },
+    {
+     "id": "auston-chen",
+     "hcp": 16,
+     "carded": [
+      6,
+      3,
+      4,
+      5,
+      4,
+      4,
+      4,
+      6,
+      5,
+      3,
+      5,
+      8,
+      7,
+      5,
+      6,
+      6,
+      5,
+      6
+     ],
+     "counted": [
+      6,
+      3,
+      4,
+      5,
+      4,
+      4,
+      4,
+      6,
+      5,
+      3,
+      5,
+      8,
+      7,
+      5,
+      6,
+      6,
+      5,
+      6
+     ],
+     "pops": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      1,
+      1,
+      1,
+      1
+     ],
+     "gross": 92,
+     "net": 76,
+     "toPar": 4,
+     "grossCarded": 92
+    },
+    {
+     "id": "nigel-scott",
+     "hcp": 5,
+     "carded": [
+      4,
+      3,
+      4,
+      6,
+      4,
+      7,
+      3,
+      6,
+      5,
+      4,
+      4,
+      5,
+      3,
+      4,
+      4,
+      5,
+      2,
+      5
+     ],
+     "counted": [
+      4,
+      3,
+      4,
+      6,
+      4,
+      7,
+      3,
+      6,
+      5,
+      4,
+      4,
+      5,
+      3,
+      4,
+      4,
+      5,
+      2,
+      5
+     ],
+     "pops": [
+      0,
+      0,
+      1,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0
+     ],
+     "gross": 78,
+     "net": 73,
+     "toPar": 1,
+     "grossCarded": 78
+    },
+    {
+     "id": "klayton-mcclosin",
+     "hcp": 9,
+     "carded": [
+      6,
+      4,
+      5,
+      5,
+      5,
+      6,
+      4,
+      6,
+      5,
+      5,
+      7,
+      5,
+      4,
+      4,
+      7,
+      6,
+      3,
+      4
+     ],
+     "counted": [
+      6,
+      4,
+      5,
+      5,
+      5,
+      6,
+      4,
+      6,
+      5,
+      5,
+      7,
+      5,
+      4,
+      4,
+      7,
+      6,
+      3,
+      4
+     ],
+     "pops": [
+      1,
+      0,
+      1,
+      1,
+      0,
+      0,
+      0,
+      1,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      1,
+      0,
+      1
+     ],
+     "gross": 91,
+     "net": 82,
+     "toPar": 10,
+     "grossCarded": 91
+    },
+    {
+     "id": "rob-vassallo",
+     "hcp": 10,
+     "carded": [
+      5,
+      4,
+      6,
+      5,
+      4,
+      7,
+      3,
+      5,
+      5,
+      5,
+      5,
+      6,
+      5,
+      3,
+      5,
+      6,
+      8,
+      4
+     ],
+     "counted": [
+      5,
+      4,
+      6,
+      5,
+      4,
+      7,
+      3,
+      5,
+      5,
+      5,
+      5,
+      6,
+      5,
+      3,
+      5,
+      6,
+      6,
+      4
+     ],
+     "pops": [
+      1,
+      0,
+      1,
+      1,
+      0,
+      0,
+      0,
+      1,
+      1,
+      0,
+      1,
+      1,
+      0,
+      0,
+      1,
+      1,
+      0,
+      1
+     ],
+     "gross": 89,
+     "net": 79,
+     "toPar": 7,
+     "grossCarded": 91
+    },
+    {
+     "id": "justin-quinn",
+     "hcp": 11,
+     "carded": [
+      6,
+      4,
+      5,
+      5,
+      8,
+      5,
+      3,
+      6,
+      5,
+      4,
+      5,
+      6,
+      4,
+      4,
+      6,
+      7,
+      4,
+      6
+     ],
+     "counted": [
+      6,
+      4,
+      5,
+      5,
+      8,
+      5,
+      3,
+      6,
+      5,
+      4,
+      5,
+      6,
+      4,
+      4,
+      6,
+      7,
+      4,
+      6
+     ],
+     "pops": [
+      1,
+      1,
+      1,
+      1,
+      0,
+      0,
+      0,
+      1,
+      1,
+      0,
+      1,
+      1,
+      0,
+      0,
+      1,
+      1,
+      0,
+      1
+     ],
+     "gross": 93,
+     "net": 82,
+     "toPar": 10,
+     "grossCarded": 93
+    },
+    {
+     "id": "mike-grosh",
+     "hcp": 12,
+     "carded": [
+      10,
+      6,
+      6,
+      7,
+      5,
+      10,
+      3,
+      6,
+      5,
+      5,
+      5,
+      6,
+      7,
+      3,
+      10,
+      6,
+      5,
+      3
+     ],
+     "counted": [
+      8,
+      6,
+      6,
+      7,
+      5,
+      10,
+      3,
+      6,
+      5,
+      5,
+      5,
+      6,
+      7,
+      3,
+      8,
+      6,
+      5,
+      3
+     ],
+     "pops": [
+      1,
+      1,
+      1,
+      1,
+      0,
+      0,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      0,
+      1,
+      1,
+      0,
+      1
+     ],
+     "gross": 104,
+     "net": 92,
+     "toPar": 20,
+     "grossCarded": 108
+    },
+    {
+     "id": "nick-fowler",
+     "hcp": 2,
+     "carded": [
+      5,
+      3,
+      3,
+      5,
+      4,
+      5,
+      3,
+      6,
+      5,
+      6,
+      5,
+      4,
+      6,
+      4,
+      5,
+      6,
+      7,
+      4
+     ],
+     "counted": [
+      5,
+      3,
+      3,
+      5,
+      4,
+      5,
+      3,
+      6,
+      5,
+      6,
+      5,
+      4,
+      6,
+      4,
+      5,
+      6,
+      6,
+      4
+     ],
+     "pops": [
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0
+     ],
+     "gross": 85,
+     "net": 83,
+     "toPar": 11,
+     "grossCarded": 86
+    },
+    {
+     "id": "alex-kampmann",
+     "hcp": 3,
+     "carded": [
+      4,
+      3,
+      4,
+      5,
+      7,
+      6,
+      3,
+      4,
+      6,
+      4,
+      5,
+      4,
+      5,
+      4,
+      4,
+      4,
+      3,
+      4
+     ],
+     "counted": [
+      4,
+      3,
+      4,
+      5,
+      7,
+      6,
+      3,
+      4,
+      6,
+      4,
+      5,
+      4,
+      5,
+      4,
+      4,
+      4,
+      3,
+      4
+     ],
+     "pops": [
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0
+     ],
+     "gross": 79,
+     "net": 76,
+     "toPar": 4,
+     "grossCarded": 79
+    },
+    {
+     "id": "anthony-gjonaj",
+     "hcp": 15,
+     "carded": [
+      5,
+      4,
+      5,
+      8,
+      4,
+      7,
+      5,
+      5,
+      5,
+      5,
+      5,
+      8,
+      7,
+      4,
+      4,
+      6,
+      8,
+      7
+     ],
+     "counted": [
+      5,
+      4,
+      5,
+      8,
+      4,
+      7,
+      5,
+      5,
+      5,
+      5,
+      5,
+      8,
+      7,
+      4,
+      4,
+      6,
+      6,
+      7
+     ],
+     "pops": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      1,
+      1,
+      0,
+      1
+     ],
+     "gross": 100,
+     "net": 85,
+     "toPar": 13,
+     "grossCarded": 102
+    },
+    {
+     "id": "farnia-ghavami",
+     "hcp": 18,
+     "carded": [
+      6,
+      4,
+      5,
+      7,
+      5,
+      8,
+      5,
+      7,
+      8,
+      6,
+      5,
+      7,
+      6,
+      4,
+      6,
+      6,
+      3,
+      6
+     ],
+     "counted": [
+      6,
+      4,
+      5,
+      7,
+      5,
+      8,
+      5,
+      7,
+      8,
+      6,
+      5,
+      7,
+      6,
+      4,
+      6,
+      6,
+      3,
+      6
+     ],
+     "pops": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "gross": 104,
+     "net": 86,
+     "toPar": 14,
+     "grossCarded": 104
+    }
+   ]
+  },
+  {
+   "id": "2026-sat-evermore",
+   "day": "Saturday",
+   "label": "Day 3",
+   "course": "Evermore Grand Cypress Resort — Cypress Course",
+   "short": "Evermore Cypress",
+   "par": 72,
+   "tee": "Gold",
+   "rating": 72.2,
+   "slope": 125,
+   "pars": [
+    4,
+    5,
+    3,
+    4,
+    4,
+    4,
+    4,
+    3,
+    5,
+    4,
+    3,
+    4,
+    5,
+    4,
+    5,
+    4,
+    3,
+    4
+   ],
+   "si": [
+    5,
+    11,
+    15,
+    7,
+    17,
+    1,
+    3,
+    9,
+    13,
+    10,
+    12,
+    4,
+    14,
+    18,
+    6,
+    2,
+    16,
+    8
+   ],
+   "yards": null,
+   "cards": [
+    {
+     "id": "robert-stong",
+     "hcp": 13,
+     "carded": [
+      4,
+      7,
+      4,
+      6,
+      4,
+      5,
+      5,
+      4,
+      8,
+      5,
+      3,
+      7,
+      5,
+      5,
+      5,
+      4,
+      3,
+      4
+     ],
+     "counted": [
+      4,
+      7,
+      4,
+      6,
+      4,
+      5,
+      5,
+      4,
+      8,
+      5,
+      3,
+      7,
+      5,
+      5,
+      5,
+      4,
+      3,
+      4
+     ],
+     "pops": [
+      1,
+      1,
+      0,
+      1,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      0,
+      1,
+      1,
+      0,
+      1
+     ],
+     "gross": 88,
+     "net": 75,
+     "toPar": 3,
+     "grossCarded": 88
+    },
+    {
+     "id": "scottie-collins",
+     "hcp": 4,
+     "carded": [
+      4,
+      6,
+      3,
+      3,
+      4,
+      5,
+      5,
+      4,
+      7,
+      4,
+      4,
+      4,
+      6,
+      6,
+      5,
+      4,
+      3,
+      4
+     ],
+     "counted": [
+      4,
+      6,
+      3,
+      3,
+      4,
+      5,
+      5,
+      4,
+      7,
+      4,
+      4,
+      4,
+      6,
+      6,
+      5,
+      4,
+      3,
+      4
+     ],
+     "pops": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0
+     ],
+     "gross": 81,
+     "net": 77,
+     "toPar": 5,
+     "grossCarded": 81
+    },
+    {
+     "id": "auston-chen",
+     "hcp": 16,
+     "carded": [
+      4,
+      6,
+      3,
+      5,
+      5,
+      6,
+      5,
+      3,
+      10,
+      5,
+      4,
+      6,
+      4,
+      6,
+      6,
+      5,
+      5,
+      10
+     ],
+     "counted": [
+      4,
+      6,
+      3,
+      5,
+      5,
+      6,
+      5,
+      3,
+      10,
+      5,
+      4,
+      6,
+      4,
+      6,
+      6,
+      5,
+      5,
+      8
+     ],
+     "pops": [
+      1,
+      1,
+      1,
+      1,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      1,
+      1,
+      1,
+      1
+     ],
+     "gross": 96,
+     "net": 80,
+     "toPar": 8,
+     "grossCarded": 98
+    },
+    {
+     "id": "nigel-scott",
+     "hcp": 6,
+     "carded": [
+      5,
+      5,
+      4,
+      6,
+      4,
+      5,
+      5,
+      4,
+      5,
+      4,
+      4,
+      7,
+      5,
+      5,
+      7,
+      5,
+      2,
+      4
+     ],
+     "counted": [
+      5,
+      5,
+      4,
+      6,
+      4,
+      5,
+      5,
+      4,
+      5,
+      4,
+      4,
+      7,
+      5,
+      5,
+      7,
+      5,
+      2,
+      4
+     ],
+     "pops": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      1,
+      1,
+      0,
+      0
+     ],
+     "gross": 86,
+     "net": 80,
+     "toPar": 8,
+     "grossCarded": 86
+    },
+    {
+     "id": "klayton-mcclosin",
+     "hcp": 9,
+     "carded": [
+      4,
+      6,
+      4,
+      4,
+      4,
+      7,
+      5,
+      5,
+      6,
+      6,
+      4,
+      6,
+      6,
+      5,
+      5,
+      8,
+      4,
+      7
+     ],
+     "counted": [
+      4,
+      6,
+      4,
+      4,
+      4,
+      7,
+      5,
+      5,
+      6,
+      6,
+      4,
+      6,
+      6,
+      5,
+      5,
+      8,
+      4,
+      7
+     ],
+     "pops": [
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      1,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      1,
+      1,
+      0,
+      1
+     ],
+     "gross": 96,
+     "net": 87,
+     "toPar": 15,
+     "grossCarded": 96
+    },
+    {
+     "id": "rob-vassallo",
+     "hcp": 10,
+     "carded": [
+      5,
+      7,
+      5,
+      5,
+      6,
+      6,
+      5,
+      4,
+      6,
+      5,
+      3,
+      5,
+      6,
+      4,
+      6,
+      5,
+      5,
+      5
+     ],
+     "counted": [
+      5,
+      7,
+      5,
+      5,
+      6,
+      6,
+      5,
+      4,
+      6,
+      5,
+      3,
+      5,
+      6,
+      4,
+      6,
+      5,
+      5,
+      5
+     ],
+     "pops": [
+      1,
+      0,
+      0,
+      1,
+      0,
+      1,
+      1,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      1,
+      0,
+      1
+     ],
+     "gross": 93,
+     "net": 83,
+     "toPar": 11,
+     "grossCarded": 93
+    },
+    {
+     "id": "justin-quinn",
+     "hcp": 11,
+     "carded": [
+      4,
+      6,
+      4,
+      5,
+      3,
+      6,
+      5,
+      6,
+      9,
+      5,
+      3,
+      5,
+      6,
+      4,
+      6,
+      5,
+      3,
+      4
+     ],
+     "counted": [
+      4,
+      6,
+      4,
+      5,
+      3,
+      6,
+      5,
+      6,
+      9,
+      5,
+      3,
+      5,
+      6,
+      4,
+      6,
+      5,
+      3,
+      4
+     ],
+     "pops": [
+      1,
+      1,
+      0,
+      1,
+      0,
+      1,
+      1,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      1,
+      0,
+      1
+     ],
+     "gross": 89,
+     "net": 78,
+     "toPar": 6,
+     "grossCarded": 89
+    },
+    {
+     "id": "mike-grosh",
+     "hcp": 12,
+     "carded": [
+      5,
+      6,
+      4,
+      5,
+      4,
+      6,
+      4,
+      4,
+      8,
+      5,
+      5,
+      5,
+      7,
+      5,
+      7,
+      5,
+      3,
+      4
+     ],
+     "counted": [
+      5,
+      6,
+      4,
+      5,
+      4,
+      6,
+      4,
+      4,
+      8,
+      5,
+      5,
+      5,
+      7,
+      5,
+      7,
+      5,
+      3,
+      4
+     ],
+     "pops": [
+      1,
+      1,
+      0,
+      1,
+      0,
+      1,
+      1,
+      1,
+      0,
+      1,
+      1,
+      1,
+      0,
+      0,
+      1,
+      1,
+      0,
+      1
+     ],
+     "gross": 92,
+     "net": 80,
+     "toPar": 8,
+     "grossCarded": 92
+    },
+    {
+     "id": "nick-fowler",
+     "hcp": 2,
+     "carded": [
+      5,
+      5,
+      5,
+      4,
+      3,
+      4,
+      5,
+      3,
+      4,
+      5,
+      3,
+      4,
+      6,
+      4,
+      4,
+      5,
+      6,
+      5
+     ],
+     "counted": [
+      5,
+      5,
+      5,
+      4,
+      3,
+      4,
+      5,
+      3,
+      4,
+      5,
+      3,
+      4,
+      6,
+      4,
+      4,
+      5,
+      6,
+      5
+     ],
+     "pops": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0
+     ],
+     "gross": 80,
+     "net": 78,
+     "toPar": 6,
+     "grossCarded": 80
+    },
+    {
+     "id": "alex-kampmann",
+     "hcp": 4,
+     "carded": [
+      4,
+      6,
+      4,
+      4,
+      4,
+      3,
+      6,
+      3,
+      6,
+      4,
+      3,
+      4,
+      7,
+      4,
+      4,
+      5,
+      4,
+      5
+     ],
+     "counted": [
+      4,
+      6,
+      4,
+      4,
+      4,
+      3,
+      6,
+      3,
+      6,
+      4,
+      3,
+      4,
+      7,
+      4,
+      4,
+      5,
+      4,
+      5
+     ],
+     "pops": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0
+     ],
+     "gross": 80,
+     "net": 76,
+     "toPar": 4,
+     "grossCarded": 80
+    },
+    {
+     "id": "anthony-gjonaj",
+     "hcp": 15,
+     "carded": [
+      5,
+      7,
+      5,
+      4,
+      4,
+      6,
+      5,
+      6,
+      7,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      5,
+      4,
+      6
+     ],
+     "counted": [
+      5,
+      7,
+      5,
+      4,
+      4,
+      6,
+      5,
+      6,
+      7,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      5,
+      4,
+      6
+     ],
+     "pops": [
+      1,
+      1,
+      1,
+      1,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      1,
+      1,
+      0,
+      1
+     ],
+     "gross": 100,
+     "net": 85,
+     "toPar": 13,
+     "grossCarded": 100
+    },
+    {
+     "id": "farnia-ghavami",
+     "hcp": 18,
+     "carded": [
+      7,
+      8,
+      3,
+      5,
+      6,
+      5,
+      4,
+      6,
+      8,
+      7,
+      4,
+      5,
+      8,
+      7,
+      6,
+      5,
+      4,
+      5
+     ],
+     "counted": [
+      7,
+      8,
+      3,
+      5,
+      6,
+      5,
+      4,
+      6,
+      8,
+      7,
+      4,
+      5,
+      8,
+      7,
+      6,
+      5,
+      4,
+      5
+     ],
+     "pops": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "gross": 103,
+     "net": 85,
+     "toPar": 13,
+     "grossCarded": 103
+    }
+   ]
+  }
+ ],
+ "days": [
+  {
+   "dayNum": 1,
+   "day": "Thursday",
+   "roundId": "2026-thu-bay-hill",
+   "prizes": [
+    {
+     "what": "Team Low Net",
+     "who": "Frombys",
+     "score": 25,
+     "amount": 260
+    },
+    {
+     "what": "Individual Low Net",
+     "who": "Scottie Collins",
+     "score": 2,
+     "amount": 100
+    },
+    {
+     "what": "Individual 2nd",
+     "who": "Klayton McClosin",
+     "score": 5,
+     "amount": 70
+    }
+   ],
+   "teams": [
+    {
+     "id": "team-2",
+     "name": "Frombys",
+     "toPar": 25
+    },
+    {
+     "id": "team-1",
+     "name": "Bison Boys",
+     "toPar": 27
+    },
+    {
+     "id": "team-3",
+     "name": "Starz & Scrubz",
+     "toPar": 37
+    }
+   ],
+   "individual": [
+    {
+     "id": "scottie-collins",
+     "toPar": 2,
+     "net": 74
+    },
+    {
+     "id": "klayton-mcclosin",
+     "toPar": 5,
+     "net": 77
+    },
+    {
+     "id": "alex-kampmann",
+     "toPar": 6,
+     "net": 78
+    },
+    {
+     "id": "anthony-gjonaj",
+     "toPar": 6,
+     "net": 78
+    },
+    {
+     "id": "nigel-scott",
+     "toPar": 7,
+     "net": 79
+    },
+    {
+     "id": "mike-grosh",
+     "toPar": 7,
+     "net": 79
+    },
+    {
+     "id": "robert-stong",
+     "toPar": 8,
+     "net": 80
+    },
+    {
+     "id": "nick-fowler",
+     "toPar": 9,
+     "net": 81
+    },
+    {
+     "id": "rob-vassallo",
+     "toPar": 10,
+     "net": 82
+    },
+    {
+     "id": "justin-quinn",
+     "toPar": 10,
+     "net": 82
+    },
+    {
+     "id": "auston-chen",
+     "toPar": 18,
+     "net": 90
+    },
+    {
+     "id": "farnia-ghavami",
+     "toPar": 27,
+     "net": 99
+    }
+   ],
+   "skins": {
+    "net": {
+     "pot": 160,
+     "count": 6,
+     "perSkin": 26.67,
+     "winners": [
+      {
+       "id": "anthony-gjonaj",
+       "skins": 3,
+       "amount": 80
+      },
+      {
+       "id": "nick-fowler",
+       "skins": 1,
+       "amount": 26.67
+      },
+      {
+       "id": "scottie-collins",
+       "skins": 1,
+       "amount": 26.67
+      },
+      {
+       "id": "alex-kampmann",
+       "skins": 1,
+       "amount": 26.67
+      }
+     ],
+     "holes": [
+      {
+       "hole": 2,
+       "id": "anthony-gjonaj",
+       "score": 2
+      },
+      {
+       "hole": 3,
+       "id": "nick-fowler",
+       "score": 3
+      },
+      {
+       "hole": 5,
+       "id": "anthony-gjonaj",
+       "score": 3
+      },
+      {
+       "hole": 6,
+       "id": "scottie-collins",
+       "score": 4
+      },
+      {
+       "hole": 15,
+       "id": "alex-kampmann",
+       "score": 3
+      },
+      {
+       "hole": 18,
+       "id": "anthony-gjonaj",
+       "score": 2
+      }
+     ]
+    },
+    "gross": {
+     "pot": 80,
+     "count": 5,
+     "perSkin": 16,
+     "winners": [
+      {
+       "id": "alex-kampmann",
+       "skins": 2,
+       "amount": 32
+      },
+      {
+       "id": "nick-fowler",
+       "skins": 1,
+       "amount": 16
+      },
+      {
+       "id": "scottie-collins",
+       "skins": 1,
+       "amount": 16
+      },
+      {
+       "id": "anthony-gjonaj",
+       "skins": 1,
+       "amount": 16
+      }
+     ],
+     "holes": [
+      {
+       "hole": 1,
+       "id": "alex-kampmann",
+       "score": 4
+      },
+      {
+       "hole": 3,
+       "id": "nick-fowler",
+       "score": 3
+      },
+      {
+       "hole": 6,
+       "id": "scottie-collins",
+       "score": 4
+      },
+      {
+       "hole": 15,
+       "id": "alex-kampmann",
+       "score": 3
+      },
+      {
+       "hole": 18,
+       "id": "anthony-gjonaj",
+       "score": 3
+      }
+     ]
+    }
+   }
+  },
+  {
+   "dayNum": 2,
+   "day": "Friday",
+   "roundId": "2026-fri-bay-hill",
+   "prizes": [
+    {
+     "what": "Team Low Net",
+     "who": "Bison Boys",
+     "score": 15,
+     "amount": 260
+    },
+    {
+     "what": "Individual Low Net",
+     "who": "Nigel Scott",
+     "score": 1,
+     "amount": 100
+    },
+    {
+     "what": "Individual 2nd",
+     "who": "Scottie Collins",
+     "score": 3,
+     "amount": 70
+    }
+   ],
+   "teams": [
+    {
+     "id": "team-1",
+     "name": "Bison Boys",
+     "toPar": 15
+    },
+    {
+     "id": "team-3",
+     "name": "Starz & Scrubz",
+     "toPar": 42
+    },
+    {
+     "id": "team-2",
+     "name": "Frombys",
+     "toPar": 47
+    }
+   ],
+   "individual": [
+    {
+     "id": "nigel-scott",
+     "toPar": 1,
+     "net": 73
+    },
+    {
+     "id": "scottie-collins",
+     "toPar": 3,
+     "net": 75
+    },
+    {
+     "id": "auston-chen",
+     "toPar": 4,
+     "net": 76
+    },
+    {
+     "id": "alex-kampmann",
+     "toPar": 4,
+     "net": 76
+    },
+    {
+     "id": "robert-stong",
+     "toPar": 7,
+     "net": 79
+    },
+    {
+     "id": "rob-vassallo",
+     "toPar": 7,
+     "net": 79
+    },
+    {
+     "id": "klayton-mcclosin",
+     "toPar": 10,
+     "net": 82
+    },
+    {
+     "id": "justin-quinn",
+     "toPar": 10,
+     "net": 82
+    },
+    {
+     "id": "nick-fowler",
+     "toPar": 11,
+     "net": 83
+    },
+    {
+     "id": "anthony-gjonaj",
+     "toPar": 13,
+     "net": 85
+    },
+    {
+     "id": "farnia-ghavami",
+     "toPar": 14,
+     "net": 86
+    },
+    {
+     "id": "mike-grosh",
+     "toPar": 20,
+     "net": 92
+    }
+   ],
+   "skins": {
+    "net": {
+     "pot": 160,
+     "count": 9,
+     "perSkin": 17.78,
+     "winners": [
+      {
+       "id": "auston-chen",
+       "skins": 3,
+       "amount": 53.33
+      },
+      {
+       "id": "nigel-scott",
+       "skins": 2,
+       "amount": 35.56
+      },
+      {
+       "id": "robert-stong",
+       "skins": 1,
+       "amount": 17.78
+      },
+      {
+       "id": "anthony-gjonaj",
+       "skins": 1,
+       "amount": 17.78
+      },
+      {
+       "id": "alex-kampmann",
+       "skins": 1,
+       "amount": 17.78
+      },
+      {
+       "id": "mike-grosh",
+       "skins": 1,
+       "amount": 17.78
+      }
+     ],
+     "holes": [
+      {
+       "hole": 2,
+       "id": "auston-chen",
+       "score": 2
+      },
+      {
+       "hole": 6,
+       "id": "auston-chen",
+       "score": 3
+      },
+      {
+       "hole": 9,
+       "id": "robert-stong",
+       "score": 3
+      },
+      {
+       "hole": 10,
+       "id": "auston-chen",
+       "score": 2
+      },
+      {
+       "hole": 11,
+       "id": "nigel-scott",
+       "score": 3
+      },
+      {
+       "hole": 13,
+       "id": "nigel-scott",
+       "score": 3
+      },
+      {
+       "hole": 15,
+       "id": "anthony-gjonaj",
+       "score": 3
+      },
+      {
+       "hole": 16,
+       "id": "alex-kampmann",
+       "score": 3
+      },
+      {
+       "hole": 18,
+       "id": "mike-grosh",
+       "score": 2
+      }
+     ]
+    },
+    "gross": {
+     "pot": 80,
+     "count": 8,
+     "perSkin": 10,
+     "winners": [
+      {
+       "id": "nigel-scott",
+       "skins": 3,
+       "amount": 30
+      },
+      {
+       "id": "nick-fowler",
+       "skins": 1,
+       "amount": 10
+      },
+      {
+       "id": "auston-chen",
+       "skins": 1,
+       "amount": 10
+      },
+      {
+       "id": "robert-stong",
+       "skins": 1,
+       "amount": 10
+      },
+      {
+       "id": "alex-kampmann",
+       "skins": 1,
+       "amount": 10
+      },
+      {
+       "id": "mike-grosh",
+       "skins": 1,
+       "amount": 10
+      }
+     ],
+     "holes": [
+      {
+       "hole": 3,
+       "id": "nick-fowler",
+       "score": 3
+      },
+      {
+       "hole": 6,
+       "id": "auston-chen",
+       "score": 4
+      },
+      {
+       "hole": 9,
+       "id": "robert-stong",
+       "score": 4
+      },
+      {
+       "hole": 11,
+       "id": "nigel-scott",
+       "score": 4
+      },
+      {
+       "hole": 13,
+       "id": "nigel-scott",
+       "score": 3
+      },
+      {
+       "hole": 16,
+       "id": "alex-kampmann",
+       "score": 4
+      },
+      {
+       "hole": 17,
+       "id": "nigel-scott",
+       "score": 2
+      },
+      {
+       "hole": 18,
+       "id": "mike-grosh",
+       "score": 3
+      }
+     ]
+    }
+   }
+  },
+  {
+   "dayNum": 3,
+   "day": "Saturday",
+   "roundId": "2026-sat-evermore",
+   "prizes": [
+    {
+     "what": "Team Low Net",
+     "who": "Bison Boys",
+     "score": 24,
+     "amount": 260
+    },
+    {
+     "what": "Individual Low Net",
+     "who": "Robert Stong",
+     "score": 3,
+     "amount": 100
+    },
+    {
+     "what": "Individual 2nd",
+     "who": "Alex Kampmann",
+     "score": 4,
+     "amount": 70
+    }
+   ],
+   "teams": [
+    {
+     "id": "team-1",
+     "name": "Bison Boys",
+     "toPar": 24
+    },
+    {
+     "id": "team-3",
+     "name": "Starz & Scrubz",
+     "toPar": 36
+    },
+    {
+     "id": "team-2",
+     "name": "Frombys",
+     "toPar": 40
+    }
+   ],
+   "individual": [
+    {
+     "id": "robert-stong",
+     "toPar": 3,
+     "net": 75
+    },
+    {
+     "id": "alex-kampmann",
+     "toPar": 4,
+     "net": 76
+    },
+    {
+     "id": "scottie-collins",
+     "toPar": 5,
+     "net": 77
+    },
+    {
+     "id": "justin-quinn",
+     "toPar": 6,
+     "net": 78
+    },
+    {
+     "id": "nick-fowler",
+     "toPar": 6,
+     "net": 78
+    },
+    {
+     "id": "auston-chen",
+     "toPar": 8,
+     "net": 80
+    },
+    {
+     "id": "nigel-scott",
+     "toPar": 8,
+     "net": 80
+    },
+    {
+     "id": "mike-grosh",
+     "toPar": 8,
+     "net": 80
+    },
+    {
+     "id": "rob-vassallo",
+     "toPar": 11,
+     "net": 83
+    },
+    {
+     "id": "anthony-gjonaj",
+     "toPar": 13,
+     "net": 85
+    },
+    {
+     "id": "farnia-ghavami",
+     "toPar": 13,
+     "net": 85
+    },
+    {
+     "id": "klayton-mcclosin",
+     "toPar": 15,
+     "net": 87
+    }
+   ],
+   "skins": {
+    "net": {
+     "pot": 160,
+     "count": 6,
+     "perSkin": 26.67,
+     "winners": [
+      {
+       "id": "auston-chen",
+       "skins": 2,
+       "amount": 53.33
+      },
+      {
+       "id": "alex-kampmann",
+       "skins": 1,
+       "amount": 26.67
+      },
+      {
+       "id": "nick-fowler",
+       "skins": 1,
+       "amount": 26.67
+      },
+      {
+       "id": "robert-stong",
+       "skins": 1,
+       "amount": 26.67
+      },
+      {
+       "id": "nigel-scott",
+       "skins": 1,
+       "amount": 26.67
+      }
+     ],
+     "holes": [
+      {
+       "hole": 6,
+       "id": "alex-kampmann",
+       "score": 2
+      },
+      {
+       "hole": 8,
+       "id": "auston-chen",
+       "score": 2
+      },
+      {
+       "hole": 9,
+       "id": "nick-fowler",
+       "score": 4
+      },
+      {
+       "hole": 11,
+       "id": "robert-stong",
+       "score": 2
+      },
+      {
+       "hole": 13,
+       "id": "auston-chen",
+       "score": 3
+      },
+      {
+       "hole": 17,
+       "id": "nigel-scott",
+       "score": 2
+      }
+     ]
+    },
+    "gross": {
+     "pot": 80,
+     "count": 5,
+     "perSkin": 16,
+     "winners": [
+      {
+       "id": "scottie-collins",
+       "skins": 1,
+       "amount": 16
+      },
+      {
+       "id": "alex-kampmann",
+       "skins": 1,
+       "amount": 16
+      },
+      {
+       "id": "nick-fowler",
+       "skins": 1,
+       "amount": 16
+      },
+      {
+       "id": "auston-chen",
+       "skins": 1,
+       "amount": 16
+      },
+      {
+       "id": "nigel-scott",
+       "skins": 1,
+       "amount": 16
+      }
+     ],
+     "holes": [
+      {
+       "hole": 4,
+       "id": "scottie-collins",
+       "score": 3
+      },
+      {
+       "hole": 6,
+       "id": "alex-kampmann",
+       "score": 3
+      },
+      {
+       "hole": 9,
+       "id": "nick-fowler",
+       "score": 4
+      },
+      {
+       "hole": 13,
+       "id": "auston-chen",
+       "score": 4
+      },
+      {
+       "hole": 17,
+       "id": "nigel-scott",
+       "score": 2
+      }
+     ]
+    }
+   }
+  }
+ ],
+ "individual": [
+  {
+   "id": "scottie-collins",
+   "pos": 1,
+   "tied": false,
+   "net": 226,
+   "toPar": 10,
+   "rounds": [
+    {
+     "roundId": "2026-thu-bay-hill",
+     "toPar": 2,
+     "net": 74,
+     "gross": 77
+    },
+    {
+     "roundId": "2026-fri-bay-hill",
+     "toPar": 3,
+     "net": 75,
+     "gross": 78
+    },
+    {
+     "roundId": "2026-sat-evermore",
+     "toPar": 5,
+     "net": 77,
+     "gross": 81
+    }
+   ]
+  },
+  {
+   "id": "alex-kampmann",
+   "pos": 2,
+   "tied": false,
+   "net": 230,
+   "toPar": 14,
+   "rounds": [
+    {
+     "roundId": "2026-thu-bay-hill",
+     "toPar": 6,
+     "net": 78,
+     "gross": 81
+    },
+    {
+     "roundId": "2026-fri-bay-hill",
+     "toPar": 4,
+     "net": 76,
+     "gross": 79
+    },
+    {
+     "roundId": "2026-sat-evermore",
+     "toPar": 4,
+     "net": 76,
+     "gross": 80
+    }
+   ]
+  },
+  {
+   "id": "nigel-scott",
+   "pos": 3,
+   "tied": false,
+   "net": 232,
+   "toPar": 16,
+   "rounds": [
+    {
+     "roundId": "2026-thu-bay-hill",
+     "toPar": 7,
+     "net": 79,
+     "gross": 84
+    },
+    {
+     "roundId": "2026-fri-bay-hill",
+     "toPar": 1,
+     "net": 73,
+     "gross": 78
+    },
+    {
+     "roundId": "2026-sat-evermore",
+     "toPar": 8,
+     "net": 80,
+     "gross": 86
+    }
+   ]
+  },
+  {
+   "id": "robert-stong",
+   "pos": 4,
+   "tied": false,
+   "net": 234,
+   "toPar": 18,
+   "rounds": [
+    {
+     "roundId": "2026-thu-bay-hill",
+     "toPar": 8,
+     "net": 80,
+     "gross": 94
+    },
+    {
+     "roundId": "2026-fri-bay-hill",
+     "toPar": 7,
+     "net": 79,
+     "gross": 93
+    },
+    {
+     "roundId": "2026-sat-evermore",
+     "toPar": 3,
+     "net": 75,
+     "gross": 88
+    }
+   ]
+  },
+  {
+   "id": "justin-quinn",
+   "pos": 5,
+   "tied": true,
+   "net": 242,
+   "toPar": 26,
+   "rounds": [
+    {
+     "roundId": "2026-thu-bay-hill",
+     "toPar": 10,
+     "net": 82,
+     "gross": 93
+    },
+    {
+     "roundId": "2026-fri-bay-hill",
+     "toPar": 10,
+     "net": 82,
+     "gross": 93
+    },
+    {
+     "roundId": "2026-sat-evermore",
+     "toPar": 6,
+     "net": 78,
+     "gross": 89
+    }
+   ]
+  },
+  {
+   "id": "nick-fowler",
+   "pos": 5,
+   "tied": true,
+   "net": 242,
+   "toPar": 26,
+   "rounds": [
+    {
+     "roundId": "2026-thu-bay-hill",
+     "toPar": 9,
+     "net": 81,
+     "gross": 83
+    },
+    {
+     "roundId": "2026-fri-bay-hill",
+     "toPar": 11,
+     "net": 83,
+     "gross": 85
+    },
+    {
+     "roundId": "2026-sat-evermore",
+     "toPar": 6,
+     "net": 78,
+     "gross": 80
+    }
+   ]
+  },
+  {
+   "id": "rob-vassallo",
+   "pos": 7,
+   "tied": false,
+   "net": 244,
+   "toPar": 28,
+   "rounds": [
+    {
+     "roundId": "2026-thu-bay-hill",
+     "toPar": 10,
+     "net": 82,
+     "gross": 92
+    },
+    {
+     "roundId": "2026-fri-bay-hill",
+     "toPar": 7,
+     "net": 79,
+     "gross": 89
+    },
+    {
+     "roundId": "2026-sat-evermore",
+     "toPar": 11,
+     "net": 83,
+     "gross": 93
+    }
+   ]
+  },
+  {
+   "id": "auston-chen",
+   "pos": 8,
+   "tied": true,
+   "net": 246,
+   "toPar": 30,
+   "rounds": [
+    {
+     "roundId": "2026-thu-bay-hill",
+     "toPar": 18,
+     "net": 90,
+     "gross": 106
+    },
+    {
+     "roundId": "2026-fri-bay-hill",
+     "toPar": 4,
+     "net": 76,
+     "gross": 92
+    },
+    {
+     "roundId": "2026-sat-evermore",
+     "toPar": 8,
+     "net": 80,
+     "gross": 96
+    }
+   ]
+  },
+  {
+   "id": "klayton-mcclosin",
+   "pos": 8,
+   "tied": true,
+   "net": 246,
+   "toPar": 30,
+   "rounds": [
+    {
+     "roundId": "2026-thu-bay-hill",
+     "toPar": 5,
+     "net": 77,
+     "gross": 86
+    },
+    {
+     "roundId": "2026-fri-bay-hill",
+     "toPar": 10,
+     "net": 82,
+     "gross": 91
+    },
+    {
+     "roundId": "2026-sat-evermore",
+     "toPar": 15,
+     "net": 87,
+     "gross": 96
+    }
+   ]
+  },
+  {
+   "id": "anthony-gjonaj",
+   "pos": 10,
+   "tied": false,
+   "net": 248,
+   "toPar": 32,
+   "rounds": [
+    {
+     "roundId": "2026-thu-bay-hill",
+     "toPar": 6,
+     "net": 78,
+     "gross": 93
+    },
+    {
+     "roundId": "2026-fri-bay-hill",
+     "toPar": 13,
+     "net": 85,
+     "gross": 100
+    },
+    {
+     "roundId": "2026-sat-evermore",
+     "toPar": 13,
+     "net": 85,
+     "gross": 100
+    }
+   ]
+  },
+  {
+   "id": "mike-grosh",
+   "pos": 11,
+   "tied": false,
+   "net": 251,
+   "toPar": 35,
+   "rounds": [
+    {
+     "roundId": "2026-thu-bay-hill",
+     "toPar": 7,
+     "net": 79,
+     "gross": 91
+    },
+    {
+     "roundId": "2026-fri-bay-hill",
+     "toPar": 20,
+     "net": 92,
+     "gross": 104
+    },
+    {
+     "roundId": "2026-sat-evermore",
+     "toPar": 8,
+     "net": 80,
+     "gross": 92
+    }
+   ]
+  },
+  {
+   "id": "farnia-ghavami",
+   "pos": 12,
+   "tied": false,
+   "net": 270,
+   "toPar": 54,
+   "rounds": [
+    {
+     "roundId": "2026-thu-bay-hill",
+     "toPar": 27,
+     "net": 99,
+     "gross": 117
+    },
+    {
+     "roundId": "2026-fri-bay-hill",
+     "toPar": 14,
+     "net": 86,
+     "gross": 104
+    },
+    {
+     "roundId": "2026-sat-evermore",
+     "toPar": 13,
+     "net": 85,
+     "gross": 103
+    }
+   ]
+  }
+ ],
+ "teamEvent": [
+  {
+   "id": "team-1",
+   "name": "Bison Boys",
+   "net": 966,
+   "toPar": 66,
+   "byDay": [
+    27,
+    15,
+    24
+   ]
+  },
+  {
+   "id": "team-2",
+   "name": "Frombys",
+   "net": 1012,
+   "toPar": 112,
+   "byDay": [
+    25,
+    47,
+    40
+   ]
+  },
+  {
+   "id": "team-3",
+   "name": "Starz & Scrubz",
+   "net": 1015,
+   "toPar": 115,
+   "byDay": [
+    37,
+    42,
+    36
+   ]
+  }
+ ],
+ "ledger": [
+  {
+   "id": "scottie-collins",
+   "total": 841.17,
+   "items": [
+    {
+     "label": "Thursday individual low net",
+     "amount": 100
+    },
+    {
+     "label": "Thursday net skins",
+     "amount": 26.67
+    },
+    {
+     "label": "Thursday gross skins",
+     "amount": 16
+    },
+    {
+     "label": "Friday team low net",
+     "amount": 65
+    },
+    {
+     "label": "Friday individual 2nd",
+     "amount": 70
+    },
+    {
+     "label": "Saturday team low net",
+     "amount": 65
+    },
+    {
+     "label": "Saturday gross skins",
+     "amount": 16
+    },
+    {
+     "label": "Individual Champion",
+     "amount": 300
+    },
+    {
+     "label": "Team Champion",
+     "amount": 182.5
+    }
+   ]
+  },
+  {
+   "id": "nigel-scott",
+   "total": 670.72,
+   "items": [
+    {
+     "label": "Friday team low net",
+     "amount": 65
+    },
+    {
+     "label": "Friday individual low net",
+     "amount": 100
+    },
+    {
+     "label": "Friday net skins",
+     "amount": 35.56
+    },
+    {
+     "label": "Friday gross skins",
+     "amount": 30
+    },
+    {
+     "label": "Saturday team low net",
+     "amount": 65
+    },
+    {
+     "label": "Saturday net skins",
+     "amount": 26.67
+    },
+    {
+     "label": "Saturday gross skins",
+     "amount": 16
+    },
+    {
+     "label": "Individual place 3",
+     "amount": 150
+    },
+    {
+     "label": "Team Champion",
+     "amount": 182.5
+    }
+   ]
+  },
+  {
+   "id": "robert-stong",
+   "total": 566.94,
+   "items": [
+    {
+     "label": "Friday team low net",
+     "amount": 65
+    },
+    {
+     "label": "Friday net skins",
+     "amount": 17.78
+    },
+    {
+     "label": "Friday gross skins",
+     "amount": 10
+    },
+    {
+     "label": "Saturday team low net",
+     "amount": 65
+    },
+    {
+     "label": "Saturday individual low net",
+     "amount": 100
+    },
+    {
+     "label": "Saturday net skins",
+     "amount": 26.67
+    },
+    {
+     "label": "Individual place 4",
+     "amount": 100
+    },
+    {
+     "label": "Team Champion",
+     "amount": 182.5
+    }
+   ]
+  },
+  {
+   "id": "auston-chen",
+   "total": 445.17,
+   "items": [
+    {
+     "label": "Friday team low net",
+     "amount": 65
+    },
+    {
+     "label": "Friday net skins",
+     "amount": 53.33
+    },
+    {
+     "label": "Friday gross skins",
+     "amount": 10
+    },
+    {
+     "label": "Saturday team low net",
+     "amount": 65
+    },
+    {
+     "label": "Saturday net skins",
+     "amount": 53.33
+    },
+    {
+     "label": "Saturday gross skins",
+     "amount": 16
+    },
+    {
+     "label": "Team Champion",
+     "amount": 182.5
+    }
+   ]
+  },
+  {
+   "id": "alex-kampmann",
+   "total": 424.11,
+   "items": [
+    {
+     "label": "Thursday net skins",
+     "amount": 26.67
+    },
+    {
+     "label": "Thursday gross skins",
+     "amount": 32
+    },
+    {
+     "label": "Friday net skins",
+     "amount": 17.78
+    },
+    {
+     "label": "Friday gross skins",
+     "amount": 10
+    },
+    {
+     "label": "Saturday individual 2nd",
+     "amount": 70
+    },
+    {
+     "label": "Saturday net skins",
+     "amount": 26.67
+    },
+    {
+     "label": "Saturday gross skins",
+     "amount": 16
+    },
+    {
+     "label": "Individual place 2",
+     "amount": 225
+    }
+   ]
+  },
+  {
+   "id": "klayton-mcclosin",
+   "total": 135,
+   "items": [
+    {
+     "label": "Thursday team low net",
+     "amount": 65
+    },
+    {
+     "label": "Thursday individual 2nd",
+     "amount": 70
+    }
+   ]
+  },
+  {
+   "id": "anthony-gjonaj",
+   "total": 113.78,
+   "items": [
+    {
+     "label": "Thursday net skins",
+     "amount": 80
+    },
+    {
+     "label": "Thursday gross skins",
+     "amount": 16
+    },
+    {
+     "label": "Friday net skins",
+     "amount": 17.78
+    }
+   ]
+  },
+  {
+   "id": "nick-fowler",
+   "total": 95.33,
+   "items": [
+    {
+     "label": "Thursday net skins",
+     "amount": 26.67
+    },
+    {
+     "label": "Thursday gross skins",
+     "amount": 16
+    },
+    {
+     "label": "Friday gross skins",
+     "amount": 10
+    },
+    {
+     "label": "Saturday net skins",
+     "amount": 26.67
+    },
+    {
+     "label": "Saturday gross skins",
+     "amount": 16
+    }
+   ]
+  },
+  {
+   "id": "mike-grosh",
+   "total": 92.78,
+   "items": [
+    {
+     "label": "Thursday team low net",
+     "amount": 65
+    },
+    {
+     "label": "Friday net skins",
+     "amount": 17.78
+    },
+    {
+     "label": "Friday gross skins",
+     "amount": 10
+    }
+   ]
+  },
+  {
+   "id": "rob-vassallo",
+   "total": 65,
+   "items": [
+    {
+     "label": "Thursday team low net",
+     "amount": 65
+    }
+   ]
+  },
+  {
+   "id": "justin-quinn",
+   "total": 65,
+   "items": [
+    {
+     "label": "Thursday team low net",
+     "amount": 65
+    }
+   ]
+  },
+  {
+   "id": "farnia-ghavami",
+   "total": 0,
+   "items": []
+  }
+ ],
+ "champions": {
+  "individual": {
+   "id": "scottie-collins",
+   "name": "Scottie Collins",
+   "toPar": 10,
+   "net": 226
+  },
+  "team": {
+   "id": "team-1",
+   "name": "Bison Boys",
+   "toPar": 66,
+   "net": 966
+  },
+  "teamRunnerUp": "Frombys"
+ },
+ "purse": 3515
+}

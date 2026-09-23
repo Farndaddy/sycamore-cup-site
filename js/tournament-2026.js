@@ -184,14 +184,9 @@ export const ROUNDS = [
     counts: { individual: true, team: true, skins: true },
     teeTimes: ['9:40 AM', '9:50 AM', '10:00 AM']
   },
-  {
-    id: '2026-fri-charger-scramble',
-    day: 'Friday', dayNum: 2, label: 'Day 2 Scramble',
-    course: 'bay-hill-charger', holes: 9, format: '4-man team scramble',
-    scramble: true,
-    counts: { individual: false, team: true, skins: false },
-    teeTimes: ['3:30 PM', '3:40 PM', '3:50 PM']
-  },
+  // Friday's Charger scramble was scheduled but never played — no score was
+  // ever entered for any team. Removed from the round list on 2026-09-23 when
+  // the year was closed out, so the schedule shows the trip as it happened.
   {
     id: '2026-sat-evermore',
     day: 'Saturday', dayNum: 3, label: 'Day 3',

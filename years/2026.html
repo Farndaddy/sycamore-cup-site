@@ -17,12 +17,13 @@
 
 <section class="hero-plain">
   <div class="wrap">
-    <p class="eyebrow">Southern Hills · Bay Hill · Evermore Cypress</p>
+    <p class="eyebrow">Bay Hill &amp; Evermore</p>
     <h1>2026 <em>Sycamore Cup</em></h1>
-    <p class="lead">Three teams, three counting rounds, one Cup. Team and individual scores update live as the guys tap them in on the course.</p>
+    <p class="lead">Three teams, three counting rounds, one Cup. Played September 9&ndash;12, 2026 at Bay Hill and Evermore.</p>
+    <p><span class="final-banner">Final &middot; Rounds closed</span></p>
     <div class="hero-cta-row">
-      <a class="btn btn-primary" href="../scoring.html">Enter Scores →</a>
-      <a class="btn btn-light" href="../players.html">Player Directory</a>
+      <a class="btn btn-primary" href="#final">Final Standings &rarr;</a>
+      <a class="btn btn-quiet" href="../players.html">Player Directory</a>
     </div>
   </div>
 </section>
@@ -36,12 +37,50 @@
   </div>
 </section>
 
-<section class="section" id="leaderboard" style="padding-top:0;">
+<section class="section" id="champions" style="padding-top:0;">
   <div class="wrap">
     <div class="section-head">
-      <div><span class="eyebrow">Live</span><h2>Leaderboard</h2></div>
+      <div><span class="eyebrow">2026</span><h2>Champions</h2></div>
     </div>
-    <div class="liv-board" id="liv-board"></div>
+    <div id="final-champions"></div>
+  </div>
+</section>
+
+<section class="section" id="final" style="padding-top:0;">
+  <div class="wrap">
+    <div class="section-head">
+      <div><span class="eyebrow">Final</span><h2>Individual</h2></div>
+    </div>
+    <div class="liv-board" id="final-individual"></div>
+  </div>
+</section>
+
+<section class="section" id="teams-final" style="padding-top:0;">
+  <div class="wrap">
+    <div class="section-head">
+      <div><span class="eyebrow">Final</span><h2>Teams</h2></div>
+    </div>
+    <div class="liv-board" id="final-teams"></div>
+  </div>
+</section>
+
+<section class="section" id="rounds" style="padding-top:0;">
+  <div class="wrap">
+    <div class="section-head">
+      <div><span class="eyebrow">Every Stroke</span><h2>Round by Round</h2></div>
+    </div>
+    <div class="liv-board" id="final-rounds"></div>
+  </div>
+</section>
+
+<section class="section" id="money" style="padding-top:0;">
+  <div class="wrap">
+    <div class="section-head">
+      <div><span class="eyebrow">Settled</span><h2>The Money</h2></div>
+    </div>
+    <div class="card" style="padding:24px;">
+      <div id="final-money"></div>
+    </div>
   </div>
 </section>
 
@@ -128,7 +167,7 @@
       </div>`;
   }).join('');
 </script>
-<script type="module" src="../js/live-board.js"></script>
+<script type="module" src="../js/final-2026.js"></script>
 <script type="module" src="../js/player-card.js"></script>
 </body>
 </html>
