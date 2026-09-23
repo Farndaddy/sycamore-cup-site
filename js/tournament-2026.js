@@ -312,6 +312,16 @@ export const RULES = {
   // NO MAXIMUM. Farnia, 2026-09-08: "someone cards a 10, they card a 10 for
   // everything. Every stroke counts." Set this to a number again and the cap
   // comes back everywhere at once — entry, net, team totals and both skins games.
+  // DOUBLE PAR is the cap, settled 2026-09-23 after running the numbers three
+  // ways against the finished cards. Par 3 caps at 6, par 4 at 8, par 5 at 10.
+  // Verified before it was adopted: against the 2026 field it moves 24 strokes
+  // and changes not one dollar — every daily prize, every skin, the individual
+  // purse and the team championship land exactly where they did uncapped. What
+  // it changes is the order below 4th place.
+  //
+  // maxOverPar is the older flat-over-par shape (3 = triple bogey). Left here
+  // because the engine still honours it if maxMultipleOfPar is null.
+  maxMultipleOfPar: 2,
   maxOverPar: null,
 
   // Ties split the money. Swap to 'countback' for a card playoff

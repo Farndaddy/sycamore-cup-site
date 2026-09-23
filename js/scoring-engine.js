@@ -74,11 +74,22 @@ export function strokesByHole(courseHcp, course) {
 // ---------------------------------------------------------
 // THE CAP
 // ---------------------------------------------------------
-// There is NO maximum score. What a man cards is what counts, on his own card
-// and in every total that pays: team net, both skins games, the individual race.
-// RULES.maxOverPar is null; put a number back and the cap returns everywhere
-// through these three functions, which is the only place it was ever applied.
+// The maximum a hole can count for. Two shapes, and this is the only place
+// either is applied — everything that pays reads the hole through capGross:
+// team net, both skins games and the individual race.
+//
+//   RULES.maxMultipleOfPar: 2  -> DOUBLE PAR. Par 3 caps at 6, par 4 at 8,
+//                                 par 5 at 10. This is how 2026 was settled.
+//   RULES.maxOverPar: 3        -> a flat number over par on every hole
+//                                 (triple bogey), regardless of the par.
+//   both null                  -> no cap at all; what a man cards is what counts.
+//
+// A multiple wins if both are set. The raw card in the database is never
+// touched — the cap is arithmetic applied at read time, so the number a man
+// actually wrote down survives and the rule can be changed back.
 export function maxGrossForHole(par) {
+  const mult = RULES.maxMultipleOfPar;
+  if (mult !== null && mult !== undefined) return par * mult;
   return RULES.maxOverPar === null || RULES.maxOverPar === undefined
     ? null
     : par + RULES.maxOverPar;
