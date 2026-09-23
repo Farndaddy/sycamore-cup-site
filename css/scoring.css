@@ -829,16 +829,20 @@ table.fc .fc-v:disabled { cursor: default; color: var(--ink-soft); }
 @media (min-width: 860px) { .money-days { grid-template-columns: repeat(3, 1fr); } }
 .money-day h4, .money-h { margin: 0 0 8px; font-size: 1rem; }
 .money-h { margin-top: 26px; }
-.money-table td { vertical-align: top; padding: 9px 8px; }
-.money-table .what { font-weight: 600; white-space: nowrap; }
-.money-table .who { color: var(--ink-soft); }
+/* Two columns, not three. At 393px a prize name, a winner and a dollar figure
+   side by side pushed the money off the right edge. The prize and who won it
+   stack in one cell; the amount keeps its own column and stays put. */
+.money-table td { vertical-align: top; padding: 10px 6px; }
+.money-table .prize { width: 100%; }
+.money-table .what { display: block; font-weight: 600; line-height: 1.35; }
+.money-table .who { display: block; color: var(--ink-soft); font-size: 0.9rem; line-height: 1.45; margin-top: 2px; }
 .money-table .who small { display: block; font-size: 0.78rem; opacity: .85; }
 .money-table .amt {
   font-family: var(--font-mono); font-weight: 600; white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
-.money-table.ledger .who { color: var(--ink); font-weight: 600; }
-.money-table.ledger .who small { font-weight: 400; color: var(--ink-soft); }
+.money-table.ledger .what { font-size: 0.98rem; }
+.money-table.ledger .who { font-size: 0.78rem; }
 .money-table tfoot td { border-top: 2px solid var(--line-strong); padding-top: 12px; }
 
 .final-banner {

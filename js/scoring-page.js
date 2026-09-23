@@ -118,6 +118,12 @@ function wireTabs() {
 function currentRound() { return roundById(S.roundId); }
 function isLocked(roundId) { const r = S.rounds[roundId]; return !!(r && r.locked); }
 
+// Every counting round marked final = the tournament is over. The app stays
+// browsable but stops pretending anything is still in play.
+function allRoundsFinal() {
+  return ROUNDS.filter(r => !r.practice).every(r => isLocked(r.id));
+}
+
 function teeFor(playerId, roundId) {
   const p = S.players[playerId];
   const round = roundById(roundId);
@@ -158,10 +164,23 @@ function teamDot(teamId) { return `<span class="team-dot dot-${teamId}"></span>`
 function render() {
   renderIdent();
   renderRoundMeta();
+  renderClosedBanner();
   if (S.tab === 'card')  renderCard();
   if (S.tab === 'board') renderBoard();
   if (S.tab === 'skins') renderSkins();
   if (S.tab === 'money') renderMoney();
+}
+
+// When every round is final the app is a record, not a scorecard. Say so once,
+// at the top, rather than letting someone tap around wondering why nothing saves.
+function renderClosedBanner() {
+  const el = $('status-banner');
+  if (!el) return;
+  if (!allRoundsFinal()) return;
+  el.innerHTML = `<div class="banner"><strong>2026 is final</strong>
+    Every round is closed and the money is settled. You can look at anything here,
+    but no score can be changed. Full results are on the
+    <a href="years/2026.html#final">2026 page</a>.</div>`;
 }
 
 function renderIdent() {
@@ -1097,8 +1116,9 @@ function renderMoney() {
     </div>
     ${chips ? `<div class="tee-row money-chips" style="margin-bottom:18px;">${chips}</div>` : ''}
     ${body || '<div class="banner"><strong>Nothing here</strong>No payouts match that filter.</div>'}
-    <p class="pane-note" style="margin-top:14px;">Leaders shown are live and provisional —
-    nothing is settled until a round is marked final. Ties split the money.</p>`;
+    <p class="pane-note" style="margin-top:14px;">${allRoundsFinal()
+      ? 'Final. Every round is marked final and the money is settled &mdash; this is what was paid. Ties split.'
+      : 'Leaders shown are live and provisional &mdash; nothing is settled until a round is marked final. Ties split the money.'}</p>`;
 
   pane.querySelectorAll('[data-mmode]').forEach(b =>
     b.addEventListener('click', () => { S.moneyMode = b.dataset.mmode; render(); }));

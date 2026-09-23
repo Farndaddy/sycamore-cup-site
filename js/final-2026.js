@@ -181,14 +181,15 @@ const F = (() => {
         <h4>${esc(d.day)}</h4>
         <table class="lb money-table">
           <tbody>
-            ${d.prizes.map(p => `<tr><td class="what">${esc(p.what)}</td>
-              <td class="who">${esc(p.who)} <small>${par(p.score)}</small></td>
+            ${d.prizes.map(p => `<tr>
+              <td class="prize"><span class="what">${esc(p.what)}</span><span class="who">${esc(p.who)} <small>${par(p.score)}</small></span></td>
               <td class="num amt">${money(p.amount)}</td></tr>`).join('')}
             ${['net', 'gross'].map(mode => {
               const s = d.skins[mode];
-              return `<tr><td class="what">${mode === 'net' ? 'Net' : 'Gross'} Skins</td>
-                <td class="who">${s.winners.map(w => `${esc(shortOf(w.id))} ${w.skins}`).join(' &middot; ')}
-                  <small>${s.count} skins @ ${money(s.perSkin)}</small></td>
+              return `<tr>
+                <td class="prize"><span class="what">${mode === 'net' ? 'Net' : 'Gross'} Skins</span>
+                  <span class="who">${s.winners.map(w => `${esc(shortOf(w.id))} ${w.skins}`).join(' &middot; ')}
+                  <small>${s.count} skins @ ${money(s.perSkin)}</small></span></td>
                 <td class="num amt">${money(s.pot)}</td></tr>`;
             }).join('')}
           </tbody>
@@ -200,10 +201,11 @@ const F = (() => {
       <h4 class="money-h">The Whole Week</h4>
       <table class="lb money-table">
         <tbody>
-          <tr><td class="what">Team Champion</td><td class="who">${esc(D.champions.team.name)} <small>${par(D.champions.team.toPar)}</small></td><td class="num amt">$730.00</td></tr>
-          <tr><td class="what">Individual Champion</td><td class="who">${esc(D.champions.individual.name)} <small>${par(D.champions.individual.toPar)}</small></td><td class="num amt">$300.00</td></tr>
-          ${D.individual.slice(1, 4).map((r, i) => `<tr><td class="what">Individual ${['Runner-Up', '3rd', '4th'][i]}</td>
-            <td class="who">${esc(nameOf(r.id))} <small>${par(r.toPar)}</small></td>
+          <tr><td class="prize"><span class="what">Team Champion</span><span class="who">${esc(D.champions.team.name)} <small>${par(D.champions.team.toPar)}</small></span></td><td class="num amt">$730.00</td></tr>
+          <tr><td class="prize"><span class="what">Individual Champion</span><span class="who">${esc(D.champions.individual.name)} <small>${par(D.champions.individual.toPar)}</small></span></td><td class="num amt">$300.00</td></tr>
+          ${D.individual.slice(1, 4).map((r, i) => `<tr>
+            <td class="prize"><span class="what">Individual ${['Runner-Up', '3rd', '4th'][i]}</span>
+              <span class="who">${esc(nameOf(r.id))} <small>${par(r.toPar)}</small></span></td>
             <td class="num amt">${money([225, 150, 100][i])}</td></tr>`).join('')}
         </tbody>
       </table>
@@ -211,10 +213,10 @@ const F = (() => {
       <table class="lb money-table ledger">
         <thead><tr><th>Player</th><th class="num">Total</th></tr></thead>
         <tbody>${D.ledger.map(l => `
-          <tr><td class="who">${dot(teamOf[l.id])}${esc(nameOf(l.id))}
-            <small>${l.items.length ? l.items.map(i => esc(i.label)).join(' &middot; ') : 'no prizes'}</small></td>
+          <tr><td class="prize"><span class="what">${dot(teamOf[l.id])}${esc(nameOf(l.id))}</span>
+            <span class="who">${l.items.length ? l.items.map(i => esc(i.label)).join(' &middot; ') : 'no prizes'}</span></td>
             <td class="num amt">${money(l.total)}</td></tr>`).join('')}</tbody>
-        <tfoot><tr><td class="who"><strong>Purse</strong></td><td class="num amt"><strong>${money(D.purse)}</strong></td></tr></tfoot>
+        <tfoot><tr><td class="prize"><span class="what">Purse</span></td><td class="num amt"><strong>${money(D.purse)}</strong></td></tr></tfoot>
       </table>`;
   }
 

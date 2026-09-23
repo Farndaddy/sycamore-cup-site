@@ -11,6 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400..600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/scoring.css">
 </head>
 <body>
 
@@ -22,9 +23,20 @@
     <h1 style="white-space:nowrap; font-size:clamp(1.6rem, 7vw, 4.5rem);">Sycamore Cup Classic</h1>
     <p class="lead">Where legendary stories are born and memories are made.</p>
     <div class="hero-cta-row">
-      <a class="btn btn-primary" href="years/2026.html#leaderboard">Live Leaderboard &rarr;</a>
+      <a class="btn btn-primary" href="years/2026.html#champions">2026 Champions &rarr;</a>
       <a class="btn btn-light" href="players.html">Player Directory</a>
     </div>
+  </div>
+</section>
+
+<section class="section" id="latest">
+  <div class="wrap">
+    <div class="section-head">
+      <div><span class="eyebrow">2026 &middot; Final</span><h2>The Cup Is Settled</h2></div>
+      <a class="btn btn-sm btn-quiet" href="years/2026.html#final">Full results &rarr;</a>
+    </div>
+    <div id="latest-champions"></div>
+    <div class="card" id="latest-money" style="padding:24px; margin-top:18px;"></div>
   </div>
 </section>
 
@@ -63,6 +75,52 @@
     2024: 'assets/photos/2024-evermore-links-group.jpg',
     2025: 'assets/photos/2025-turning-stone-huddle.jpg',
   };
+
+  // The 2026 winners, straight from the frozen results file the year page uses,
+  // so the front page and the record book can never drift apart.
+  fetch('data/2026-final.json').then(r => r.json()).then(F => {
+    const nameOf = id => (F.players.find(p => p.id === id) || {}).name || id;
+    const par = n => n === 0 ? 'E' : (n > 0 ? '+' + n : String(n));
+    const money = n => '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const roster = F.teams.find(t => t.id === F.champions.team.id).roster;
+
+    document.getElementById('latest-champions').innerHTML = `
+      <div class="champ-grid">
+        <div class="champ-card champ-card--team">
+          <span class="eyebrow">Team Champion</span>
+          <h3>${F.champions.team.name}</h3>
+          <div class="champ-score">${par(F.champions.team.toPar)}</div>
+          <ul class="champ-roster">${roster.map(id => `<li>${nameOf(id)}</li>`).join('')}</ul>
+          <p class="champ-note">Runner-up ${F.champions.teamRunnerUp}</p>
+        </div>
+        <div class="champ-card champ-card--ind">
+          <span class="eyebrow">Individual Champion</span>
+          <h3>${F.champions.individual.name}</h3>
+          <div class="champ-score">${par(F.champions.individual.toPar)}</div>
+          <p class="champ-note">Low net across all three rounds, wire to wire.</p>
+        </div>
+      </div>`;
+
+    const rows = [];
+    rows.push(['Team Champion', F.champions.team.name, par(F.champions.team.toPar), 730]);
+    rows.push(['Individual Champion', F.champions.individual.name, par(F.champions.individual.toPar), 300]);
+    ['Runner-Up', '3rd', '4th'].forEach((lbl, i) => {
+      const r = F.individual[i + 1];
+      rows.push(['Individual ' + lbl, nameOf(r.id), par(r.toPar), [225, 150, 100][i]]);
+    });
+    F.days.forEach(d => d.prizes.forEach(pz =>
+      rows.push([d.day + ' ' + pz.what, pz.who, par(pz.score), pz.amount])));
+
+    document.getElementById('latest-money').innerHTML = `
+      <h4 class="money-h" style="margin-top:0;">Where the ${money(F.purse)} went</h4>
+      <table class="lb money-table">
+        <tbody>${rows.map(r => `<tr>
+          <td class="prize"><span class="what">${r[0]}</span><span class="who">${r[1]} <small>${r[2]}</small></span></td>
+          <td class="num amt">${money(r[3])}</td></tr>`).join('')}</tbody>
+      </table>
+      <p class="liv-note" style="padding:14px 0 0;">Skins are listed round by round on the
+        <a href="years/2026.html#money">2026 page</a>, along with what each man collected.</p>`;
+  });
 
   loadData().then(data => {
     const cardsEl = document.getElementById('year-cards');

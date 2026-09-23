@@ -1113,6 +1113,79 @@
           ]
         }
       ]
+    },
+    "2026": {
+      "year": 2026,
+      "location": "Bay Hill & Evermore, Orlando, FL",
+      "courses": [
+        "Bay Hill (Championship)",
+        "Bay Hill (Charger)",
+        "Evermore Grand Cypress"
+      ],
+      "teamChampion": "Bison Boys",
+      "individualChampion": "Scottie Collins",
+      "individualChampionScore": 10,
+      "teamChampionScore": 66,
+      "teams": [
+        {
+          "id": "2026-bison-boys",
+          "name": "Bison Boys",
+          "result": "Champion",
+          "roster": [
+            {
+              "playerId": "robert-stong"
+            },
+            {
+              "playerId": "scottie-collins"
+            },
+            {
+              "playerId": "auston-chen"
+            },
+            {
+              "playerId": "nigel-scott"
+            }
+          ]
+        },
+        {
+          "id": "2026-frombys",
+          "name": "Frombys",
+          "result": "Runner-up",
+          "roster": [
+            {
+              "playerId": "klayton-mcclosin"
+            },
+            {
+              "playerId": "rob-vassallo"
+            },
+            {
+              "playerId": "justin-quinn"
+            },
+            {
+              "playerId": "mike-grosh"
+            }
+          ]
+        },
+        {
+          "id": "2026-starz-scrubz",
+          "name": "Starz & Scrubz",
+          "result": "Third",
+          "roster": [
+            {
+              "playerId": "nick-fowler"
+            },
+            {
+              "playerId": "alex-kampmann"
+            },
+            {
+              "playerId": "anthony-gjonaj"
+            },
+            {
+              "playerId": "farnia-ghavami"
+            }
+          ]
+        }
+      ],
+      "schedule": []
     }
   },
   "championshipHistory": [
@@ -1130,6 +1203,12 @@
       "year": 2025,
       "teamChampion": "DOMinators",
       "teamRunnerUp": "Sycamore Swingers"
+    },
+    {
+      "year": 2026,
+      "teamChampion": "Bison Boys",
+      "teamRunnerUp": "Frombys",
+      "individualChampion": "Scottie Collins"
     }
   ],
   "funFactsByPlayer": {
