@@ -216,7 +216,6 @@ const F = (() => {
           <tr><td class="prize"><span class="what">${dot(teamOf[l.id])}${esc(nameOf(l.id))}</span>
             <span class="who">${l.items.length ? l.items.map(i => esc(i.label)).join(' &middot; ') : 'no prizes'}</span></td>
             <td class="num amt">${money(l.total)}</td></tr>`).join('')}</tbody>
-        <tfoot><tr><td class="prize"><span class="what">Purse</span></td><td class="num amt"><strong>${money(D.purse)}</strong></td></tr></tfoot>
       </table>`;
   }
 

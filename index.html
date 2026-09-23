@@ -112,7 +112,7 @@
       rows.push([d.day + ' ' + pz.what, pz.who, par(pz.score), pz.amount])));
 
     document.getElementById('latest-money').innerHTML = `
-      <h4 class="money-h" style="margin-top:0;">Where the ${money(F.purse)} went</h4>
+      <h4 class="money-h" style="margin-top:0;">Where the money went</h4>
       <table class="lb money-table">
         <tbody>${rows.map(r => `<tr>
           <td class="prize"><span class="what">${r[0]}</span><span class="who">${r[1]} <small>${r[2]}</small></span></td>

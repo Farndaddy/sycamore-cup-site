@@ -2,7 +2,7 @@
 // Sycamore Cup Classic — live scoring page
 // =========================================================
 import {
-  COURSES, TEAMS, PLAYERS, ROUNDS, PAYOUTS, RULES, EVENT,
+  COURSES, TEAMS, PLAYERS, ROUNDS, PAYOUTS, RULES,
   playerById, teamById, roundById
 } from './tournament-2026.js';
 

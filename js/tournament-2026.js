@@ -209,8 +209,8 @@ export const ROUNDS = [
 
 export const PAYOUTS = [
   // 2026-09-10 — WEDNESDAY IS A PRACTICE ROUND. The $505 that had been riding on
-  // it was rolled into the three days that count, so the pot and the buy-in are
-  // untouched: still $3,515 and still $292.92 a man. What changed per day:
+  // it was rolled into the three days that count, so the total and the buy-in
+  // are untouched. What changed per day:
   //   Team Low Net   $200 -> $260   ($65 a man)
   //   Individual 1st  $75 -> $100
   //   Individual 2nd  $50 ->  $70
@@ -324,10 +324,13 @@ export const RULES = {
   tieBreak: 'split'
 };
 
+// No totalPot here on purpose. Farnia asked on 2026-09-23 that the overall
+// figure not appear anywhere on the site — individual prizes are published,
+// the sum of them is not. This file is served to the browser, so a comment
+// stating it would be just as public as a heading.
 export const EVENT = {
   year: 2026,
-  name: '2026 Sycamore Cup Classic',
-  totalPot: PAYOUTS.reduce((sum, p) => sum + p.amount, 0)
+  name: '2026 Sycamore Cup Classic'
 };
 
 // ---------- small lookups ----------
