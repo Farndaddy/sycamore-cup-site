@@ -25,7 +25,14 @@ function renderHeader(activeKey) {
     { key: '2024', href: ROOT + 'years/2024.html', label: '2024' },
     { key: '2023', href: ROOT + 'years/2023.html', label: '2023' },
     { key: 'players', href: ROOT + 'players.html', label: 'Players' },
-    { key: 'scoring', href: ROOT + 'scoring.html', label: 'Live Scoring' },
+
+    // Live Scoring comes off the nav between tournaments. 2026 is closed and
+    // every round is locked, so the tab pointed at a scoreboard nobody can
+    // change. scoring.html and admin.html are both still there and still work
+    // if you go straight to the URL — this only removes the front door.
+    //
+    // Put it back when next year's tournament is built:
+    //   { key: 'scoring', href: ROOT + 'scoring.html', label: 'Live Scoring' },
   ];
   el.innerHTML = `
     <div class="wrap">
