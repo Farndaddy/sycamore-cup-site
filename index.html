@@ -64,6 +64,17 @@
   </div>
 </section>
 
+<section class="section" id="accolades" style="padding-top:0;">
+  <div class="wrap">
+    <div class="section-head">
+      <div><span class="eyebrow">The Record Book</span><h2>Individual Accolades</h2></div>
+    </div>
+    <div class="card" style="padding:22px 20px;">
+      <div id="acc-list"></div>
+    </div>
+  </div>
+</section>
+
 <footer class="site-footer" id="site-footer"></footer>
 
 <script src="js/app.js"></script>
@@ -123,7 +134,60 @@
         <a href="years/2026.html#money">2026 page</a>, along with what each man collected.</p>`;
   });
 
-  loadData().then(data => {
+  // Individual Accolades — who has won the Cup, how many times, and when.
+  // A title means being on the championship team that year, which is the same
+  // thing the "2 won" on a player card counts.
+  Promise.all([
+    loadData(),
+    fetch('data/2026-final.json').then(r => r.json()).catch(() => null)
+  ]).then(([data, fin]) => {
+    // Three of the 2026 men were never added to data.players, so fall back to
+    // the 2026 roster for a name before giving up and showing the raw id.
+    const extra = {};
+    (fin ? fin.players : []).forEach(p => extra[p.id] = p.name);
+    const nameOf = id => (data.players.find(p => p.id === id) || {}).name || extra[id] || id;
+
+    const tally = {};
+    Object.values(data.years).sort((a, b) => a.year - b.year).forEach(y => {
+      (y.teams || []).forEach(t => (t.roster || []).forEach(r => {
+        const v = tally[r.playerId] || (tally[r.playerId] = { cups: 0, wins: [] });
+        v.cups++;
+        if (t.result === 'Champion') v.wins.push({ year: y.year, team: t.name });
+      }));
+    });
+
+    // Individual championships, where a year recorded one.
+    const indTitles = {};
+    Object.values(data.years).forEach(y => {
+      if (!y.individualChampion) return;
+      const m = data.players.find(p => p.name === y.individualChampion)
+            || (fin ? fin.players.find(p => p.name === y.individualChampion) : null);
+      if (m) (indTitles[m.id] = indTitles[m.id] || []).push(y.year);
+    });
+
+    const rows = Object.entries(tally).map(([id, v]) => ({ id, name: nameOf(id), ...v }))
+      .sort((a, b) => b.wins.length - a.wins.length || b.cups - a.cups || a.name.localeCompare(b.name));
+    const winners = rows.filter(r => r.wins.length);
+    const chasing = rows.filter(r => !r.wins.length);
+
+    document.getElementById('acc-list').innerHTML = `
+      <div class="acc-list">
+        ${winners.map((r, i) => {
+          const tie = i > 0 && winners[i - 1].wins.length === r.wins.length;
+          return `<div class="acc-row">
+            <span class="acc-rank">${tie ? '' : i + 1}</span>
+            <span class="acc-main">
+              <span class="acc-name">${r.name}${(indTitles[r.id] || []).length
+                ? `<span class="acc-badge">Individual Champion ${indTitles[r.id].join(', ')}</span>` : ''}</span>
+              <span class="acc-years">${r.wins.map(w => `<b>${w.year}</b> ${w.team}`).join(' &middot; ')}</span>
+            </span>
+            <span class="acc-count">${r.wins.length}<small>${r.wins.length === 1 ? 'title' : 'titles'}</small></span>
+          </div>`;
+        }).join('')}
+      </div>
+      ${chasing.length ? `<p class="acc-chasing"><strong>Still chasing a first:</strong>
+        ${chasing.map(r => r.name).join(' &middot; ')}</p>` : ''}`;
+
     const cardsEl = document.getElementById('year-cards');
     const years = Object.values(data.years).sort((a,b) => b.year - a.year);
     cardsEl.innerHTML = years.map(y => `
