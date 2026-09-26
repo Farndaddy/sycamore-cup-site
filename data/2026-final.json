@@ -2742,7 +2742,7 @@
      "what": "Team Low Net",
      "who": "Frombys",
      "score": 25,
-     "amount": 260
+     "amount": 200
     },
     {
      "what": "Individual Low Net",
@@ -2754,7 +2754,7 @@
      "what": "Individual 2nd",
      "who": "Klayton McClosin",
      "score": 5,
-     "amount": 70
+     "amount": 50
     }
    ],
    "teams": [
@@ -2838,29 +2838,29 @@
    ],
    "skins": {
     "net": {
-     "pot": 160,
+     "pot": 120,
      "count": 6,
-     "perSkin": 26.67,
+     "perSkin": 20.0,
      "winners": [
       {
        "id": "anthony-gjonaj",
        "skins": 3,
-       "amount": 80
+       "amount": 60.0
       },
       {
        "id": "nick-fowler",
        "skins": 1,
-       "amount": 26.67
+       "amount": 20.0
       },
       {
        "id": "scottie-collins",
        "skins": 1,
-       "amount": 26.67
+       "amount": 20.0
       },
       {
        "id": "alex-kampmann",
        "skins": 1,
-       "amount": 26.67
+       "amount": 20.0
       }
      ],
      "holes": [
@@ -2897,29 +2897,29 @@
      ]
     },
     "gross": {
-     "pot": 80,
+     "pot": 60,
      "count": 5,
-     "perSkin": 16,
+     "perSkin": 12.0,
      "winners": [
       {
        "id": "alex-kampmann",
        "skins": 2,
-       "amount": 32
+       "amount": 24.0
       },
       {
        "id": "nick-fowler",
        "skins": 1,
-       "amount": 16
+       "amount": 12.0
       },
       {
        "id": "scottie-collins",
        "skins": 1,
-       "amount": 16
+       "amount": 12.0
       },
       {
        "id": "anthony-gjonaj",
        "skins": 1,
-       "amount": 16
+       "amount": 12.0
       }
      ],
      "holes": [
@@ -2961,7 +2961,7 @@
      "what": "Team Low Net",
      "who": "Bison Boys",
      "score": 15,
-     "amount": 260
+     "amount": 200
     },
     {
      "what": "Individual Low Net",
@@ -2973,7 +2973,7 @@
      "what": "Individual 2nd",
      "who": "Scottie Collins",
      "score": 3,
-     "amount": 70
+     "amount": 50
     }
    ],
    "teams": [
@@ -3057,39 +3057,39 @@
    ],
    "skins": {
     "net": {
-     "pot": 160,
+     "pot": 120,
      "count": 9,
-     "perSkin": 17.78,
+     "perSkin": 13.33,
      "winners": [
       {
        "id": "auston-chen",
        "skins": 3,
-       "amount": 53.33
+       "amount": 40.0
       },
       {
        "id": "nigel-scott",
        "skins": 2,
-       "amount": 35.56
+       "amount": 26.67
       },
       {
        "id": "robert-stong",
        "skins": 1,
-       "amount": 17.78
+       "amount": 13.33
       },
       {
        "id": "anthony-gjonaj",
        "skins": 1,
-       "amount": 17.78
+       "amount": 13.33
       },
       {
        "id": "alex-kampmann",
        "skins": 1,
-       "amount": 17.78
+       "amount": 13.33
       },
       {
        "id": "mike-grosh",
        "skins": 1,
-       "amount": 17.78
+       "amount": 13.33
       }
      ],
      "holes": [
@@ -3141,39 +3141,39 @@
      ]
     },
     "gross": {
-     "pot": 80,
+     "pot": 60,
      "count": 8,
-     "perSkin": 10,
+     "perSkin": 7.5,
      "winners": [
       {
        "id": "nigel-scott",
        "skins": 3,
-       "amount": 30
+       "amount": 22.5
       },
       {
        "id": "nick-fowler",
        "skins": 1,
-       "amount": 10
+       "amount": 7.5
       },
       {
        "id": "auston-chen",
        "skins": 1,
-       "amount": 10
+       "amount": 7.5
       },
       {
        "id": "robert-stong",
        "skins": 1,
-       "amount": 10
+       "amount": 7.5
       },
       {
        "id": "alex-kampmann",
        "skins": 1,
-       "amount": 10
+       "amount": 7.5
       },
       {
        "id": "mike-grosh",
        "skins": 1,
-       "amount": 10
+       "amount": 7.5
       }
      ],
      "holes": [
@@ -3230,7 +3230,7 @@
      "what": "Team Low Net",
      "who": "Bison Boys",
      "score": 24,
-     "amount": 260
+     "amount": 200
     },
     {
      "what": "Individual Low Net",
@@ -3242,7 +3242,7 @@
      "what": "Individual 2nd",
      "who": "Alex Kampmann",
      "score": 4,
-     "amount": 70
+     "amount": 50
     }
    ],
    "teams": [
@@ -3326,34 +3326,34 @@
    ],
    "skins": {
     "net": {
-     "pot": 160,
+     "pot": 120,
      "count": 6,
-     "perSkin": 26.67,
+     "perSkin": 20.0,
      "winners": [
       {
        "id": "auston-chen",
        "skins": 2,
-       "amount": 53.33
+       "amount": 40.0
       },
       {
        "id": "alex-kampmann",
        "skins": 1,
-       "amount": 26.67
+       "amount": 20.0
       },
       {
        "id": "nick-fowler",
        "skins": 1,
-       "amount": 26.67
+       "amount": 20.0
       },
       {
        "id": "robert-stong",
        "skins": 1,
-       "amount": 26.67
+       "amount": 20.0
       },
       {
        "id": "nigel-scott",
        "skins": 1,
-       "amount": 26.67
+       "amount": 20.0
       }
      ],
      "holes": [
@@ -3390,34 +3390,34 @@
      ]
     },
     "gross": {
-     "pot": 80,
+     "pot": 60,
      "count": 5,
-     "perSkin": 16,
+     "perSkin": 12.0,
      "winners": [
       {
        "id": "scottie-collins",
        "skins": 1,
-       "amount": 16
+       "amount": 12.0
       },
       {
        "id": "alex-kampmann",
        "skins": 1,
-       "amount": 16
+       "amount": 12.0
       },
       {
        "id": "nick-fowler",
        "skins": 1,
-       "amount": 16
+       "amount": 12.0
       },
       {
        "id": "auston-chen",
        "skins": 1,
-       "amount": 16
+       "amount": 12.0
       },
       {
        "id": "nigel-scott",
        "skins": 1,
-       "amount": 16
+       "amount": 12.0
       }
      ],
      "holes": [
@@ -3815,7 +3815,7 @@
  "ledger": [
   {
    "id": "scottie-collins",
-   "total": 842.17,
+   "total": 695.0,
    "items": [
     {
      "label": "Thursday individual low net",
@@ -3823,35 +3823,35 @@
     },
     {
      "label": "Thursday net skins",
-     "amount": 26.67
+     "amount": 20.0
     },
     {
      "label": "Thursday gross skins",
-     "amount": 16
+     "amount": 12.0
     },
     {
      "label": "Friday team low net",
-     "amount": 65
+     "amount": 50.0
     },
     {
      "label": "Friday individual 2nd",
-     "amount": 70
+     "amount": 50.0
     },
     {
      "label": "Saturday team low net",
-     "amount": 65
+     "amount": 50.0
     },
     {
      "label": "Saturday gross skins",
-     "amount": 16
-    },
-    {
-     "label": "Individual Champion",
-     "amount": 300
+     "amount": 12.0
     },
     {
      "label": "Team Champion",
-     "amount": 182.5
+     "amount": 150.0
+    },
+    {
+     "label": "Individual Champion",
+     "amount": 250
     },
     {
      "label": "Rounding remainder",
@@ -3861,11 +3861,11 @@
   },
   {
    "id": "nigel-scott",
-   "total": 671.72,
+   "total": 582.17,
    "items": [
     {
      "label": "Friday team low net",
-     "amount": 65
+     "amount": 50.0
     },
     {
      "label": "Friday individual low net",
@@ -3873,31 +3873,31 @@
     },
     {
      "label": "Friday net skins",
-     "amount": 35.56
-    },
-    {
-     "label": "Friday gross skins",
-     "amount": 30
-    },
-    {
-     "label": "Saturday team low net",
-     "amount": 65
-    },
-    {
-     "label": "Saturday net skins",
      "amount": 26.67
     },
     {
-     "label": "Saturday gross skins",
-     "amount": 16
+     "label": "Friday gross skins",
+     "amount": 22.5
     },
     {
-     "label": "Individual place 3",
-     "amount": 150
+     "label": "Saturday team low net",
+     "amount": 50.0
+    },
+    {
+     "label": "Saturday net skins",
+     "amount": 20.0
+    },
+    {
+     "label": "Saturday gross skins",
+     "amount": 12.0
     },
     {
      "label": "Team Champion",
-     "amount": 182.5
+     "amount": 150.0
+    },
+    {
+     "label": "Individual 3rd",
+     "amount": 150
     },
     {
      "label": "Rounding remainder",
@@ -3907,23 +3907,23 @@
   },
   {
    "id": "robert-stong",
-   "total": 567.94,
+   "total": 491.83,
    "items": [
     {
      "label": "Friday team low net",
-     "amount": 65
+     "amount": 50.0
     },
     {
      "label": "Friday net skins",
-     "amount": 17.78
+     "amount": 13.33
     },
     {
      "label": "Friday gross skins",
-     "amount": 10
+     "amount": 7.5
     },
     {
      "label": "Saturday team low net",
-     "amount": 65
+     "amount": 50.0
     },
     {
      "label": "Saturday individual low net",
@@ -3931,15 +3931,15 @@
     },
     {
      "label": "Saturday net skins",
-     "amount": 26.67
-    },
-    {
-     "label": "Individual place 4",
-     "amount": 100
+     "amount": 20.0
     },
     {
      "label": "Team Champion",
-     "amount": 182.5
+     "amount": 150.0
+    },
+    {
+     "label": "Individual 4th",
+     "amount": 100
     },
     {
      "label": "Rounding remainder",
@@ -3949,35 +3949,35 @@
   },
   {
    "id": "auston-chen",
-   "total": 446.17,
+   "total": 350.5,
    "items": [
     {
      "label": "Friday team low net",
-     "amount": 65
+     "amount": 50.0
     },
     {
      "label": "Friday net skins",
-     "amount": 53.33
+     "amount": 40.0
     },
     {
      "label": "Friday gross skins",
-     "amount": 10
+     "amount": 7.5
     },
     {
      "label": "Saturday team low net",
-     "amount": 65
+     "amount": 50.0
     },
     {
      "label": "Saturday net skins",
-     "amount": 53.33
+     "amount": 40.0
     },
     {
      "label": "Saturday gross skins",
-     "amount": 16
+     "amount": 12.0
     },
     {
      "label": "Team Champion",
-     "amount": 182.5
+     "amount": 150.0
     },
     {
      "label": "Rounding remainder",
@@ -3987,141 +3987,141 @@
   },
   {
    "id": "alex-kampmann",
-   "total": 424.11,
+   "total": 346.83,
    "items": [
     {
      "label": "Thursday net skins",
-     "amount": 26.67
+     "amount": 20.0
     },
     {
      "label": "Thursday gross skins",
-     "amount": 32
+     "amount": 24.0
     },
     {
      "label": "Friday net skins",
-     "amount": 17.78
+     "amount": 13.33
     },
     {
      "label": "Friday gross skins",
-     "amount": 10
+     "amount": 7.5
     },
     {
      "label": "Saturday individual 2nd",
-     "amount": 70
+     "amount": 50.0
     },
     {
      "label": "Saturday net skins",
-     "amount": 26.67
+     "amount": 20.0
     },
     {
      "label": "Saturday gross skins",
-     "amount": 16
+     "amount": 12.0
     },
     {
-     "label": "Individual place 2",
-     "amount": 225
+     "label": "Individual Runner-Up",
+     "amount": 200
     }
    ]
   },
   {
    "id": "klayton-mcclosin",
-   "total": 135,
+   "total": 100.0,
    "items": [
     {
      "label": "Thursday team low net",
-     "amount": 65
+     "amount": 50.0
     },
     {
      "label": "Thursday individual 2nd",
-     "amount": 70
+     "amount": 50.0
     }
    ]
   },
   {
    "id": "anthony-gjonaj",
-   "total": 113.78,
+   "total": 85.33,
    "items": [
     {
      "label": "Thursday net skins",
-     "amount": 80
+     "amount": 60.0
     },
     {
      "label": "Thursday gross skins",
-     "amount": 16
+     "amount": 12.0
     },
     {
      "label": "Friday net skins",
-     "amount": 17.78
+     "amount": 13.33
     }
    ]
   },
   {
    "id": "nick-fowler",
-   "total": 95.33,
+   "total": 71.5,
    "items": [
     {
      "label": "Thursday net skins",
-     "amount": 26.67
+     "amount": 20.0
     },
     {
      "label": "Thursday gross skins",
-     "amount": 16
+     "amount": 12.0
     },
     {
      "label": "Friday gross skins",
-     "amount": 10
+     "amount": 7.5
     },
     {
      "label": "Saturday net skins",
-     "amount": 26.67
+     "amount": 20.0
     },
     {
      "label": "Saturday gross skins",
-     "amount": 16
+     "amount": 12.0
     }
    ]
   },
   {
    "id": "mike-grosh",
-   "total": 92.78,
+   "total": 70.83,
    "items": [
     {
      "label": "Thursday team low net",
-     "amount": 65
+     "amount": 50.0
     },
     {
      "label": "Friday net skins",
-     "amount": 17.78
+     "amount": 13.33
     },
     {
      "label": "Friday gross skins",
-     "amount": 10
+     "amount": 7.5
     }
    ]
   },
   {
    "id": "rob-vassallo",
-   "total": 65,
+   "total": 50.0,
    "items": [
     {
      "label": "Thursday team low net",
-     "amount": 65
+     "amount": 50.0
     }
    ]
   },
   {
    "id": "justin-quinn",
-   "total": 65,
+   "total": 50.0,
    "items": [
     {
      "label": "Thursday team low net",
-     "amount": 65
+     "amount": 50.0
     }
    ]
   },
   {
    "id": "farnia-ghavami",
-   "total": 0,
+   "total": 0.0,
    "items": []
   }
  ],
@@ -4140,5 +4140,14 @@
   },
   "teamRunnerUp": "Frombys"
  },
- "roundingNote": "Every figure is shown in whole dollars, rounded down. The $4 that left behind was split $1 each to the team champion."
+ "roundingNote": "Every figure is shown in whole dollars, rounded down. The remainder that left behind was split $1 each to the team champion.",
+ "event": {
+  "teamChampion": 600,
+  "places": [
+   250,
+   200,
+   150,
+   100
+  ]
+ }
 }

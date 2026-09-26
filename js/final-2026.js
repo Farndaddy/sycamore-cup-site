@@ -202,12 +202,12 @@ const F = (() => {
       <h4 class="money-h">The Whole Week</h4>
       <table class="lb money-table">
         <tbody>
-          <tr><td class="prize"><span class="what">Team Champion</span><span class="who">${esc(D.champions.team.name)} <small>${par(D.champions.team.toPar)}</small></span></td><td class="num amt">${money(730)}</td></tr>
-          <tr><td class="prize"><span class="what">Individual Champion</span><span class="who">${esc(D.champions.individual.name)} <small>${par(D.champions.individual.toPar)}</small></span></td><td class="num amt">${money(300)}</td></tr>
+          <tr><td class="prize"><span class="what">Team Champion</span><span class="who">${esc(D.champions.team.name)} <small>${par(D.champions.team.toPar)}</small></span></td><td class="num amt">${money(D.event.teamChampion)}</td></tr>
+          <tr><td class="prize"><span class="what">Individual Champion</span><span class="who">${esc(D.champions.individual.name)} <small>${par(D.champions.individual.toPar)}</small></span></td><td class="num amt">${money(D.event.places[0])}</td></tr>
           ${D.individual.slice(1, 4).map((r, i) => `<tr>
             <td class="prize"><span class="what">Individual ${['Runner-Up', '3rd', '4th'][i]}</span>
               <span class="who">${esc(nameOf(r.id))} <small>${par(r.toPar)}</small></span></td>
-            <td class="num amt">${money([225, 150, 100][i])}</td></tr>`).join('')}
+            <td class="num amt">${money(D.event.places[i + 1])}</td></tr>`).join('')}
         </tbody>
       </table>
       <h4 class="money-h">What Each Man Collected</h4>

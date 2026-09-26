@@ -208,42 +208,43 @@ export const ROUNDS = [
 //   event-individual - every counting round combined, by place
 
 export const PAYOUTS = [
-  // 2026-09-10 — WEDNESDAY IS A PRACTICE ROUND. The $505 that had been riding on
-  // it was rolled into the three days that count, so the total and the buy-in
-  // are untouched. What changed per day:
-  //   Team Low Net   $200 -> $260   ($65 a man)
-  //   Individual 1st  $75 -> $100
-  //   Individual 2nd  $50 ->  $70
-  //   Net Skins      $120 -> $160
-  //   Gross Skins     $60 ->  $80
-  // That redistributes $495 of it; the last $10 went onto the team championship
-  // ($720 -> $730) so every number stays whole and the total still balances.
-  // Day 1 is now THURSDAY. There is no dayNum 1 round on Wednesday any more.
+  // 2026-09-26 — FINAL PAYOUT STRUCTURE, set by Farnia after the trip.
+  // Wednesday was a practice round and pays nothing. The three counting days
+  // (Thursday, Friday, Saturday) each pay the same:
+  //   Team Low Net   $200  ($50 a man)
+  //   Individual 1st $100
+  //   Individual 2nd  $50
+  //   Net Skins      $120
+  //   Gross Skins     $60
+  // Event: Team Champion $600 ($150 a man); Individual $250 / $200 / $150 / $100.
+  // The buy-in did not change; the difference covers trip expenses. That total
+  // is deliberately not written anywhere in this file — it is served to the
+  // browser, and Farnia asked that it not appear on the site.
 
-  { id: 'd1-team',   label: 'Day 1 Team Low Net',          amount: 260, perPerson: 65,  scope: 'day-team',       dayNum: 1 },
+  { id: 'd1-team',   label: 'Day 1 Team Low Net',          amount: 200, perPerson: 50,  scope: 'day-team',       dayNum: 1 },
   { id: 'd1-ind-1',  label: 'Day 1 Individual Low Net',    amount: 100, perPerson: 100, scope: 'day-individual', dayNum: 1, place: 1 },
-  { id: 'd1-ind-2',  label: 'Day 1 Individual Low Net #2', amount: 70,  perPerson: 70,  scope: 'day-individual', dayNum: 1, place: 2 },
+  { id: 'd1-ind-2',  label: 'Day 1 Individual Low Net #2', amount: 50,  perPerson: 50,  scope: 'day-individual', dayNum: 1, place: 2 },
 
-  { id: 'd2-team',   label: 'Day 2 Team Low Net',          amount: 260, perPerson: 65,  scope: 'day-team',       dayNum: 2 },
+  { id: 'd2-team',   label: 'Day 2 Team Low Net',          amount: 200, perPerson: 50,  scope: 'day-team',       dayNum: 2 },
   { id: 'd2-ind-1',  label: 'Day 2 Individual Low Net',    amount: 100, perPerson: 100, scope: 'day-individual', dayNum: 2, place: 1 },
-  { id: 'd2-ind-2',  label: 'Day 2 Individual Low Net #2', amount: 70,  perPerson: 70,  scope: 'day-individual', dayNum: 2, place: 2 },
+  { id: 'd2-ind-2',  label: 'Day 2 Individual Low Net #2', amount: 50,  perPerson: 50,  scope: 'day-individual', dayNum: 2, place: 2 },
 
-  { id: 'd3-team',   label: 'Day 3 Team Low Net',          amount: 260, perPerson: 65,  scope: 'day-team',       dayNum: 3 },
+  { id: 'd3-team',   label: 'Day 3 Team Low Net',          amount: 200, perPerson: 50,  scope: 'day-team',       dayNum: 3 },
   { id: 'd3-ind-1',  label: 'Day 3 Individual Low Net',    amount: 100, perPerson: 100, scope: 'day-individual', dayNum: 3, place: 1 },
-  { id: 'd3-ind-2',  label: 'Day 3 Individual Low Net #2', amount: 70,  perPerson: 70,  scope: 'day-individual', dayNum: 3, place: 2 },
+  { id: 'd3-ind-2',  label: 'Day 3 Individual Low Net #2', amount: 50,  perPerson: 50,  scope: 'day-individual', dayNum: 3, place: 2 },
 
-  { id: 'd1-skins',  label: 'Day 1 Skins', amount: 160, scope: 'day-skins', dayNum: 1 },
-  { id: 'd2-skins',  label: 'Day 2 Skins', amount: 160, scope: 'day-skins', dayNum: 2 },
-  { id: 'd3-skins',  label: 'Day 3 Skins', amount: 160, scope: 'day-skins', dayNum: 3 },
+  { id: 'd1-skins',  label: 'Day 1 Skins', amount: 120, scope: 'day-skins', dayNum: 1 },
+  { id: 'd2-skins',  label: 'Day 2 Skins', amount: 120, scope: 'day-skins', dayNum: 2 },
+  { id: 'd3-skins',  label: 'Day 3 Skins', amount: 120, scope: 'day-skins', dayNum: 3 },
 
-  { id: 'd1-gskins', label: 'Day 1 Gross Skins', amount: 80, scope: 'day-gross-skins', dayNum: 1 },
-  { id: 'd2-gskins', label: 'Day 2 Gross Skins', amount: 80, scope: 'day-gross-skins', dayNum: 2 },
-  { id: 'd3-gskins', label: 'Day 3 Gross Skins', amount: 80, scope: 'day-gross-skins', dayNum: 3 },
+  { id: 'd1-gskins', label: 'Day 1 Gross Skins', amount: 60, scope: 'day-gross-skins', dayNum: 1 },
+  { id: 'd2-gskins', label: 'Day 2 Gross Skins', amount: 60, scope: 'day-gross-skins', dayNum: 2 },
+  { id: 'd3-gskins', label: 'Day 3 Gross Skins', amount: 60, scope: 'day-gross-skins', dayNum: 3 },
 
-  { id: 'team-champ', label: 'Overall Team Champion', amount: 730, perPerson: 182.50, scope: 'event-team' },
+  { id: 'team-champ', label: 'Overall Team Champion', amount: 600, perPerson: 150, scope: 'event-team' },
 
-  { id: 'ind-1', label: 'Individual Champion',  amount: 300, perPerson: 300, scope: 'event-individual', place: 1 },
-  { id: 'ind-2', label: 'Individual Runner-Up', amount: 225, perPerson: 225, scope: 'event-individual', place: 2 },
+  { id: 'ind-1', label: 'Individual Champion',  amount: 250, perPerson: 250, scope: 'event-individual', place: 1 },
+  { id: 'ind-2', label: 'Individual Runner-Up', amount: 200, perPerson: 200, scope: 'event-individual', place: 2 },
   { id: 'ind-3', label: 'Individual 3rd',       amount: 150, perPerson: 150, scope: 'event-individual', place: 3 },
   { id: 'ind-4', label: 'Individual 4th',       amount: 100, perPerson: 100, scope: 'event-individual', place: 4 }
 ];

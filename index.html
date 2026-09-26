@@ -114,11 +114,11 @@
       </div>`;
 
     const rows = [];
-    rows.push(['Team Champion', F.champions.team.name, par(F.champions.team.toPar), 730]);
-    rows.push(['Individual Champion', F.champions.individual.name, par(F.champions.individual.toPar), 300]);
+    rows.push(['Team Champion', F.champions.team.name, par(F.champions.team.toPar), F.event.teamChampion]);
+    rows.push(['Individual Champion', F.champions.individual.name, par(F.champions.individual.toPar), F.event.places[0]]);
     ['Runner-Up', '3rd', '4th'].forEach((lbl, i) => {
       const r = F.individual[i + 1];
-      rows.push(['Individual ' + lbl, nameOf(r.id), par(r.toPar), [225, 150, 100][i]]);
+      rows.push(['Individual ' + lbl, nameOf(r.id), par(r.toPar), F.event.places[i + 1]]);
     });
     F.days.forEach(d => d.prizes.forEach(pz =>
       rows.push([d.day + ' ' + pz.what, pz.who, par(pz.score), pz.amount])));
