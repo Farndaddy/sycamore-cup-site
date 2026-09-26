@@ -3815,7 +3815,7 @@
  "ledger": [
   {
    "id": "scottie-collins",
-   "total": 841.17,
+   "total": 842.17,
    "items": [
     {
      "label": "Thursday individual low net",
@@ -3852,12 +3852,16 @@
     {
      "label": "Team Champion",
      "amount": 182.5
+    },
+    {
+     "label": "Rounding remainder",
+     "amount": 1
     }
    ]
   },
   {
    "id": "nigel-scott",
-   "total": 670.72,
+   "total": 671.72,
    "items": [
     {
      "label": "Friday team low net",
@@ -3894,12 +3898,16 @@
     {
      "label": "Team Champion",
      "amount": 182.5
+    },
+    {
+     "label": "Rounding remainder",
+     "amount": 1
     }
    ]
   },
   {
    "id": "robert-stong",
-   "total": 566.94,
+   "total": 567.94,
    "items": [
     {
      "label": "Friday team low net",
@@ -3932,12 +3940,16 @@
     {
      "label": "Team Champion",
      "amount": 182.5
+    },
+    {
+     "label": "Rounding remainder",
+     "amount": 1
     }
    ]
   },
   {
    "id": "auston-chen",
-   "total": 445.17,
+   "total": 446.17,
    "items": [
     {
      "label": "Friday team low net",
@@ -3966,6 +3978,10 @@
     {
      "label": "Team Champion",
      "amount": 182.5
+    },
+    {
+     "label": "Rounding remainder",
+     "amount": 1
     }
    ]
   },
@@ -4123,5 +4139,6 @@
    "net": 966
   },
   "teamRunnerUp": "Frombys"
- }
+ },
+ "roundingNote": "Every figure is shown in whole dollars, rounded down. The $4 that left behind was split $1 each to the team champion."
 }

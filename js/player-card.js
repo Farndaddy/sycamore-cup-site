@@ -74,10 +74,21 @@ function careerRows(data, player) {
       });
     });
   });
+  // 2026 is finished and in data.years now, so it already produced a real row
+  // above. Adding the FIELD_2026 "in for 2026" row on top of it put the year on
+  // the card twice — once with the trophy and no handicap, once with the
+  // handicap and no trophy. Only add it while the year is still to be played.
   const up = FIELD_2026.get(player.id);
-  if (up) {
+  const alreadyPlayed = rows.some(r => r.year === CURRENT_YEAR);
+  if (up && !alreadyPlayed) {
     rows.push({ year: CURRENT_YEAR, team: up.team, won: false, index: up.index,
                 upcoming: true, titles: '', displayName: '', funFacts: null });
+  }
+  // The completed row carries no handicap of its own — indexByYear stops before
+  // the current year — so fall back to what he actually played off.
+  if (up && alreadyPlayed) {
+    const row = rows.find(r => r.year === CURRENT_YEAR);
+    if (row && row.index == null) row.index = up.index;
   }
   return rows.sort((a, b) => a.year - b.year);
 }
@@ -142,7 +153,7 @@ export function cardHTML(data, player) {
           <div class="cb-head">
             <div>
               <h3>${esc(named && named.displayName ? named.displayName : player.name)}</h3>
-              <p class="cb-sub">${cups === 0 ? 'Rookie' : `${cups} Cup${cups === 1 ? '' : 's'} played`}${wins ? ` &middot; ${wins} won` : ''}${field ? ' &middot; in for 2026' : ''}</p>
+              <p class="cb-sub">${cups === 0 ? 'Rookie' : `${cups} Cup${cups === 1 ? '' : 's'} played`}${wins ? ` &middot; ${wins} won` : ''}${field && !played.some(r => r.year === CURRENT_YEAR) ? ' &middot; in for ' + CURRENT_YEAR : ''}</p>
             </div>
             ${currentIndex != null ? `<span class="cb-hcp">HCP ${currentIndex}</span>` : ''}
           </div>
