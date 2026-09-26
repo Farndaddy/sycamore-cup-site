@@ -487,8 +487,17 @@ export function splitPrize(amount, winners) {
   return winners.map(w => ({ ...w, amount: amount / n, split: n > 1 }));
 }
 
+// Money is shown in WHOLE DOLLARS, always rounded DOWN. Farnia, 2026-09-26:
+// "round everything down... including skins and total payouts." $841.17 reads
+// as $841; $113.78 reads as $113.
+//
+// Floor, not round: a man is never shown more than he actually won. The
+// consequence is that the displayed figures add up to slightly less than what
+// went into the pot — the few dollars of remainder simply are not shown. The
+// underlying arithmetic is untouched; this is a display rule only, so the
+// ranking and the split of any tie are still computed on the exact amounts.
 export function formatMoney(n) {
-  return '$' + Number(n).toLocaleString('en-US', { minimumFractionDigits: n % 1 === 0 ? 0 : 2, maximumFractionDigits: 2 });
+  return '$' + Math.floor(Number(n)).toLocaleString('en-US');
 }
 
 

@@ -14,7 +14,8 @@ const F = (() => {
   const $ = id => document.getElementById(id);
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const par = n => n === 0 ? 'E' : (n > 0 ? `+${n}` : `${n}`);
-  const money = n => '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  // Whole dollars, always rounded DOWN — same rule as formatMoney in the engine.
+  const money = n => '$' + Math.floor(n).toLocaleString('en-US');
 
   let D = null, byId = {}, teamOf = {};
 
@@ -201,8 +202,8 @@ const F = (() => {
       <h4 class="money-h">The Whole Week</h4>
       <table class="lb money-table">
         <tbody>
-          <tr><td class="prize"><span class="what">Team Champion</span><span class="who">${esc(D.champions.team.name)} <small>${par(D.champions.team.toPar)}</small></span></td><td class="num amt">$730.00</td></tr>
-          <tr><td class="prize"><span class="what">Individual Champion</span><span class="who">${esc(D.champions.individual.name)} <small>${par(D.champions.individual.toPar)}</small></span></td><td class="num amt">$300.00</td></tr>
+          <tr><td class="prize"><span class="what">Team Champion</span><span class="who">${esc(D.champions.team.name)} <small>${par(D.champions.team.toPar)}</small></span></td><td class="num amt">${money(730)}</td></tr>
+          <tr><td class="prize"><span class="what">Individual Champion</span><span class="who">${esc(D.champions.individual.name)} <small>${par(D.champions.individual.toPar)}</small></span></td><td class="num amt">${money(300)}</td></tr>
           ${D.individual.slice(1, 4).map((r, i) => `<tr>
             <td class="prize"><span class="what">Individual ${['Runner-Up', '3rd', '4th'][i]}</span>
               <span class="who">${esc(nameOf(r.id))} <small>${par(r.toPar)}</small></span></td>

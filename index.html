@@ -81,7 +81,8 @@
   fetch('data/2026-final.json').then(r => r.json()).then(F => {
     const nameOf = id => (F.players.find(p => p.id === id) || {}).name || id;
     const par = n => n === 0 ? 'E' : (n > 0 ? '+' + n : String(n));
-    const money = n => '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    // Whole dollars, always rounded DOWN — same rule as formatMoney in the engine.
+    const money = n => '$' + Math.floor(n).toLocaleString('en-US');
     const roster = F.teams.find(t => t.id === F.champions.team.id).roster;
 
     document.getElementById('latest-champions').innerHTML = `
